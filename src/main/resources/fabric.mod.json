@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "togglevisualize",
+	"version": "${version}",
+	"name": "Toggle Visualize",
+	"description": "Visualize sprint and crouch toggling.",
+	"authors": [
+		"BlueSheep2804"
+	],
+	"contact": {
+		"sources": "https://github.com/BlueSheep2804/ToggleVisualize"
+	},
+	"license": "MIT",
+	"icon": "assets/togglevisualize/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			{
+				"value": "io.github.bluesheep2804.togglevisualize.ToggleVisualize",
+				"adapter": "kotlin"
+			}
+		]
+	},
+	"depends": {
+		"fabricloader": ">=0.16.9",
+		"minecraft": "~1.21.3",
+		"java": ">=21",
+		"fabric-api": "*",
+		"fabric-language-kotlin": "*"
+	}
+}

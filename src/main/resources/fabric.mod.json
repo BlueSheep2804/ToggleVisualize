@@ -19,6 +19,9 @@
 				"value": "io.github.bluesheep2804.togglevisualize.ToggleVisualize",
 				"adapter": "kotlin"
 			}
+		],
+		"modmenu": [
+			"io.github.bluesheep2804.togglevisualize.ModMenuIntegration"
 		]
 	},
 	"depends": {
@@ -26,6 +29,7 @@
 		"minecraft": "~1.21.3",
 		"java": ">=21",
 		"fabric-api": "*",
-		"fabric-language-kotlin": "*"
+		"fabric-language-kotlin": "*",
+		"yet_another_config_lib_v3": ">=3.6.1+1.21.2-fabric"
 	}
 }

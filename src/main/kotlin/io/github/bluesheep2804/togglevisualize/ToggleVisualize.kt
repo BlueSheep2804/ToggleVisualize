@@ -12,8 +12,11 @@ import org.slf4j.LoggerFactory
 object ToggleVisualize : ModInitializer {
     private val logger = LoggerFactory.getLogger("togglevisualize")
     private val sprintOverlayTexture = ResourceLocation.withDefaultNamespace("textures/mob_effect/speed.png")
+	private lateinit var config: ToggleVisualizeConfig
 
 	override fun onInitialize() {
+		ToggleVisualizeConfig.HANDLER.load()
+		config = ToggleVisualizeConfig.HANDLER.instance()
 		HudRenderCallback.EVENT.register { guiGraphics: GuiGraphics, _: DeltaTracker ->
 			val options = Minecraft.getInstance().options
 			val optionToggleSprint = options.toggleSprint().get()

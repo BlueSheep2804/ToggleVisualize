@@ -3,12 +3,7 @@ package io.github.bluesheep2804.togglevisualize
 import com.terraformersmc.modmenu.api.ConfigScreenFactory
 import com.terraformersmc.modmenu.api.ModMenuApi
 import dev.isxander.yacl3.api.*
-import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder
-import dev.isxander.yacl3.api.controller.SliderControllerBuilder
-import dev.isxander.yacl3.api.controller.StringControllerBuilder
-import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
-import dev.isxander.yacl3.gui.controllers.slider.IntegerSliderController
-import dev.isxander.yacl3.gui.controllers.string.StringController
+import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder
 import net.minecraft.network.chat.Component
 
 class ModMenuIntegration: ModMenuApi {
@@ -22,25 +17,29 @@ class ModMenuIntegration: ModMenuApi {
                     .category(ConfigCategory.createBuilder()
                             .name(Component.literal(""))
                             .group(OptionGroup.createBuilder()
-                                    .name(Component.literal("Test Group"))
-                                    .option(Option.createBuilder<Boolean>()
-                                            .name(Component.literal("Bool Option"))
-                                            .description(OptionDescription.of(Component.literal("Bool Description")))
-                                            .binding(defaultConfig.myCoolBoolean, { config.myCoolBoolean }, {newVal -> config.myCoolBoolean = newVal})
-                                            .controller(TickBoxControllerBuilder::create)
+                                    .name(Component.literal("Sprint"))
+                                    .option(Option.createBuilder<Int>()
+                                            .name(Component.literal("Indicator position X"))
+                                            .binding(defaultConfig.sprintPositionX, { config.sprintPositionX }, {newVal -> config.sprintPositionX = newVal})
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
                                             .build())
                                     .option(Option.createBuilder<Int>()
-                                            .name(Component.literal("Integer Option"))
-                                            .binding(defaultConfig.myCoolInteger, { config.myCoolInteger }, {newVal -> config.myCoolInteger = newVal})
-                                            .controller { opt -> IntegerSliderControllerBuilder.create(opt).range(0, 10).step(1) }
+                                            .name(Component.literal("Indicator position Y"))
+                                            .binding(defaultConfig.sprintPositionY, { config.sprintPositionY }, {newVal -> config.sprintPositionY = newVal})
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
                                             .build())
                                     .build())
                             .group(OptionGroup.createBuilder()
-                                    .name(Component.literal("Another Group"))
-                                    .option(Option.createBuilder<String>()
-                                            .name(Component.literal("String Option"))
-                                            .binding(defaultConfig.myCoolString, { config.myCoolString }, {newVal -> config.myCoolString = newVal})
-                                            .controller(StringControllerBuilder::create)
+                                    .name(Component.literal("Crouch"))
+                                    .option(Option.createBuilder<Int>()
+                                            .name(Component.literal("Indicator position X"))
+                                            .binding(defaultConfig.crouchPositionX, { config.crouchPositionX }, {newVal -> config.crouchPositionX = newVal})
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .option(Option.createBuilder<Int>()
+                                            .name(Component.literal("Indicator position Y"))
+                                            .binding(defaultConfig.crouchPositionY, { config.crouchPositionY }, {newVal -> config.crouchPositionY = newVal})
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
                                             .build())
                                     .build())
                             .build())

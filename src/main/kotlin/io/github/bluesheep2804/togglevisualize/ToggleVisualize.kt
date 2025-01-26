@@ -30,10 +30,10 @@ object ToggleVisualize : ModInitializer {
 			val isSprintDown = options.keySprint.isDown
 			val isCrouchDown = options.keyShift.isDown
 			if (optionToggleSprint && isSprintDown) {
-				guiGraphics.blit(RenderType::guiTexturedOverlay, sprintOverlayTexture, 16, 16, 0F, 0F, 16, 16, 16, 16)
+				guiGraphics.blit(RenderType::guiTexturedOverlay, sprintOverlayTexture, config.sprintPositionX, config.sprintPositionY, 0F, 0F, 16, 16, 16, 16)
 			}
 			if (optionToggleCrouch && isCrouchDown) {
-				guiGraphics.blit(RenderType::guiTexturedOverlay, crouchOverlayTexture, 32, 16, 0F, 0F, 16, 16, 16, 16)
+				guiGraphics.blit(RenderType::guiTexturedOverlay, crouchOverlayTexture, config.crouchPositionX, config.crouchPositionY, 0F, 0F, 16, 16, 16, 16)
 			}
 		}
 	}

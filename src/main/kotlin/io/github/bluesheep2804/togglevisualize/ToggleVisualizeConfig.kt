@@ -8,13 +8,16 @@ import net.minecraft.resources.ResourceLocation
 
 class ToggleVisualizeConfig {
     @SerialEntry
-    var myCoolBoolean = true
+    var sprintPositionX = 16
 
     @SerialEntry
-    var myCoolInteger = 5
+    var sprintPositionY = 16
 
-    @SerialEntry(comment = "This string is amazing")
-    var myCoolString = "How amazing!"
+    @SerialEntry
+    var crouchPositionX = 16
+
+    @SerialEntry
+    var crouchPositionY = 32
 
     companion object {
         var HANDLER: ConfigClassHandler<ToggleVisualizeConfig> = ConfigClassHandler.createBuilder<ToggleVisualizeConfig>(ToggleVisualizeConfig::class.java)

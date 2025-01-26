@@ -2,10 +2,12 @@ package io.github.bluesheep2804.togglevisualize
 
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
+import net.minecraft.ChatFormatting
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.renderer.RenderType
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import org.slf4j.LoggerFactory
 
@@ -31,9 +33,11 @@ object ToggleVisualize : ModInitializer {
 			val isCrouchDown = options.keyShift.isDown
 			if (optionToggleSprint && isSprintDown) {
 				guiGraphics.blit(RenderType::guiTexturedOverlay, sprintOverlayTexture, config.sprintPositionX, config.sprintPositionY, 0F, 0F, 16, 16, 16, 16)
+				guiGraphics.drawString(minecraftInstance.font, Component.literal("Sprint").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.sprintPositionX+20, config.sprintPositionY+4, 16777215)
 			}
 			if (optionToggleCrouch && isCrouchDown) {
 				guiGraphics.blit(RenderType::guiTexturedOverlay, crouchOverlayTexture, config.crouchPositionX, config.crouchPositionY, 0F, 0F, 16, 16, 16, 16)
+				guiGraphics.drawString(minecraftInstance.font, Component.literal("Crouch").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.crouchPositionX+20, config.crouchPositionY+4, 16777215)
 			}
 		}
 	}

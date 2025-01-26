@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
 object ToggleVisualize : ModInitializer {
     private val logger = LoggerFactory.getLogger("togglevisualize")
     private val sprintOverlayTexture = ResourceLocation.withDefaultNamespace("textures/mob_effect/speed.png")
+    private val crouchOverlayTexture = ResourceLocation.withDefaultNamespace("textures/item/hopper.png")
 	private lateinit var config: ToggleVisualizeConfig
 
 	override fun onInitialize() {
@@ -20,9 +21,14 @@ object ToggleVisualize : ModInitializer {
 		HudRenderCallback.EVENT.register { guiGraphics: GuiGraphics, _: DeltaTracker ->
 			val options = Minecraft.getInstance().options
 			val optionToggleSprint = options.toggleSprint().get()
+			val optionToggleCrouch = options.toggleCrouch().get()
 			val isSprintDown = options.keySprint.isDown
+			val isCrouchDown = options.keyShift.isDown
 			if (optionToggleSprint && isSprintDown) {
 				guiGraphics.blit(RenderType::guiTexturedOverlay, sprintOverlayTexture, 16, 16, 0F, 0F, 16, 16, 16, 16)
+			}
+			if (optionToggleCrouch && isCrouchDown) {
+				guiGraphics.blit(RenderType::guiTexturedOverlay, crouchOverlayTexture, 32, 16, 0F, 0F, 16, 16, 16, 16)
 			}
 		}
 	}

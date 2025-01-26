@@ -19,7 +19,12 @@ object ToggleVisualize : ModInitializer {
 		ToggleVisualizeConfig.HANDLER.load()
 		config = ToggleVisualizeConfig.HANDLER.instance()
 		HudRenderCallback.EVENT.register { guiGraphics: GuiGraphics, _: DeltaTracker ->
-			val options = Minecraft.getInstance().options
+			val minecraftInstance = Minecraft.getInstance()
+			val options = minecraftInstance.options
+			val debugScreen = minecraftInstance.debugOverlay.showDebugScreen()
+			val hideGui = options.hideGui
+			if (debugScreen || hideGui) return@register
+
 			val optionToggleSprint = options.toggleSprint().get()
 			val optionToggleCrouch = options.toggleCrouch().get()
 			val isSprintDown = options.keySprint.isDown

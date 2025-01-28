@@ -8,6 +8,9 @@ import net.minecraft.resources.ResourceLocation
 
 class ToggleVisualizeConfig {
     @SerialEntry
+    var sprintShow = true
+
+    @SerialEntry
     var sprintPositionX = 16
 
     @SerialEntry
@@ -21,6 +24,9 @@ class ToggleVisualizeConfig {
 
     @SerialEntry
     var sprintTextPositionY = 20
+
+    @SerialEntry
+    var crouchShow = true
 
     @SerialEntry
     var crouchPositionX = 16

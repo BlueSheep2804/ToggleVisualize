@@ -28,17 +28,22 @@ object ToggleVisualize : ModInitializer {
 			if (debugScreen || hideGui) return@register
 
 			val optionToggleSprint = options.toggleSprint().get()
-			val optionToggleCrouch = options.toggleCrouch().get()
 			val isSprintDown = options.keySprint.isDown
-			val isCrouchDown = options.keyShift.isDown
 			if (optionToggleSprint && isSprintDown) {
-				guiGraphics.blit(RenderType::guiTexturedOverlay, sprintOverlayTexture, config.sprintPositionX, config.sprintPositionY, 0F, 0F, 16, 16, 16, 16)
+				if (config.sprintShow) {
+					guiGraphics.blit(RenderType::guiTexturedOverlay, sprintOverlayTexture, config.sprintPositionX, config.sprintPositionY, 0F, 0F, 16, 16, 16, 16)
+				}
 				if (config.sprintShowText) {
 					guiGraphics.drawString(minecraftInstance.font, Component.literal("Sprint").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.sprintTextPositionX, config.sprintTextPositionY, 16777215)
 				}
 			}
+
+			val optionToggleCrouch = options.toggleCrouch().get()
+			val isCrouchDown = options.keyShift.isDown
 			if (optionToggleCrouch && isCrouchDown) {
-				guiGraphics.blit(RenderType::guiTexturedOverlay, crouchOverlayTexture, config.crouchPositionX, config.crouchPositionY, 0F, 0F, 16, 16, 16, 16)
+				if (config.crouchShow) {
+					guiGraphics.blit(RenderType::guiTexturedOverlay, crouchOverlayTexture, config.crouchPositionX, config.crouchPositionY, 0F, 0F, 16, 16, 16, 16)
+				}
 				if (config.crouchShowText) {
 					guiGraphics.drawString(minecraftInstance.font, Component.literal("Crouch").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.crouchTextPositionX, config.crouchTextPositionY, 16777215)
 				}

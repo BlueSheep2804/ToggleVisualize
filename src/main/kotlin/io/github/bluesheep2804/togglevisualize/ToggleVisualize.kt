@@ -34,13 +34,13 @@ object ToggleVisualize : ModInitializer {
 			if (optionToggleSprint && isSprintDown) {
 				guiGraphics.blit(RenderType::guiTexturedOverlay, sprintOverlayTexture, config.sprintPositionX, config.sprintPositionY, 0F, 0F, 16, 16, 16, 16)
 				if (config.sprintShowText) {
-					guiGraphics.drawString(minecraftInstance.font, Component.literal("Sprint").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.sprintPositionX + 20, config.sprintPositionY + 4, 16777215)
+					guiGraphics.drawString(minecraftInstance.font, Component.literal("Sprint").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.sprintTextPositionX, config.sprintTextPositionY, 16777215)
 				}
 			}
 			if (optionToggleCrouch && isCrouchDown) {
 				guiGraphics.blit(RenderType::guiTexturedOverlay, crouchOverlayTexture, config.crouchPositionX, config.crouchPositionY, 0F, 0F, 16, 16, 16, 16)
 				if (config.crouchShowText) {
-					guiGraphics.drawString(minecraftInstance.font, Component.literal("Crouch").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.crouchPositionX + 20, config.crouchPositionY + 4, 16777215)
+					guiGraphics.drawString(minecraftInstance.font, Component.literal("Crouch").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.crouchTextPositionX, config.crouchTextPositionY, 16777215)
 				}
 			}
 		}

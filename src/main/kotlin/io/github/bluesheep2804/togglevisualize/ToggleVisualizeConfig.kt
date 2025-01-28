@@ -17,6 +17,12 @@ class ToggleVisualizeConfig {
     var sprintShowText = false
 
     @SerialEntry
+    var sprintTextPositionX = 36
+
+    @SerialEntry
+    var sprintTextPositionY = 20
+
+    @SerialEntry
     var crouchPositionX = 16
 
     @SerialEntry
@@ -24,6 +30,13 @@ class ToggleVisualizeConfig {
 
     @SerialEntry
     var crouchShowText = false
+
+    @SerialEntry
+    var crouchTextPositionX = 36
+
+    @SerialEntry
+    var crouchTextPositionY = 36
+
 
     companion object {
         var HANDLER: ConfigClassHandler<ToggleVisualizeConfig> = ConfigClassHandler.createBuilder<ToggleVisualizeConfig>(ToggleVisualizeConfig::class.java)

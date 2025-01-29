@@ -1,6 +1,6 @@
 package io.github.bluesheep2804.togglevisualize
 
-import net.fabricmc.api.ModInitializer
+import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.ChatFormatting
 import net.minecraft.client.DeltaTracker
@@ -11,13 +11,13 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import org.slf4j.LoggerFactory
 
-object ToggleVisualize : ModInitializer {
+object ToggleVisualize : ClientModInitializer {
     private val logger = LoggerFactory.getLogger("togglevisualize")
     private val sprintOverlayTexture = ResourceLocation.withDefaultNamespace("textures/mob_effect/speed.png")
     private val crouchOverlayTexture = ResourceLocation.withDefaultNamespace("textures/item/hopper.png")
 	private lateinit var config: ToggleVisualizeConfig
 
-	override fun onInitialize() {
+	override fun onInitializeClient() {
 		ToggleVisualizeConfig.HANDLER.load()
 		config = ToggleVisualizeConfig.HANDLER.instance()
 		HudRenderCallback.EVENT.register { guiGraphics: GuiGraphics, _: DeltaTracker ->

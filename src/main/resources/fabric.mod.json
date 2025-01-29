@@ -14,7 +14,7 @@
 	"icon": "assets/togglevisualize/icon.png",
 	"environment": "client",
 	"entrypoints": {
-		"main": [
+		"client": [
 			{
 				"value": "io.github.bluesheep2804.togglevisualize.ToggleVisualize",
 				"adapter": "kotlin"

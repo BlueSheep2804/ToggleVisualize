@@ -6,7 +6,8 @@ plugins {
 	id("org.jetbrains.kotlin.jvm") version "2.1.0"
 }
 
-version = project.property("modVersion") as String
+val modVersion = project.property("modVersion")
+version = "$modVersion+${stonecutter.current.project}"
 group = project.property("mavenGroup") as String
 
 base {
@@ -35,7 +36,6 @@ repositories {
 
 dependencies {
 	// To change the versions see the gradle.properties file
-	val minecraftVersion: String by project
 	val loaderVersion: String by project
 	val fabricVersion: String by project
 	val fabricKotlinVersion: String by project
@@ -43,10 +43,10 @@ dependencies {
 	val modmenuVersion: String by project
 	val parchmentMappings: String by project
 
-	minecraft("com.mojang:minecraft:${minecraftVersion}")
+	minecraft("com.mojang:minecraft:${stonecutter.current.project}")
 	mappings(loom.layered {
 		officialMojangMappings()
-		parchment("org.parchmentmc.data:parchment-${minecraftVersion}:${parchmentMappings}@zip")
+		parchment("org.parchmentmc.data:parchment-${stonecutter.current.project}:${parchmentMappings}@zip")
 	})
 	modImplementation("net.fabricmc:fabric-loader:${loaderVersion}")
 
@@ -64,12 +64,20 @@ tasks {
 	}
 
 	processResources {
+		inputs.property("minecraft", stonecutter.current.project)
+
 		filesMatching("fabric.mod.json") {
-			expand("version" to project.version)
+			expand(mapOf(
+				"version" to version,
+				"minecraftVersion" to stonecutter.current.project,
+				"yaclVersion" to project.property("yaclVersion")
+			))
 		}
 	}
 
 	jar {
+//		archiveBaseName = "${project.base.archivesName}-${stonecutter.current.version}-${stonecutter.current.project}"
+
 		from("LICENSE") {
 			rename { "${it}_${project.base.archivesName}" }
 		}
@@ -90,4 +98,11 @@ java {
 
 	sourceCompatibility = JavaVersion.VERSION_21
 	targetCompatibility = JavaVersion.VERSION_21
+}
+
+loom {
+	runConfigs.all {
+		ideConfigGenerated(true)
+		runDir = "../../run"
+	}
 }

@@ -43,10 +43,14 @@ class ToggleVisualizeConfig {
     @SerialEntry
     var crouchTextPositionY = 36
 
-
     companion object {
+        //? if <1.21 {
+        /*private val configId = ResourceLocation("togglevisualize", "config")
+        *///?} else {
+        private val configId = ResourceLocation.fromNamespaceAndPath("togglevisualize", "config")
+        //?}
         var HANDLER: ConfigClassHandler<ToggleVisualizeConfig> = ConfigClassHandler.createBuilder<ToggleVisualizeConfig>(ToggleVisualizeConfig::class.java)
-                .id(ResourceLocation.fromNamespaceAndPath("togglevisualize", "config"))
+                .id(configId)
                 .serializer { config: ConfigClassHandler<ToggleVisualizeConfig>? ->
                     GsonConfigSerializerBuilder.create<ToggleVisualizeConfig>(config)
                             .setPath(FabricLoader.getInstance().configDir.resolve("togglevisualize.json5"))

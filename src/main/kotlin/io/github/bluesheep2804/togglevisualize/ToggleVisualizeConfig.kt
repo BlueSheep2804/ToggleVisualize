@@ -1,9 +1,17 @@
 package io.github.bluesheep2804.togglevisualize
 
+import dev.isxander.yacl3.api.ConfigCategory
+import dev.isxander.yacl3.api.Option
+import dev.isxander.yacl3.api.OptionGroup
+import dev.isxander.yacl3.api.YetAnotherConfigLib
+import dev.isxander.yacl3.api.YetAnotherConfigLib.ConfigBackedBuilder
+import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder
+import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler
 import dev.isxander.yacl3.config.v2.api.SerialEntry
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
 class ToggleVisualizeConfig {
@@ -49,14 +57,151 @@ class ToggleVisualizeConfig {
         *///?} else {
         private val configId = ResourceLocation.fromNamespaceAndPath("togglevisualize", "config")
         //?}
-        var HANDLER: ConfigClassHandler<ToggleVisualizeConfig> = ConfigClassHandler.createBuilder<ToggleVisualizeConfig>(ToggleVisualizeConfig::class.java)
+        private val HANDLER: ConfigClassHandler<ToggleVisualizeConfig> = ConfigClassHandler.createBuilder(ToggleVisualizeConfig::class.java)
                 .id(configId)
                 .serializer { config: ConfigClassHandler<ToggleVisualizeConfig>? ->
-                    GsonConfigSerializerBuilder.create<ToggleVisualizeConfig>(config)
+                    GsonConfigSerializerBuilder.create(config)
                             .setPath(FabricLoader.getInstance().configDir.resolve("togglevisualize.json5"))
                             .setJson5(true)
                             .build()
                 }
                 .build()
+
+        val instance: ToggleVisualizeConfig
+            get() = HANDLER.instance()
+
+        fun load() {
+            HANDLER.load()
+        }
+
+        val configScreen: YetAnotherConfigLib
+            get() = YetAnotherConfigLib.create(HANDLER) { defaultConfig, config, builder -> builder
+                    .title(Component.literal("Toggle Visualize"))
+                    .save(HANDLER::save)
+                    .category(
+                        ConfigCategory.createBuilder()
+                            .name(Component.literal("Main"))
+                            .group(
+                                OptionGroup.createBuilder()
+                                    .name(Component.literal("Sprint"))
+                                    .option(
+                                        Option.createBuilder<Boolean>()
+                                            .name(Component.literal("Indicator"))
+                                            .binding(
+                                                defaultConfig.sprintShow,
+                                                { config.sprintShow },
+                                                { newVal -> config.sprintShow = newVal })
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build()
+                                    )
+                                    .option(
+                                        Option.createBuilder<Int>()
+                                            .name(Component.literal("Indicator position X"))
+                                            .binding(
+                                                defaultConfig.sprintPositionX,
+                                                { config.sprintPositionX },
+                                                { newVal -> config.sprintPositionX = newVal })
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .option(
+                                        Option.createBuilder<Int>()
+                                            .name(Component.literal("Indicator position Y"))
+                                            .binding(
+                                                defaultConfig.sprintPositionY,
+                                                { config.sprintPositionY },
+                                                { newVal -> config.sprintPositionY = newVal })
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .option(
+                                        Option.createBuilder<Boolean>()
+                                            .name(Component.literal("Text"))
+                                            .binding(
+                                                defaultConfig.sprintShowText,
+                                                { config.sprintShowText },
+                                                { newVal -> config.sprintShowText = newVal })
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build()
+                                    )
+                                    .option(
+                                        Option.createBuilder<Int>()
+                                            .name(Component.literal("Text position X"))
+                                            .binding(
+                                                defaultConfig.sprintTextPositionX,
+                                                { config.sprintTextPositionX },
+                                                { newVal -> config.sprintTextPositionX = newVal })
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .option(
+                                        Option.createBuilder<Int>()
+                                            .name(Component.literal("Text position Y"))
+                                            .binding(
+                                                defaultConfig.sprintTextPositionY,
+                                                { config.sprintTextPositionY },
+                                                { newVal -> config.sprintTextPositionY = newVal })
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .build())
+                            .group(
+                                OptionGroup.createBuilder()
+                                    .name(Component.literal("Crouch"))
+                                    .option(
+                                        Option.createBuilder<Boolean>()
+                                            .name(Component.literal("Indicator"))
+                                            .binding(
+                                                defaultConfig.crouchShow,
+                                                { config.crouchShow },
+                                                { newVal -> config.crouchShow = newVal })
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build()
+                                    )
+                                    .option(
+                                        Option.createBuilder<Int>()
+                                            .name(Component.literal("Indicator position X"))
+                                            .binding(
+                                                defaultConfig.crouchPositionX,
+                                                { config.crouchPositionX },
+                                                { newVal -> config.crouchPositionX = newVal })
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .option(
+                                        Option.createBuilder<Int>()
+                                            .name(Component.literal("Indicator position Y"))
+                                            .binding(
+                                                defaultConfig.crouchPositionY,
+                                                { config.crouchPositionY },
+                                                { newVal -> config.crouchPositionY = newVal })
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .option(
+                                        Option.createBuilder<Boolean>()
+                                            .name(Component.literal("Text"))
+                                            .binding(
+                                                defaultConfig.crouchShowText,
+                                                { config.crouchShowText },
+                                                { newVal -> config.crouchShowText = newVal })
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build()
+                                    )
+                                    .option(
+                                        Option.createBuilder<Int>()
+                                            .name(Component.literal("Text position X"))
+                                            .binding(
+                                                defaultConfig.crouchTextPositionX,
+                                                { config.crouchTextPositionX },
+                                                { newVal -> config.crouchTextPositionX = newVal })
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .option(
+                                        Option.createBuilder<Int>()
+                                            .name(Component.literal("Text position Y"))
+                                            .binding(
+                                                defaultConfig.crouchTextPositionY,
+                                                { config.crouchTextPositionY },
+                                                { newVal -> config.crouchTextPositionY = newVal })
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .build())
+                            .build())
+            }
     }
 }

@@ -25,8 +25,8 @@ object ToggleVisualize : ClientModInitializer {
 	private lateinit var config: ToggleVisualizeConfig
 
 	override fun onInitializeClient() {
-		ToggleVisualizeConfig.HANDLER.load()
-		config = ToggleVisualizeConfig.HANDLER.instance()
+		ToggleVisualizeConfig.load()
+		config = ToggleVisualizeConfig.instance
 		HudRenderCallback.EVENT.register { guiGraphics: GuiGraphics, _: /*? if <1.21 {*//*Float*//*?} else {*/ DeltaTracker /*?}*/ ->
 			val minecraftInstance = Minecraft.getInstance()
 			val options = minecraftInstance.options

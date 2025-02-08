@@ -1,0 +1,11 @@
+{
+  "modmenu.descriptionTranslation.togglevisualize": "Visualize sprint and sneak toggling.",
+  "togglevisualize.config.title": "Toggle Visualize",
+  "togglevisualize.config.category.main": "Main",
+  "togglevisualize.config.option.indicator": "Indicator",
+  "togglevisualize.config.option.indicatorPositionX": "Indicator position X",
+  "togglevisualize.config.option.indicatorPositionY": "Indicator position Y",
+  "togglevisualize.config.option.text": "Text",
+  "togglevisualize.config.option.textPositionX": "Text position X",
+  "togglevisualize.config.option.textPositionY": "Text position Y"
+}

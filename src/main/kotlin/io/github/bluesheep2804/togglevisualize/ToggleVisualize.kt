@@ -45,7 +45,7 @@ object ToggleVisualize : ClientModInitializer {
 					//?}
 				}
 				if (config.sprintShowText) {
-					guiGraphics.drawString(minecraftInstance.font, Component.literal("Sprint").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.sprintTextPositionX, config.sprintTextPositionY, 16777215)
+					guiGraphics.drawString(minecraftInstance.font, Component.translatable("key.sprint").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.sprintTextPositionX, config.sprintTextPositionY, 16777215)
 				}
 			}
 
@@ -60,7 +60,7 @@ object ToggleVisualize : ClientModInitializer {
 					//?}
 				}
 				if (config.sneakShowText) {
-					guiGraphics.drawString(minecraftInstance.font, Component.literal("Sneak").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.sneakTextPositionX, config.sneakTextPositionY, 16777215)
+					guiGraphics.drawString(minecraftInstance.font, Component.translatable("key.sneak").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.sneakTextPositionX, config.sneakTextPositionY, 16777215)
 				}
 			}
 		}

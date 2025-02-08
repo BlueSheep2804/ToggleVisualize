@@ -76,17 +76,17 @@ class ToggleVisualizeConfig {
 
         val configScreen: YetAnotherConfigLib
             get() = YetAnotherConfigLib.create(HANDLER) { defaultConfig, config, builder -> builder
-                    .title(Component.literal("Toggle Visualize"))
+                    .title(Component.translatable("togglevisualize.config.title"))
                     .save(HANDLER::save)
                     .category(
                         ConfigCategory.createBuilder()
-                            .name(Component.literal("Main"))
+                            .name(Component.translatable("togglevisualize.config.category.main"))
                             .group(
                                 OptionGroup.createBuilder()
-                                    .name(Component.literal("Sprint"))
+                                    .name(Component.translatable("key.sprint"))
                                     .option(
                                         Option.createBuilder<Boolean>()
-                                            .name(Component.literal("Indicator"))
+                                            .name(Component.translatable("togglevisualize.config.option.indicator"))
                                             .binding(
                                                 defaultConfig.sprintShow,
                                                 { config.sprintShow },
@@ -96,7 +96,7 @@ class ToggleVisualizeConfig {
                                     )
                                     .option(
                                         Option.createBuilder<Int>()
-                                            .name(Component.literal("Indicator position X"))
+                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionX"))
                                             .binding(
                                                 defaultConfig.sprintPositionX,
                                                 { config.sprintPositionX },
@@ -105,7 +105,7 @@ class ToggleVisualizeConfig {
                                             .build())
                                     .option(
                                         Option.createBuilder<Int>()
-                                            .name(Component.literal("Indicator position Y"))
+                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionY"))
                                             .binding(
                                                 defaultConfig.sprintPositionY,
                                                 { config.sprintPositionY },
@@ -114,7 +114,7 @@ class ToggleVisualizeConfig {
                                             .build())
                                     .option(
                                         Option.createBuilder<Boolean>()
-                                            .name(Component.literal("Text"))
+                                            .name(Component.translatable("togglevisualize.config.option.text"))
                                             .binding(
                                                 defaultConfig.sprintShowText,
                                                 { config.sprintShowText },
@@ -124,7 +124,7 @@ class ToggleVisualizeConfig {
                                     )
                                     .option(
                                         Option.createBuilder<Int>()
-                                            .name(Component.literal("Text position X"))
+                                            .name(Component.translatable("togglevisualize.config.option.textPositionX"))
                                             .binding(
                                                 defaultConfig.sprintTextPositionX,
                                                 { config.sprintTextPositionX },
@@ -133,7 +133,7 @@ class ToggleVisualizeConfig {
                                             .build())
                                     .option(
                                         Option.createBuilder<Int>()
-                                            .name(Component.literal("Text position Y"))
+                                            .name(Component.translatable("togglevisualize.config.option.textPositionY"))
                                             .binding(
                                                 defaultConfig.sprintTextPositionY,
                                                 { config.sprintTextPositionY },
@@ -143,10 +143,10 @@ class ToggleVisualizeConfig {
                                     .build())
                             .group(
                                 OptionGroup.createBuilder()
-                                    .name(Component.literal("Sneak"))
+                                    .name(Component.translatable("key.sneak"))
                                     .option(
                                         Option.createBuilder<Boolean>()
-                                            .name(Component.literal("Indicator"))
+                                            .name(Component.translatable("togglevisualize.config.option.indicator"))
                                             .binding(
                                                 defaultConfig.sneakShow,
                                                 { config.sneakShow },
@@ -156,7 +156,7 @@ class ToggleVisualizeConfig {
                                     )
                                     .option(
                                         Option.createBuilder<Int>()
-                                            .name(Component.literal("Indicator position X"))
+                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionX"))
                                             .binding(
                                                 defaultConfig.sneakPositionX,
                                                 { config.sneakPositionX },
@@ -165,7 +165,7 @@ class ToggleVisualizeConfig {
                                             .build())
                                     .option(
                                         Option.createBuilder<Int>()
-                                            .name(Component.literal("Indicator position Y"))
+                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionY"))
                                             .binding(
                                                 defaultConfig.sneakPositionY,
                                                 { config.sneakPositionY },
@@ -174,7 +174,7 @@ class ToggleVisualizeConfig {
                                             .build())
                                     .option(
                                         Option.createBuilder<Boolean>()
-                                            .name(Component.literal("Text"))
+                                            .name(Component.translatable("togglevisualize.config.option.text"))
                                             .binding(
                                                 defaultConfig.sneakShowText,
                                                 { config.sneakShowText },
@@ -184,7 +184,7 @@ class ToggleVisualizeConfig {
                                     )
                                     .option(
                                         Option.createBuilder<Int>()
-                                            .name(Component.literal("Text position X"))
+                                            .name(Component.translatable("togglevisualize.config.option.textPositionX"))
                                             .binding(
                                                 defaultConfig.sneakTextPositionX,
                                                 { config.sneakTextPositionX },
@@ -193,7 +193,7 @@ class ToggleVisualizeConfig {
                                             .build())
                                     .option(
                                         Option.createBuilder<Int>()
-                                            .name(Component.literal("Text position Y"))
+                                            .name(Component.translatable("togglevisualize.config.option.textPositionY"))
                                             .binding(
                                                 defaultConfig.sneakTextPositionY,
                                                 { config.sneakTextPositionY },

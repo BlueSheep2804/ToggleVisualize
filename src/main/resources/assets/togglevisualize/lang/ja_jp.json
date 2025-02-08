@@ -1,0 +1,11 @@
+{
+  "modmenu.descriptionTranslation.togglevisualize": "ダッシュとスニークの切り替えを可視化します。",
+  "togglevisualize.config.title": "Toggle Visualize",
+  "togglevisualize.config.category.main": "メイン設定",
+  "togglevisualize.config.option.indicator": "アイコン",
+  "togglevisualize.config.option.indicatorPositionX": "アイコンの位置(X)",
+  "togglevisualize.config.option.indicatorPositionY": "アイコンの位置(Y)",
+  "togglevisualize.config.option.text": "テキスト",
+  "togglevisualize.config.option.textPositionX": "テキストの位置(X)",
+  "togglevisualize.config.option.textPositionY": "テキストの位置(Y)"
+}

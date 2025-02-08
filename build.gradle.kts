@@ -4,6 +4,7 @@ plugins {
 	id("fabric-loom") version "1.9-SNAPSHOT"
 	id("maven-publish")
 	id("org.jetbrains.kotlin.jvm") version "2.1.0"
+	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
 val modVersion = project.property("modVersion")
@@ -104,5 +105,33 @@ loom {
 	runConfigs.all {
 		ideConfigGenerated(true)
 		runDir = "../../run"
+	}
+}
+
+publishMods {
+	file.set(tasks.remapJar.get().archiveFile)
+	type = STABLE
+	modLoaders.add("fabric")
+	changelog = "Please check the [Github repository](https://github.com/BlueSheep2804/ToggleVisualize) for the update history."
+
+	curseforge {
+		accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
+		projectId.set("1195905")
+		minecraftVersions.add(stonecutter.current.project)
+
+		clientRequired = true
+		projectSlug = "toggle-visualize"
+
+		requires("yacl", "fabric-api")
+		optional("modmenu")
+	}
+
+	modrinth {
+		accessToken = providers.environmentVariable("MODRINTH_API_KEY")
+		projectId = "brJIdf61"
+		minecraftVersions.add(stonecutter.current.project)
+
+		requires("yacl", "fabric-api")
+		optional("modmenu")
 	}
 }

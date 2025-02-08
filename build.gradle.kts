@@ -127,7 +127,7 @@ publishMods {
 	}
 
 	modrinth {
-		accessToken = providers.environmentVariable("MODRINTH_API_KEY")
+		accessToken = providers.environmentVariable("MODRINTH_TOKEN")
 		projectId = "brJIdf61"
 		minecraftVersions.add(stonecutter.current.project)
 

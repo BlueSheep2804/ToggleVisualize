@@ -3,7 +3,7 @@
 	"id": "togglevisualize",
 	"version": "${version}",
 	"name": "Toggle Visualize",
-	"description": "Visualize sprint and crouch toggling.",
+	"description": "Visualize sprint and sneak toggling.",
 	"authors": [
 		"BlueSheep2804"
 	],

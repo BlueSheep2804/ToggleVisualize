@@ -17,10 +17,10 @@ object ToggleVisualize : ClientModInitializer {
     private val logger = LoggerFactory.getLogger("togglevisualize")
 	//? if <1.21 {
 	/*private val sprintOverlayTexture = ResourceLocation("minecraft:textures/mob_effect/speed.png")
-	private val crouchOverlayTexture = ResourceLocation("minecraft:textures/item/hopper.png")
+	private val sneakOverlayTexture = ResourceLocation("minecraft:textures/item/hopper.png")
 	*///?} else {
 	private val sprintOverlayTexture = ResourceLocation.withDefaultNamespace("textures/mob_effect/speed.png")
-	private val crouchOverlayTexture = ResourceLocation.withDefaultNamespace("textures/item/hopper.png")
+	private val sneakOverlayTexture = ResourceLocation.withDefaultNamespace("textures/item/hopper.png")
 	//?}
 	private lateinit var config: ToggleVisualizeConfig
 
@@ -49,18 +49,18 @@ object ToggleVisualize : ClientModInitializer {
 				}
 			}
 
-			val optionToggleCrouch = options.toggleCrouch().get()
-			val isCrouchDown = options.keyShift.isDown
-			if (optionToggleCrouch && isCrouchDown) {
-				if (config.crouchShow) {
+			val optionToggleSneak = options.toggleCrouch().get()
+			val isSneakDown = options.keyShift.isDown
+			if (optionToggleSneak && isSneakDown) {
+				if (config.sneakShow) {
 					//? if <1.21.2 {
-					/*guiGraphics.blit(crouchOverlayTexture, config.crouchPositionX, config.crouchPositionY, 0F, 0F, 16, 16, 16, 16)
+					/*guiGraphics.blit(sneakOverlayTexture, config.sneakPositionX, config.sneakPositionY, 0F, 0F, 16, 16, 16, 16)
 					*///?} else {
-					guiGraphics.blit(RenderType::guiTexturedOverlay, crouchOverlayTexture, config.crouchPositionX, config.crouchPositionY, 0F, 0F, 16, 16, 16, 16)
+					guiGraphics.blit(RenderType::guiTexturedOverlay, sneakOverlayTexture, config.sneakPositionX, config.sneakPositionY, 0F, 0F, 16, 16, 16, 16)
 					//?}
 				}
-				if (config.crouchShowText) {
-					guiGraphics.drawString(minecraftInstance.font, Component.literal("Crouch").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.crouchTextPositionX, config.crouchTextPositionY, 16777215)
+				if (config.sneakShowText) {
+					guiGraphics.drawString(minecraftInstance.font, Component.literal("Sneak").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.sneakTextPositionX, config.sneakTextPositionY, 16777215)
 				}
 			}
 		}

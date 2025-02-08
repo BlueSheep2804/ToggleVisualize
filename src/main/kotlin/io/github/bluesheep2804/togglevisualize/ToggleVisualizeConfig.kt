@@ -34,22 +34,22 @@ class ToggleVisualizeConfig {
     var sprintTextPositionY = 20
 
     @SerialEntry
-    var crouchShow = true
+    var sneakShow = true
 
     @SerialEntry
-    var crouchPositionX = 16
+    var sneakPositionX = 16
 
     @SerialEntry
-    var crouchPositionY = 32
+    var sneakPositionY = 32
 
     @SerialEntry
-    var crouchShowText = false
+    var sneakShowText = false
 
     @SerialEntry
-    var crouchTextPositionX = 36
+    var sneakTextPositionX = 36
 
     @SerialEntry
-    var crouchTextPositionY = 36
+    var sneakTextPositionY = 36
 
     companion object {
         //? if <1.21 {
@@ -143,14 +143,14 @@ class ToggleVisualizeConfig {
                                     .build())
                             .group(
                                 OptionGroup.createBuilder()
-                                    .name(Component.literal("Crouch"))
+                                    .name(Component.literal("Sneak"))
                                     .option(
                                         Option.createBuilder<Boolean>()
                                             .name(Component.literal("Indicator"))
                                             .binding(
-                                                defaultConfig.crouchShow,
-                                                { config.crouchShow },
-                                                { newVal -> config.crouchShow = newVal })
+                                                defaultConfig.sneakShow,
+                                                { config.sneakShow },
+                                                { newVal -> config.sneakShow = newVal })
                                             .controller(TickBoxControllerBuilder::create)
                                             .build()
                                     )
@@ -158,27 +158,27 @@ class ToggleVisualizeConfig {
                                         Option.createBuilder<Int>()
                                             .name(Component.literal("Indicator position X"))
                                             .binding(
-                                                defaultConfig.crouchPositionX,
-                                                { config.crouchPositionX },
-                                                { newVal -> config.crouchPositionX = newVal })
+                                                defaultConfig.sneakPositionX,
+                                                { config.sneakPositionX },
+                                                { newVal -> config.sneakPositionX = newVal })
                                             .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
                                             .build())
                                     .option(
                                         Option.createBuilder<Int>()
                                             .name(Component.literal("Indicator position Y"))
                                             .binding(
-                                                defaultConfig.crouchPositionY,
-                                                { config.crouchPositionY },
-                                                { newVal -> config.crouchPositionY = newVal })
+                                                defaultConfig.sneakPositionY,
+                                                { config.sneakPositionY },
+                                                { newVal -> config.sneakPositionY = newVal })
                                             .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
                                             .build())
                                     .option(
                                         Option.createBuilder<Boolean>()
                                             .name(Component.literal("Text"))
                                             .binding(
-                                                defaultConfig.crouchShowText,
-                                                { config.crouchShowText },
-                                                { newVal -> config.crouchShowText = newVal })
+                                                defaultConfig.sneakShowText,
+                                                { config.sneakShowText },
+                                                { newVal -> config.sneakShowText = newVal })
                                             .controller(TickBoxControllerBuilder::create)
                                             .build()
                                     )
@@ -186,18 +186,18 @@ class ToggleVisualizeConfig {
                                         Option.createBuilder<Int>()
                                             .name(Component.literal("Text position X"))
                                             .binding(
-                                                defaultConfig.crouchTextPositionX,
-                                                { config.crouchTextPositionX },
-                                                { newVal -> config.crouchTextPositionX = newVal })
+                                                defaultConfig.sneakTextPositionX,
+                                                { config.sneakTextPositionX },
+                                                { newVal -> config.sneakTextPositionX = newVal })
                                             .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
                                             .build())
                                     .option(
                                         Option.createBuilder<Int>()
                                             .name(Component.literal("Text position Y"))
                                             .binding(
-                                                defaultConfig.crouchTextPositionY,
-                                                { config.crouchTextPositionY },
-                                                { newVal -> config.crouchTextPositionY = newVal })
+                                                defaultConfig.sneakTextPositionY,
+                                                { config.sneakTextPositionY },
+                                                { newVal -> config.sneakTextPositionY = newVal })
                                             .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
                                             .build())
                                     .build())

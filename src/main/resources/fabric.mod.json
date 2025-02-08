@@ -8,7 +8,8 @@
 		"BlueSheep2804"
 	],
 	"contact": {
-		"sources": "https://github.com/BlueSheep2804/ToggleVisualize"
+		"sources": "https://github.com/BlueSheep2804/ToggleVisualize",
+		"issues": "https://github.com/BlueSheep2804/ToggleVisualize/issues"
 	},
 	"license": "MIT",
 	"icon": "assets/togglevisualize/icon.png",
@@ -31,5 +32,14 @@
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*",
 		"yet_another_config_lib_v3": ">=${yaclVersion}"
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/toggle-visualize",
+				"modmenu.modrinth": "https://modrinth.com/mod/toggle-visualize",
+				"modmenu.kofi": "https://ko-fi.com/bluesheep"
+			}
+		}
 	}
 }

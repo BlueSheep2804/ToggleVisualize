@@ -15,6 +15,7 @@ Of course, it can also be disabled in the configuration.
 ## Dependencies
 - Fabric API
 - YetAnotherConfigLib
+- Fabric Language Kotlin
 
 ---
 

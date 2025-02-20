@@ -129,7 +129,7 @@ publishMods {
 		clientRequired = true
 		projectSlug = "toggle-visualize"
 
-		requires("yacl", "fabric-api")
+		requires("yacl", "fabric-api", "fabric-language-kotlin")
 		optional("modmenu")
 	}
 
@@ -138,7 +138,7 @@ publishMods {
 		projectId = "brJIdf61"
 		minecraftVersions = mcVersions
 
-		requires("yacl", "fabric-api")
+		requires("yacl", "fabric-api", "fabric-language-kotlin")
 		optional("modmenu")
 	}
 }

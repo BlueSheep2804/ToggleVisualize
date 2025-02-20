@@ -109,15 +109,22 @@ loom {
 }
 
 publishMods {
+	val mcVersions = when(stonecutter.current.project) {
+		"1.21.3" -> listOf("1.21.3", "1.21.4")
+		else -> listOf(stonecutter.current.project)
+	}
+
 	file.set(tasks.remapJar.get().archiveFile)
 	type = STABLE
 	modLoaders.add("fabric")
 	changelog = "Please check the [Github repository](https://github.com/BlueSheep2804/ToggleVisualize) for the update history."
 
+//	dryRun = true
+
 	curseforge {
-		accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
-		projectId.set("1195905")
-		minecraftVersions.add(stonecutter.current.project)
+		accessToken = providers.environmentVariable("CURSEFORGE_API_KEY").get()
+		projectId = "1195905"
+		minecraftVersions = mcVersions
 
 		clientRequired = true
 		projectSlug = "toggle-visualize"
@@ -127,9 +134,9 @@ publishMods {
 	}
 
 	modrinth {
-		accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+		accessToken = providers.environmentVariable("MODRINTH_TOKEN").get()
 		projectId = "brJIdf61"
-		minecraftVersions.add(stonecutter.current.project)
+		minecraftVersions = mcVersions
 
 		requires("yacl", "fabric-api")
 		optional("modmenu")

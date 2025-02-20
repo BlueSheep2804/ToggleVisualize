@@ -18,9 +18,11 @@ object ToggleVisualize : ClientModInitializer {
 	//? if <1.21 {
 	/*private val sprintOverlayTexture = ResourceLocation("minecraft:textures/mob_effect/speed.png")
 	private val sneakOverlayTexture = ResourceLocation("minecraft:textures/item/hopper.png")
+	private val flyingOverlayTexture = ResourceLocation("minecraft:textures/item/elytra.png")
 	*///?} else {
 	private val sprintOverlayTexture = ResourceLocation.withDefaultNamespace("textures/mob_effect/speed.png")
 	private val sneakOverlayTexture = ResourceLocation.withDefaultNamespace("textures/item/hopper.png")
+	private val flyingOverlayTexture = ResourceLocation.withDefaultNamespace("textures/item/elytra.png")
 	//?}
 	private lateinit var config: ToggleVisualizeConfig
 
@@ -61,6 +63,48 @@ object ToggleVisualize : ClientModInitializer {
 				}
 				if (config.sneakShowText) {
 					guiGraphics.drawString(minecraftInstance.font, Component.translatable("key.sneak").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY), config.sneakTextPositionX, config.sneakTextPositionY, 16777215)
+				}
+			}
+
+			val player = minecraftInstance.player
+			val isFlying = player?.isFallFlying
+			if (isFlying == true) {
+				if (config.flyingShow) {
+					//? if <1.21.2 {
+					/*guiGraphics.blit(
+						flyingOverlayTexture,
+						config.flyingPositionX,
+						config.flyingPositionY,
+						0F,
+						0F,
+						16,
+						16,
+						16,
+						16
+					)
+					*///?} else {
+					guiGraphics.blit(
+						RenderType::guiTexturedOverlay,
+						flyingOverlayTexture,
+						config.flyingPositionX,
+						config.flyingPositionY,
+						0F,
+						0F,
+						16,
+						16,
+						16,
+						16
+					)
+					//?}
+				}
+				if (config.flyingShowText) {
+					guiGraphics.drawString(
+						minecraftInstance.font,
+						Component.translatable("item.minecraft.elytra").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
+						config.flyingTextPositionX,
+						config.flyingTextPositionY,
+						16777215
+					)
 				}
 			}
 		}

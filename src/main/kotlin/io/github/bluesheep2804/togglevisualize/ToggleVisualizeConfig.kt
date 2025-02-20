@@ -51,6 +51,24 @@ class ToggleVisualizeConfig {
     @SerialEntry
     var sneakTextPositionY = 36
 
+    @SerialEntry
+    var flyingShow = true
+
+    @SerialEntry
+    var flyingPositionX = 16
+
+    @SerialEntry
+    var flyingPositionY = 48
+
+    @SerialEntry
+    var flyingShowText = false
+
+    @SerialEntry
+    var flyingTextPositionX = 36
+
+    @SerialEntry
+    var flyingTextPositionY = 52
+
     companion object {
         //? if <1.21 {
         /*private val configId = ResourceLocation("togglevisualize", "config")
@@ -198,6 +216,66 @@ class ToggleVisualizeConfig {
                                                 defaultConfig.sneakTextPositionY,
                                                 { config.sneakTextPositionY },
                                                 { newVal -> config.sneakTextPositionY = newVal })
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .build())
+                            .group(
+                                OptionGroup.createBuilder()
+                                    .name(Component.translatable("item.minecraft.elytra"))
+                                    .option(
+                                        Option.createBuilder<Boolean>()
+                                            .name(Component.translatable("togglevisualize.config.option.indicator"))
+                                            .binding(
+                                                defaultConfig.flyingShow,
+                                                { config.flyingShow },
+                                                { newVal -> config.flyingShow = newVal })
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build()
+                                    )
+                                    .option(
+                                        Option.createBuilder<Int>()
+                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionX"))
+                                            .binding(
+                                                defaultConfig.flyingPositionX,
+                                                { config.flyingPositionX },
+                                                { newVal -> config.flyingPositionX = newVal })
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .option(
+                                        Option.createBuilder<Int>()
+                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionY"))
+                                            .binding(
+                                                defaultConfig.flyingPositionY,
+                                                { config.flyingPositionY },
+                                                { newVal -> config.flyingPositionY = newVal })
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .option(
+                                        Option.createBuilder<Boolean>()
+                                            .name(Component.translatable("togglevisualize.config.option.text"))
+                                            .binding(
+                                                defaultConfig.flyingShowText,
+                                                { config.flyingShowText },
+                                                { newVal -> config.flyingShowText = newVal })
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build()
+                                    )
+                                    .option(
+                                        Option.createBuilder<Int>()
+                                            .name(Component.translatable("togglevisualize.config.option.textPositionX"))
+                                            .binding(
+                                                defaultConfig.flyingTextPositionX,
+                                                { config.flyingTextPositionX },
+                                                { newVal -> config.flyingTextPositionX = newVal })
+                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                                            .build())
+                                    .option(
+                                        Option.createBuilder<Int>()
+                                            .name(Component.translatable("togglevisualize.config.option.textPositionY"))
+                                            .binding(
+                                                defaultConfig.flyingTextPositionY,
+                                                { config.flyingTextPositionY },
+                                                { newVal -> config.flyingTextPositionY = newVal })
                                             .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
                                             .build())
                                     .build())

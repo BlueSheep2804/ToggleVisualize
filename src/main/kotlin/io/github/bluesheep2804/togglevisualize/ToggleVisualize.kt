@@ -32,7 +32,11 @@ object ToggleVisualize : ClientModInitializer {
 		HudRenderCallback.EVENT.register { guiGraphics: GuiGraphics, _: /*? if <1.21 {*//*Float*//*?} else {*/ DeltaTracker /*?}*/ ->
 			val minecraftInstance = Minecraft.getInstance()
 			val options = minecraftInstance.options
+			//? if <1.20.2 {
+			/*val debugScreen = options.renderDebug
+			*///?} else {
 			val debugScreen = minecraftInstance.debugOverlay.showDebugScreen()
+			//?}
 			val hideGui = options.hideGui
 			if (debugScreen || hideGui) return@register
 

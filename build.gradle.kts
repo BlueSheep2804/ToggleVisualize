@@ -11,6 +11,9 @@ val modVersion = project.property("modVersion")
 version = "$modVersion+${stonecutter.current.project}"
 group = project.property("mavenGroup") as String
 
+val javaVersion = if (stonecutter.eval(stonecutter.current.project, ">=1.20.5"))
+	21 else 17
+
 base {
 	archivesName.set(project.property("archivesBaseName") as String)
 }
@@ -61,7 +64,7 @@ dependencies {
 
 tasks {
 	compileJava {
-		options.release.set(21)
+		options.release.set(javaVersion)
 	}
 
 	processResources {
@@ -70,6 +73,7 @@ tasks {
 		filesMatching("fabric.mod.json") {
 			expand(mapOf(
 				"version" to version,
+				"javaVersion" to javaVersion,
 				"minecraftVersion" to stonecutter.current.project,
 				"yaclVersion" to project.property("yaclVersion")
 			))
@@ -86,8 +90,10 @@ tasks {
 }
 
 kotlin {
+	val jvm = if (javaVersion == 21)
+		JvmTarget.JVM_21 else JvmTarget.JVM_17
 	compilerOptions {
-		jvmTarget.set(JvmTarget.JVM_21)
+		jvmTarget.set(jvm)
 	}
 }
 
@@ -97,8 +103,11 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	val java = if (javaVersion == 21)
+		JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+
+	sourceCompatibility = java
+	targetCompatibility = java
 }
 
 loom {

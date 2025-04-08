@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-	id("fabric-loom") version "1.9-SNAPSHOT"
+	id("fabric-loom") version "1.10.5"
 	id("maven-publish")
 	id("org.jetbrains.kotlin.jvm") version "2.1.0"
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
@@ -50,7 +50,9 @@ dependencies {
 	minecraft("com.mojang:minecraft:${stonecutter.current.project}")
 	mappings(loom.layered {
 		officialMojangMappings()
-		parchment("org.parchmentmc.data:parchment-${stonecutter.current.project}:${parchmentMappings}@zip")
+		if (parchmentMappings != "none") {
+			parchment("org.parchmentmc.data:parchment-${stonecutter.current.project}:${parchmentMappings}@zip")
+		}
 	})
 	modImplementation("net.fabricmc:fabric-loader:${loaderVersion}")
 

@@ -13,8 +13,10 @@ import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 
 class PositioningScreen(private val yaclParent: Screen): Screen(Component.translatable("togglevisualize.config.positioning_tool.title")) {
+    private val selectOverlayTexture = ResourceLocation.withDefaultNamespace("textures/block/sculk_shrieker_top.png")
     private val config = ToggleVisualizeConfig.instance
     private var sprintPositionX = config.sprintPositionX
     private var sprintPositionY = config.sprintPositionY
@@ -106,6 +108,29 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             16,
             16
         )
+
+        if (activeToggleElement != null) return
+
+        val selected: List<Int> = when {
+            isHoveredSprint(mouseX, mouseY) -> listOf(sprintPositionX, sprintPositionY)
+            isHoveredSneak(mouseX, mouseY) -> listOf(sneakPositionX, sneakPositionY)
+            isHoveredFlying(mouseX, mouseY) -> listOf(flyingPositionX, flyingPositionY)
+            else -> emptyList()
+        }
+        if (selected.isNotEmpty()) {
+            guiGraphics.blit(
+                RenderType::guiTexturedOverlay,
+                selectOverlayTexture,
+                selected[0],
+                selected[1],
+                0F,
+                0F,
+                16,
+                16,
+                16,
+                16
+            )
+        }
     }
 
     override fun mouseClicked(rawMouseX: Double, rawMouseY: Double, button: Int): Boolean {
@@ -142,15 +167,15 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             howtoStringWidget.visible = true
             selectedHowtoStringWidget.visible = false
             activeToggleElement = null
-        } else if (isHovered(mouseX, mouseY, sprintPositionX, sprintPositionY)) {
+        } else if (isHoveredSprint(mouseX, mouseY)) {
             activeToggleElement = Sprint
             mouseOffsetX = mouseX - sprintPositionX
             mouseOffsetY = mouseY - sprintPositionY
-        } else if (isHovered(mouseX, mouseY, sneakPositionX, sneakPositionY)) {
+        } else if (isHoveredSneak(mouseX, mouseY)) {
             activeToggleElement = Sneak
             mouseOffsetX = mouseX - sneakPositionX
             mouseOffsetY = mouseY - sneakPositionY
-        } else if (isHovered(mouseX, mouseY, flyingPositionX, flyingPositionY)) {
+        } else if (isHoveredFlying(mouseX, mouseY)) {
             activeToggleElement = Flying
             mouseOffsetX = mouseX - flyingPositionX
             mouseOffsetY = mouseY - flyingPositionY
@@ -171,6 +196,18 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
 
     private fun isHovered(mouseX: Int, mouseY: Int, x: Int, y: Int): Boolean {
         return (x <= mouseX && x+16 >= mouseX && y <= mouseY && y+16 >= mouseY)
+    }
+
+    private fun isHoveredSprint(mouseX: Int, mouseY: Int): Boolean {
+        return isHovered(mouseX, mouseY, sprintPositionX, sprintPositionY)
+    }
+
+    private fun isHoveredSneak(mouseX: Int, mouseY: Int): Boolean {
+        return isHovered(mouseX, mouseY, sneakPositionX, sneakPositionY)
+    }
+
+    private fun isHoveredFlying(mouseX: Int, mouseY: Int): Boolean {
+        return isHovered(mouseX, mouseY, flyingPositionX, flyingPositionY)
     }
 
     private fun changeSelectionStringWidget(toggle: ToggleType) {

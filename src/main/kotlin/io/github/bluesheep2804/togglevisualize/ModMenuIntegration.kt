@@ -5,6 +5,6 @@ import com.terraformersmc.modmenu.api.ModMenuApi
 
 class ModMenuIntegration: ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> {
-        return ConfigScreenFactory { parentScreen -> ToggleVisualizeConfig.configScreen.generateScreen(parentScreen) }
+        return ConfigScreenFactory { parentScreen -> ToggleVisualizeConfig.configScreen(parentScreen).generateScreen(parentScreen) }
     }
 }

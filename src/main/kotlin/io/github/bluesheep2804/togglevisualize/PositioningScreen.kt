@@ -72,41 +72,23 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         super.render(guiGraphics, mouseX, mouseY, partialTick)
 
-        guiGraphics.blit(
-            RenderType::guiTexturedOverlay,
+        blit(
+            guiGraphics,
             sprintOverlayTexture,
             if (activeToggleElement == Sprint) mouseX - mouseOffsetX else sprintPositionX,
-            if (activeToggleElement == Sprint) mouseY - mouseOffsetY else sprintPositionY,
-            0F,
-            0F,
-            16,
-            16,
-            16,
-            16
+            if (activeToggleElement == Sprint) mouseY - mouseOffsetY else sprintPositionY
         )
-        guiGraphics.blit(
-            RenderType::guiTexturedOverlay,
+        blit(
+            guiGraphics,
             sneakOverlayTexture,
             if (activeToggleElement == Sneak) mouseX - mouseOffsetX else sneakPositionX,
-            if (activeToggleElement == Sneak) mouseY - mouseOffsetY else sneakPositionY,
-            0F,
-            0F,
-            16,
-            16,
-            16,
-            16
+            if (activeToggleElement == Sneak) mouseY - mouseOffsetY else sneakPositionY
         )
-        guiGraphics.blit(
-            RenderType::guiTexturedOverlay,
+        blit(
+            guiGraphics,
             flyingOverlayTexture,
             if (activeToggleElement == Flying) mouseX - mouseOffsetX else flyingPositionX,
-            if (activeToggleElement == Flying) mouseY - mouseOffsetY else flyingPositionY,
-            0F,
-            0F,
-            16,
-            16,
-            16,
-            16
+            if (activeToggleElement == Flying) mouseY - mouseOffsetY else flyingPositionY
         )
 
         if (activeToggleElement != null) return
@@ -118,17 +100,11 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             else -> emptyList()
         }
         if (selected.isNotEmpty()) {
-            guiGraphics.blit(
-                RenderType::guiTexturedOverlay,
+            blit(
+                guiGraphics,
                 selectOverlayTexture,
                 selected[0],
-                selected[1],
-                0F,
-                0F,
-                16,
-                16,
-                16,
-                16
+                selected[1]
             )
         }
     }
@@ -217,5 +193,20 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             Flying -> "item.minecraft.elytra"
         })
         selectionStringWidget.message = Component.translatable(selectionComponentKey, toggleTypeComponent).withStyle(ChatFormatting.GRAY)
+    }
+
+    private fun blit(guiGraphics: GuiGraphics, atlasLocation: ResourceLocation, x: Int, y: Int) {
+        guiGraphics.blit(
+            RenderType::guiTexturedOverlay,
+            atlasLocation,
+            x,
+            y,
+            0F,
+            0F,
+            16,
+            16,
+            16,
+            16
+        )
     }
 }

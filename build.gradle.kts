@@ -121,7 +121,7 @@ loom {
 
 publishMods {
 	val mcVersions = when(stonecutter.current.project) {
-		"1.21.3" -> listOf("1.21.3", "1.21.4")
+		"1.21.3" -> listOf("1.21.3", "1.21.4", "1.21.5")
 		else -> listOf(stonecutter.current.project)
 	}
 

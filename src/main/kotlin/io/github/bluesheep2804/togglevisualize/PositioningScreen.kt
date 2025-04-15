@@ -170,8 +170,8 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             guiGraphics.renderOutline(
                 rectangle.left()-1,
                 rectangle.top()-1,
-                rectangle.width+1,
-                rectangle.height+1,
+                rectangle.width+2,
+                rectangle.height+2,
                 -1
             )
         }

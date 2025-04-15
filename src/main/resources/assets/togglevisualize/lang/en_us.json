@@ -12,5 +12,5 @@
   "togglevisualize.config.positioning_tool.title": "Positioning Tool",
   "togglevisualize.config.positioning_tool.howto": "Left click to select.",
   "togglevisualize.config.positioning_tool.howto.selected": "Left click to position. Right click to cancel.",
-  "togglevisualize.config.positioning_tool.selecting": "Selecting: %s"
+  "togglevisualize.config.positioning_tool.selecting": "Selecting: %s (%s)"
 }

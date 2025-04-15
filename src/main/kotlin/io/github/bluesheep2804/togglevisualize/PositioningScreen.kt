@@ -145,6 +145,23 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
                 selected[1]
             )
         }
+
+        val rectangle = when {
+            sprintText.isHovered -> sprintText.rectangle
+            sneakText.isHovered -> sneakText.rectangle
+            flyingText.isHovered -> flyingText.rectangle
+            else -> null
+        }
+
+        if (rectangle != null){
+            guiGraphics.renderOutline(
+                rectangle.left()-1,
+                rectangle.top()-1,
+                rectangle.width+1,
+                rectangle.height+1,
+                -1
+            )
+        }
     }
 
     override fun mouseClicked(rawMouseX: Double, rawMouseY: Double, button: Int): Boolean {

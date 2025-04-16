@@ -1,5 +1,6 @@
 package io.github.bluesheep2804.togglevisualize
 
+import dev.isxander.yacl3.api.ButtonOption
 import dev.isxander.yacl3.api.ConfigCategory
 import dev.isxander.yacl3.api.Option
 import dev.isxander.yacl3.api.OptionGroup
@@ -11,6 +12,8 @@ import dev.isxander.yacl3.config.v2.api.ConfigClassHandler
 import dev.isxander.yacl3.config.v2.api.SerialEntry
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
@@ -92,13 +95,25 @@ class ToggleVisualizeConfig {
             HANDLER.load()
         }
 
-        val configScreen: YetAnotherConfigLib
-            get() = YetAnotherConfigLib.create(HANDLER) { defaultConfig, config, builder -> builder
+        fun save() {
+            HANDLER.save()
+        }
+
+        fun configScreen(parent: Screen): YetAnotherConfigLib {
+            return YetAnotherConfigLib.create(HANDLER) { defaultConfig, config, builder -> builder
                     .title(Component.translatable("togglevisualize.config.title"))
                     .save(HANDLER::save)
                     .category(
                         ConfigCategory.createBuilder()
                             .name(Component.translatable("togglevisualize.config.category.main"))
+                            .option(
+                                ButtonOption.createBuilder()
+                                    .name(Component.translatable("togglevisualize.config.option.open_positioning_tool"))
+                                    .action{_, _ ->
+                                        Minecraft.getInstance().setScreen(PositioningScreen(parent))
+                                    }
+                                    .build()
+                            )
                             .group(
                                 OptionGroup.createBuilder()
                                     .name(Component.translatable("key.sprint"))
@@ -281,5 +296,6 @@ class ToggleVisualizeConfig {
                                     .build())
                             .build())
             }
+        }
     }
 }

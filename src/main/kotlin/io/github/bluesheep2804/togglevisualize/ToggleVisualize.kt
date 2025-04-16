@@ -14,15 +14,15 @@ import net.minecraft.resources.ResourceLocation
 import org.slf4j.LoggerFactory
 
 object ToggleVisualize : ClientModInitializer {
-    private val logger = LoggerFactory.getLogger("togglevisualize")
+	val logger = LoggerFactory.getLogger("togglevisualize")
 	//? if <1.21 {
-	/*private val sprintOverlayTexture = ResourceLocation("minecraft:textures/mob_effect/speed.png")
-	private val sneakOverlayTexture = ResourceLocation("minecraft:textures/item/hopper.png")
-	private val flyingOverlayTexture = ResourceLocation("minecraft:textures/item/elytra.png")
+	/*val sprintOverlayTexture = ResourceLocation("minecraft:textures/mob_effect/speed.png")
+	val sneakOverlayTexture = ResourceLocation("minecraft:textures/item/hopper.png")
+	val flyingOverlayTexture = ResourceLocation("minecraft:textures/item/elytra.png")
 	*///?} else {
-	private val sprintOverlayTexture = ResourceLocation.withDefaultNamespace("textures/mob_effect/speed.png")
-	private val sneakOverlayTexture = ResourceLocation.withDefaultNamespace("textures/item/hopper.png")
-	private val flyingOverlayTexture = ResourceLocation.withDefaultNamespace("textures/item/elytra.png")
+	val sprintOverlayTexture: ResourceLocation = ResourceLocation.withDefaultNamespace("textures/mob_effect/speed.png")
+	val sneakOverlayTexture: ResourceLocation = ResourceLocation.withDefaultNamespace("textures/item/hopper.png")
+	val flyingOverlayTexture: ResourceLocation = ResourceLocation.withDefaultNamespace("textures/item/elytra.png")
 	//?}
 	private lateinit var config: ToggleVisualizeConfig
 
@@ -38,7 +38,7 @@ object ToggleVisualize : ClientModInitializer {
 			val debugScreen = minecraftInstance.debugOverlay.showDebugScreen()
 			//?}
 			val hideGui = options.hideGui
-			if (debugScreen || hideGui) return@register
+			if (debugScreen || hideGui || minecraftInstance.screen is PositioningScreen) return@register
 
 			val optionToggleSprint = options.toggleSprint().get()
 			val isSprintDown = options.keySprint.isDown

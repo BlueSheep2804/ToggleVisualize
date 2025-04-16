@@ -7,5 +7,10 @@
   "togglevisualize.config.option.indicatorPositionY": "Indicator position Y",
   "togglevisualize.config.option.text": "Text",
   "togglevisualize.config.option.textPositionX": "Text position X",
-  "togglevisualize.config.option.textPositionY": "Text position Y"
+  "togglevisualize.config.option.textPositionY": "Text position Y",
+  "togglevisualize.config.option.open_positioning_tool": "Open Positioning Tool",
+  "togglevisualize.config.positioning_tool.title": "Positioning Tool",
+  "togglevisualize.config.positioning_tool.howto": "Left click to select.",
+  "togglevisualize.config.positioning_tool.howto.selected": "Left click to position. Right click to cancel.",
+  "togglevisualize.config.positioning_tool.selecting": "Selecting: %s (%s)"
 }

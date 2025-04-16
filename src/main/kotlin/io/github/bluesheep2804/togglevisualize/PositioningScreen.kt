@@ -70,12 +70,12 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         *///?}
 
         positionSettingLayout.setMinDimensions(width, height)
-        positionSettingLayout.addChild(sprintIcon)
-        positionSettingLayout.addChild(sprintText)
-        positionSettingLayout.addChild(sneakIcon)
-        positionSettingLayout.addChild(sneakText)
-        positionSettingLayout.addChild(flyingIcon)
-        positionSettingLayout.addChild(flyingText)
+        if (config.sprintShow) positionSettingLayout.addChild(sprintIcon)
+        if (config.sprintShowText) positionSettingLayout.addChild(sprintText)
+        if (config.sneakShow) positionSettingLayout.addChild(sneakIcon)
+        if (config.sneakShowText) positionSettingLayout.addChild(sneakText)
+        if (config.flyingShow) positionSettingLayout.addChild(flyingIcon)
+        if (config.flyingShowText) positionSettingLayout.addChild(flyingText)
 
         selectedHowtoStringWidget.visible = false
         selectionStringWidget.visible = false

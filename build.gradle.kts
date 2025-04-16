@@ -128,7 +128,7 @@ publishMods {
 	file.set(tasks.remapJar.get().archiveFile)
 	type = STABLE
 	modLoaders.add("fabric")
-	changelog = "Please check the [Github repository](https://github.com/BlueSheep2804/ToggleVisualize) for the update history."
+	changelog = rootProject.file("changelog.md").readText()
 
 //	dryRun = true
 

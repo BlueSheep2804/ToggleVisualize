@@ -13,7 +13,6 @@ import net.minecraft.client.gui.components.StringWidget
 import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
@@ -36,34 +35,16 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     private var activeToggleElement: ToggleType? = null
     private var isTextElement: Boolean = false
     private val layout = FrameLayout()
-    private val descriptionLayout = LinearLayout.vertical()
+    private lateinit var descriptionLayout: LinearLayout
     private val howtoLayout = FrameLayout()
     private val positionSettingLayout = FrameLayout()
     private lateinit var howtoStringWidget: StringWidget
     private lateinit var selectedHowtoStringWidget: StringWidget
     private lateinit var selectionStringWidget: StringWidget
     private val selectionComponentKey = "togglevisualize.config.positioning_tool.selecting"
-    private val sprintIcon = ImageWidget.texture(
-        16,
-        16,
-        sprintOverlayTexture,
-        16,
-        16
-    )
-    private val sneakIcon = ImageWidget.texture(
-        16,
-        16,
-        sneakOverlayTexture,
-        16,
-        16
-    )
-    private val flyingIcon = ImageWidget.texture(
-        16,
-        16,
-        flyingOverlayTexture,
-        16,
-        16
-    )
+    private val sprintIcon = imageWidget(sprintOverlayTexture)
+    private val sneakIcon = imageWidget(sneakOverlayTexture)
+    private val flyingIcon = imageWidget(flyingOverlayTexture)
     private lateinit var sprintText: StringWidget
     private lateinit var sneakText: StringWidget
     private lateinit var flyingText: StringWidget
@@ -78,8 +59,15 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         flyingText = StringWidget(Component.translatable("item.minecraft.elytra").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC), font)
 
         selectionStringWidget.width = width
+        //? if >1.20.1 {
+        descriptionLayout = LinearLayout.vertical()
         descriptionLayout.defaultCellSetting().align(0.5f, 0.5f)
         descriptionLayout.spacing(4)
+        //?} else {
+        /*descriptionLayout = LinearLayout(0, 0, LinearLayout.Orientation.VERTICAL)
+        descriptionLayout.defaultChildLayoutSetting().align(0.5f, 0.5f)
+        descriptionLayout.defaultChildLayoutSetting().padding(4)
+        *///?}
 
         positionSettingLayout.setMinDimensions(width, height)
         positionSettingLayout.addChild(sprintIcon)
@@ -149,7 +137,9 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     }
 
     // 背景のぼかしを無効化
-    override fun renderBlurredBackground() {}
+    //? if >1.20.4 {
+    override fun renderBlurredBackground(/*? if >1.20.4 <1.21.3 {*//*patialTick: Float*//*?}*/) {}
+    //?}
 
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         super.render(guiGraphics, mouseX, mouseY, partialTick)
@@ -317,18 +307,21 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         selectionStringWidget.message = Component.translatable(selectionComponentKey, toggleTypeComponent, widgetTypeComponent).withStyle(ChatFormatting.GRAY)
     }
 
-    private fun blit(guiGraphics: GuiGraphics, atlasLocation: ResourceLocation, x: Int, y: Int) {
-        guiGraphics.blit(
-            RenderType::guiTexturedOverlay,
-            atlasLocation,
-            x,
-            y,
-            0F,
-            0F,
+    private fun imageWidget(imageLocation: ResourceLocation): ImageWidget {
+        //? if >1.20.1 {
+        return ImageWidget.texture(
             16,
             16,
+            imageLocation,
             16,
             16
         )
+        //?} else {
+        /*return ImageWidget(
+            16,
+            16,
+            imageLocation
+        )
+        *///?}
     }
 }

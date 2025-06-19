@@ -138,7 +138,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
 
     // 背景のぼかしを無効化
     //? if >1.20.4 {
-    override fun renderBlurredBackground(/*? if >1.20.4 <1.21.3 {*//*patialTick: Float*//*?}*/) {}
+    override fun renderBlurredBackground(/*? if >1.20.4 <1.21.3 {*//*patialTick: Float*//*?} else if >=1.21.6 {*/guiGraphics: GuiGraphics/*?}*/) {}
     //?}
 
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {

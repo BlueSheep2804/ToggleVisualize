@@ -1,0 +1,39 @@
+name: Feature Request
+description: Suggest a new feature.
+title: "[Feature]: "
+labels: ["enhancement"]
+assignees:
+  - BlueSheep2804
+body:
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: Please describe the feature you would like to see added.
+      placeholder: e.g. Add a new display mode
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation / Background
+      description: Why do you need this feature? What problem does it solve?
+      placeholder: e.g. The current display method makes information hard to see
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives or Related Information
+      description: If there are existing methods or other ideas, please describe them (optional).
+      placeholder: e.g. Features available in other mods, etc.
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: Please provide any screenshots, references, or other information (optional).
+      placeholder: e.g. Reference images or links
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request!

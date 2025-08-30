@@ -1,9 +1,9 @@
 pluginManagement {
 	repositories {
-		maven {
-			name = "Fabric"
-			url = uri("https://maven.fabricmc.net/")
-		}
+		maven("https://maven.fabricmc.net/")
+		maven("https://maven.architectury.dev/")
+		maven("https://maven.minecraftforge.net/")
+		maven("https://maven.neoforged.net/releases/")
 		mavenCentral()
 		gradlePluginPortal()
 	}
@@ -17,8 +17,13 @@ stonecutter {
 	kotlinController = true
 	centralScript = "build.gradle.kts"
 
-	create(rootProject) {
-		versions("1.20.1", "1.20.4", "1.20.6", "1.21.1", "1.21.3", "1.21.6")
-		vcsVersion = "1.21.6"
+	shared {
+		fun mc(loader: String, vararg versions: String) {
+			for (version in versions) vers("$version-$loader", version)
+		}
+		mc("fabric", "1.20.1", "1.20.4", "1.20.6", "1.21.1", "1.21.3", "1.21.6")
 	}
+	create(rootProject)
 }
+
+rootProject.name = "ToggleVisualize"

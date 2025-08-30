@@ -1,22 +1,29 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-	id("fabric-loom") version "1.10.5"
+	id("dev.architectury.loom") version "1.11-SNAPSHOT"
+	id("architectury-plugin") version "3.4-SNAPSHOT"
 	id("maven-publish")
 	id("org.jetbrains.kotlin.jvm") version "2.1.0"
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
+val minecraftVersion = stonecutter.current.version
+val javaVersion = if (stonecutter.eval(minecraftVersion, ">=1.20.5")) 21 else 17
+val loader = loom.platform.get().name.lowercase()
+
 val modVersion = project.property("modVersion")
-version = "$modVersion+${stonecutter.current.project}"
+version = "$modVersion+$minecraftVersion"
 group = project.property("mavenGroup") as String
 
-val javaVersion = if (stonecutter.eval(stonecutter.current.project, ">=1.20.5"))
-	21 else 17
-
 base {
-	archivesName.set(project.property("archivesBaseName") as String)
+	archivesName.set(project.property("archivesBaseName") as String + "-$loader")
 }
+
+architectury.common(stonecutter.tree.branches.mapNotNull {
+	if (stonecutter.current.project !in it) null
+	else project.property("loom.platform") as String
+})
 
 repositories {
 	// Add repositories to retrieve artifacts from in here.
@@ -40,53 +47,44 @@ repositories {
 
 dependencies {
 	// To change the versions see the gradle.properties file
-	val loaderVersion: String by project
 	val fabricVersion: String by project
+	val fabricApiVersion: String by project
 	val fabricKotlinVersion: String by project
 	val yaclVersion: String by project
 	val modmenuVersion: String by project
 	val parchmentMappings: String by project
 
-	minecraft("com.mojang:minecraft:${stonecutter.current.project}")
+	minecraft("com.mojang:minecraft:$minecraftVersion")
 	mappings(loom.layered {
 		officialMojangMappings()
 		if (parchmentMappings != "none") {
-			parchment("org.parchmentmc.data:parchment-${stonecutter.current.project}:${parchmentMappings}@zip")
+			parchment("org.parchmentmc.data:parchment-$minecraftVersion:$parchmentMappings@zip")
 		}
 	})
-	modImplementation("net.fabricmc:fabric-loader:${loaderVersion}")
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${fabricVersion}")
-	modImplementation("net.fabricmc:fabric-language-kotlin:${fabricKotlinVersion}")
+	if (loader == "fabric") {
+		modImplementation("net.fabricmc:fabric-loader:${fabricVersion}")
 
-	modImplementation("dev.isxander:yet-another-config-lib:${yaclVersion}")
-	modImplementation("com.terraformersmc:modmenu:${modmenuVersion}")
+		// Fabric API. This is technically optional, but you probably want it anyway.
+		modImplementation("net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}")
+		modImplementation("net.fabricmc:fabric-language-kotlin:${fabricKotlinVersion}")
+
+		modImplementation("dev.isxander:yet-another-config-lib:${yaclVersion}")
+		modImplementation("com.terraformersmc:modmenu:${modmenuVersion}")
+	}
 }
 
-tasks {
-	compileJava {
-		options.release.set(javaVersion)
+loom {
+	runConfigs.all {
+		ideConfigGenerated(true)
+		runDir = "../../run"
 	}
 
-	processResources {
-		inputs.property("minecraft", stonecutter.current.project)
+//	accessWidenerPath = rootProject.file("src/main/resources/togglevisualize.accesswidener")
 
-		filesMatching("fabric.mod.json") {
-			expand(mapOf(
-				"version" to version,
-				"javaVersion" to javaVersion,
-				"minecraftVersion" to stonecutter.current.project,
-				"yaclVersion" to project.property("yaclVersion")
-			))
-		}
-	}
-
-	jar {
-//		archiveBaseName = "${project.base.archivesName}-${stonecutter.current.version}-${stonecutter.current.project}"
-
-		from("LICENSE") {
-			rename { "${it}_${project.base.archivesName}" }
+	decompilers {
+		get("vineflower").apply {
+			options.put("mark-corresponding-synthetics", "1")
 		}
 	}
 }
@@ -112,22 +110,56 @@ java {
 	targetCompatibility = java
 }
 
-loom {
-	runConfigs.all {
-		ideConfigGenerated(true)
-		runDir = "../../run"
+tasks.jar {
+	archiveClassifier = "dev"
+	from("LICENSE") {
+		rename { "${it}_${project.base.archivesName}" }
+	}
+}
+
+val buildAndCollect = tasks.register<Copy>("buildAndCollect") {
+	group = "versioned"
+	description = "Must run thorough 'chiseledBuild'"
+	from(tasks.remapJar.get().archiveFile, tasks.remapSourcesJar.get().archiveFile)
+	into(rootProject.layout.buildDirectory.dir("libs/$modVersion/$loader"))
+	dependsOn("build")
+}
+
+if (stonecutter.current.isActive) {
+	rootProject.tasks.register("buildActive") {
+		group = "project"
+		dependsOn(buildAndCollect)
+	}
+
+	rootProject.tasks.register("runActive") {
+		group = "project"
+		dependsOn(tasks.named("runClient"))
+	}
+}
+
+tasks.processResources {
+	inputs.property("minecraft", stonecutter.current.project)
+
+	filesMatching("fabric.mod.json") {
+		expand(mapOf(
+			"version" to version,
+			"javaVersion" to javaVersion,
+			"minecraftVersion" to stonecutter.current.project,
+			"yaclVersion" to project.property("yaclVersion")
+		))
 	}
 }
 
 publishMods {
-	val mcVersions = when(stonecutter.current.project) {
+	val mcVersions = when(minecraftVersion) {
 		"1.21.3" -> listOf("1.21.3", "1.21.4", "1.21.5")
+		"1.21.6" -> listOf("1.21.6", "1.21.7", "1.21.8")
 		else -> listOf(stonecutter.current.project)
 	}
 
-	file.set(tasks.remapJar.get().archiveFile)
+	file = project.tasks.remapJar.get().archiveFile
 	type = STABLE
-	modLoaders.add("fabric")
+	modLoaders.add(loader)
 	changelog = rootProject.file("changelog.md").readText()
 
 //	dryRun = true

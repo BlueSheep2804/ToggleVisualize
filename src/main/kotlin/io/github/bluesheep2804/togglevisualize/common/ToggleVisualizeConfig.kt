@@ -10,11 +10,11 @@ import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler
 import dev.isxander.yacl3.config.v2.api.SerialEntry
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder
-import net.fabricmc.loader.api.FabricLoader
+import io.github.bluesheep2804.togglevisualize.ToggleVisualize.rl
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import java.nio.file.Path
 
 class ToggleVisualizeConfig {
     @SerialEntry
@@ -72,23 +72,28 @@ class ToggleVisualizeConfig {
     var flyingTextPositionY = 52
 
     companion object {
-        //? if <1.21 {
-        /*private val configId = ResourceLocation("togglevisualize", "config")
-        *///?} else {
-        private val configId = ResourceLocation.fromNamespaceAndPath("togglevisualize", "config")
-        //?}
-        private val HANDLER: ConfigClassHandler<ToggleVisualizeConfig> = ConfigClassHandler.createBuilder(ToggleVisualizeConfig::class.java)
-                .id(configId)
-                .serializer { config: ConfigClassHandler<ToggleVisualizeConfig>? ->
-                    GsonConfigSerializerBuilder.create(config)
-                            .setPath(FabricLoader.getInstance().configDir.resolve("togglevisualize.json5"))
-                            .setJson5(true)
-                            .build()
-                }
-                .build()
+        private val configId = rl("config")
+
+        private lateinit var configDir: Path
+
+        private lateinit var HANDLER: ConfigClassHandler<ToggleVisualizeConfig>
 
         val instance: ToggleVisualizeConfig
             get() = HANDLER.instance()
+
+        fun init(dir: Path) {
+            configDir = dir
+            HANDLER = ConfigClassHandler.createBuilder(ToggleVisualizeConfig::class.java)
+                .id(configId)
+                .serializer { config: ConfigClassHandler<ToggleVisualizeConfig>? ->
+                    GsonConfigSerializerBuilder.create(config)
+                        .setPath(configDir)
+                        .setJson5(true)
+                        .build()
+                }
+                .build()
+            load()
+        }
 
         fun load() {
             HANDLER.load()

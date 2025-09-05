@@ -10,16 +10,13 @@ pluginManagement {
 }
 
 plugins {
-	id("dev.kikugie.stonecutter") version "0.5.1"
+	id("dev.kikugie.stonecutter") version "0.7.10"
 }
 
 stonecutter {
-	kotlinController = true
-	centralScript = "build.gradle.kts"
-
 	shared {
 		fun mc(loader: String, vararg versions: String) {
-			for (version in versions) vers("$version-$loader", version)
+			for (version in versions) version("$version-$loader", version).buildscript.set("build.$loader.gradle.kts")
 		}
 		mc("fabric", "1.20.1", "1.20.4", "1.20.6", "1.21.1", "1.21.3", "1.21.6")
 		vcsVersion = "1.21.6-fabric"

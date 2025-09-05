@@ -1,16 +1,13 @@
-import org.gradle.kotlin.dsl.support.uppercaseFirstChar
-
 plugins {
     id("dev.kikugie.stonecutter")
 }
-stonecutter active "1.21.6-fabric" /* [SC] DO NOT EDIT */
+stonecutter active "1.21.6-fabric"
 
-stonecutter registerChiseled tasks.register("chiseledBuild", stonecutter.chiseled) {
-    group = "project"
-    ofTask("build")
+stonecutter parameters {
+    constants.match(node.metadata.project.substringAfterLast("-"), "fabric")
 }
 
-stonecutter registerChiseled tasks.register("chiseledPublishMods", stonecutter.chiseled) {
-    group = "project"
-    ofTask("publishMods")
+for (version in stonecutter.versions.map { it.project }.distinct()) tasks.register("publish$version") {
+    group = "publishing"
+    dependsOn(stonecutter.tasks.named("publishMods") { metadata.version == version })
 }

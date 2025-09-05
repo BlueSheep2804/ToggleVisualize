@@ -1,3 +1,4 @@
+//? if fabric {
 package io.github.bluesheep2804.togglevisualize.fabric
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory
@@ -11,3 +12,4 @@ class ModMenuIntegration: ModMenuApi {
         }
     }
 }
+//?}

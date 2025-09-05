@@ -1,3 +1,4 @@
+//? if fabric {
 package io.github.bluesheep2804.togglevisualize.fabric
 
 import io.github.bluesheep2804.togglevisualize.ToggleVisualize
@@ -21,3 +22,4 @@ object ToggleVisualizeFabric : ClientModInitializer {
         //?}
     }
 }
+//?}

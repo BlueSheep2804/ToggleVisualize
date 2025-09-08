@@ -4,7 +4,16 @@ plugins {
 stonecutter active "1.21.6-fabric"
 
 stonecutter parameters {
-    constants.match(node.metadata.project.substringAfterLast("-"), "fabric")
+    constants.match(node.metadata.project.substringAfterLast("-"), "fabric", "forge")
+}
+
+tasks.register("buildAndCollectAll") {
+    group = "project"
+    dependsOn(stonecutter.tasks.named("buildAndCollect"))
+}
+
+stonecutter.tasks {
+    order("publishMods")
 }
 
 for (version in stonecutter.versions.map { it.project }.distinct()) tasks.register("publish$version") {

@@ -18,6 +18,7 @@ object ToggleVisualize {
         config = ToggleVisualizeConfig.instance
     }
 
+    @Suppress("DEPRECATION", "removal")
     fun rl(path: String): ResourceLocation {
         //? if <1.21 {
         /*return ResourceLocation("togglevisualize", path)
@@ -26,6 +27,7 @@ object ToggleVisualize {
         //?}
     }
 
+    @Suppress("DEPRECATION", "removal")
     fun rlMinecraft(path: String): ResourceLocation {
         //? if <1.21 {
         /*return ResourceLocation("minecraft", path)

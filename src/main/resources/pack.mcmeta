@@ -1,6 +1,6 @@
 {
   "pack": {
     "description": "Toggle Visualize Resource",
-    "pack_format": 15
+    "pack_format": ${packFormat}
   }
 }

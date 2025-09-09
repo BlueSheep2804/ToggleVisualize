@@ -13,7 +13,8 @@ tasks.register("buildAndCollectAll") {
 }
 
 stonecutter.tasks {
-    order("publishMods")
+    order("publishCurseforge")
+    order("publishModrinth")
 }
 
 for (version in stonecutter.versions.map { it.project }.distinct()) tasks.register("publish$version") {

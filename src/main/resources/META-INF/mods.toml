@@ -7,8 +7,10 @@ issueTrackerURL="https://github.com/BlueSheep2804/ToggleVisualize/issues"
 modId="togglevisualize"
 version="${version}"
 displayName="Toggle Visualize"
+logoFile="assets/togglevisualize/icon.png"
 authors="BlueSheep2804"
 description="Visualize sprint and sneak toggling."
+displayTest="IGNORE_ALL_VERSION"
 
 [[dependencies.togglevisualize]]
 modId="forge"

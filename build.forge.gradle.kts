@@ -25,7 +25,7 @@ legacyForge {
 
     parchment {
         mappingsVersion = project.property("parchmentMappings") as String
-        this.minecraftVersion = mcVersion
+        minecraftVersion = mcVersion
     }
     runs {
         configureEach {
@@ -33,13 +33,6 @@ legacyForge {
         }
         register("client") {
             client()
-        }
-        register("data") {
-            data()
-        }
-        register("server") {
-            programArguments.add("--nogui")
-            server()
         }
     }
 
@@ -59,7 +52,7 @@ repositories {
 }
 
 dependencies {
-    implementation("thedarkcolour:kotlinforforge:4.10.0")
+    implementation("thedarkcolour:kotlinforforge:${project.property("kotlinForForgeVersion")}")
     modImplementation("dev.isxander:yet-another-config-lib:${project.property("yaclVersion")}")
 }
 
@@ -77,13 +70,6 @@ java {
 
     sourceCompatibility = java
     targetCompatibility = java
-}
-
-tasks.jar {
-    archiveClassifier = "dev"
-    from("LICENSE") {
-        rename { "${it}_${project.base.archivesName}" }
-    }
 }
 
 val buildAndCollect = tasks.register<Copy>("buildAndCollect") {
@@ -109,6 +95,7 @@ if (stonecutter.current.isActive) {
 tasks.named<ProcessResources>("processResources") {
     inputs.property("minecraft", mcVersion)
 
+    exclude("fabric.mod.json")
     filesMatching("META-INF/mods.toml") {
         expand(mapOf(
             "version" to version,
@@ -117,8 +104,9 @@ tasks.named<ProcessResources>("processResources") {
             "minecraftVersionRange" to project.property("minecraftVersionRange")
         ))
     }
-//    into("build/resources/main")
-//    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    filesMatching("pack.mcmeta") {
+        expand("packFormat" to project.property("packFormat"))
+    }
 }
 
 publishMods {
@@ -128,6 +116,7 @@ publishMods {
         else -> listOf(mcVersion)
     }
 
+    displayName = "$modVersion for $loader $mcVersion"
     file = project.tasks.jar.get().archiveFile
     type = STABLE
     modLoaders.add(loader)
@@ -143,8 +132,7 @@ publishMods {
         clientRequired = true
         projectSlug = "toggle-visualize"
 
-        requires("yacl", "fabric-api", "fabric-language-kotlin")
-        optional("modmenu")
+        requires("yacl", "kotlin-for-forge")
     }
 
     modrinth {
@@ -152,7 +140,6 @@ publishMods {
         projectId = "brJIdf61"
         minecraftVersions = mcVersions
 
-        requires("yacl", "fabric-api", "fabric-language-kotlin")
-        optional("modmenu")
+        requires("yacl", "kotlin-for-forge")
     }
 }

@@ -94,17 +94,10 @@ java {
 	targetCompatibility = java
 }
 
-tasks.jar {
-	archiveClassifier = "dev"
-	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName}" }
-	}
-}
-
 val buildAndCollect = tasks.register<Copy>("buildAndCollect") {
 	group = "versioned"
 	description = "Must run thorough 'chiseledBuild'"
-	from(tasks.remapJar.get().archiveFile, tasks.remapSourcesJar.get().archiveFile)
+	from(tasks.remapJar.get().archiveFile)
 	into(rootProject.layout.buildDirectory.dir("libs/$modVersion/$loader"))
 	dependsOn("build")
 }
@@ -124,6 +117,7 @@ if (stonecutter.current.isActive) {
 tasks.processResources {
 	inputs.property("minecraft", stonecutter.current.project)
 
+	exclude("META-INF/mods.toml")
 	filesMatching("fabric.mod.json") {
 		expand(mapOf(
 			"version" to version,
@@ -131,6 +125,9 @@ tasks.processResources {
 			"minecraftVersion" to stonecutter.current.project,
 			"yaclVersion" to project.property("yaclVersion")
 		))
+	}
+	filesMatching("pack.mcmeta") {
+		expand("packFormat" to project.property("packFormat"))
 	}
 }
 
@@ -141,6 +138,7 @@ publishMods {
 		else -> listOf(stonecutter.current.project)
 	}
 
+	displayName = "$modVersion for $loader $mcVersion"
 	file = project.tasks.remapJar.get().archiveFile
 	type = STABLE
 	modLoaders.add(loader)

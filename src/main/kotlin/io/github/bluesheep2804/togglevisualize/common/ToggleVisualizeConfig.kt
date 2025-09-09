@@ -74,20 +74,20 @@ class ToggleVisualizeConfig {
     companion object {
         private val configId = rl("config")
 
-        private lateinit var configDir: Path
+        private lateinit var configPath: Path
 
         private lateinit var HANDLER: ConfigClassHandler<ToggleVisualizeConfig>
 
         val instance: ToggleVisualizeConfig
             get() = HANDLER.instance()
 
-        fun init(dir: Path) {
-            configDir = dir
+        fun init(path: Path) {
+            configPath = path
             HANDLER = ConfigClassHandler.createBuilder(ToggleVisualizeConfig::class.java)
                 .id(configId)
                 .serializer { config: ConfigClassHandler<ToggleVisualizeConfig>? ->
                     GsonConfigSerializerBuilder.create(config)
-                        .setPath(configDir)
+                        .setPath(configPath)
                         .setJson5(true)
                         .build()
                 }

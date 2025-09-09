@@ -14,7 +14,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
 
 object ToggleVisualizeFabric : ClientModInitializer {
     override fun onInitializeClient() {
-        ToggleVisualize.init(FabricLoader.getInstance().configDir.resolve("togglevisualize.json5"))
+        ToggleVisualize.init(FabricLoader.getInstance().configDir)
         //? if <1.21.6 {
         /*HudRenderCallback.EVENT.register(HudOverlay::renderOverlay)
         *///?} else {

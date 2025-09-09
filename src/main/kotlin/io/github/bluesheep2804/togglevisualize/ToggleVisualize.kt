@@ -14,7 +14,7 @@ object ToggleVisualize {
     val flyingOverlayTexture: ResourceLocation = rlMinecraft("textures/item/elytra.png")
 
     fun init(configDir: Path) {
-        ToggleVisualizeConfig.init(configDir)
+        ToggleVisualizeConfig.init(configDir.resolve("togglevisualize.json5"))
         config = ToggleVisualizeConfig.instance
     }
 

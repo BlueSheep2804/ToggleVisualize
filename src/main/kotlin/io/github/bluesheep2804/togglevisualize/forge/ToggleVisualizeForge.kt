@@ -17,7 +17,7 @@ import thedarkcolour.kotlinforforge.forge.LOADING_CONTEXT
 object ToggleVisualizeForge {
     init {
         MinecraftForge.EVENT_BUS.register(this)
-        ToggleVisualize.init(FMLPaths.CONFIGDIR.get().resolve("togglevisualize.json5"))
+        ToggleVisualize.init(FMLPaths.CONFIGDIR.get())
         ConfigScreenFactory { parentScreen ->
             ToggleVisualizeConfig.Companion.configScreen(parentScreen).generateScreen(parentScreen)
         }

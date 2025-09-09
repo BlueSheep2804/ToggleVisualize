@@ -117,7 +117,7 @@ if (stonecutter.current.isActive) {
 tasks.processResources {
 	inputs.property("minecraft", stonecutter.current.project)
 
-	exclude("META-INF/mods.toml")
+	exclude("META-INF/mods.toml", "META-INF/neoforge.mods.toml")
 	filesMatching("fabric.mod.json") {
 		expand(mapOf(
 			"version" to version,

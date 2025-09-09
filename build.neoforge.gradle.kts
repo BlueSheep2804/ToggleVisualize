@@ -2,13 +2,13 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.1.0"
-    id("net.neoforged.moddev.legacyforge") version "2.0.107"
+    id("net.neoforged.moddev") version "2.0.107"
     id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
 val mcVersion = stonecutter.current.version
 val javaVersion = if (stonecutter.eval(mcVersion, ">=1.20.5")) 21 else 17
-val loader = "forge"
+val loader = "neoforge"
 
 val modVersion = project.property("modVersion")
 version = "$modVersion+$mcVersion"
@@ -18,8 +18,8 @@ base {
     archivesName.set(project.property("archivesBaseName") as String + "-$loader")
 }
 
-legacyForge {
-    version = "$mcVersion-${project.property("forgeVersion")}"
+neoForge {
+    version = "${project.property("forgeVersion")}"
 
     validateAccessTransformers.set(true)
 
@@ -52,8 +52,8 @@ repositories {
 }
 
 dependencies {
-    implementation("thedarkcolour:kotlinforforge:${project.property("kotlinForForgeVersion")}")
-    modImplementation("dev.isxander:yet-another-config-lib:${project.property("yaclVersion")}")
+    implementation("thedarkcolour:kotlinforforge-neoforge:${project.property("kotlinForForgeVersion")}")
+    implementation("dev.isxander:yet-another-config-lib:${project.property("yaclVersion")}")
 }
 
 kotlin {
@@ -95,8 +95,8 @@ if (stonecutter.current.isActive) {
 tasks.named<ProcessResources>("processResources") {
     inputs.property("minecraft", mcVersion)
 
-    exclude("fabric.mod.json", "META-INF/neoforge.mods.toml")
-    filesMatching("META-INF/mods.toml") {
+    exclude("fabric.mod.json", "META-INF/mods.toml")
+    filesMatching("META-INF/neoforge.mods.toml") {
         expand(mapOf(
             "version" to version,
             "loaderVersionRange" to project.property("loaderVersionRange"),
@@ -110,12 +110,6 @@ tasks.named<ProcessResources>("processResources") {
 }
 
 publishMods {
-    val mcVersions = when(mcVersion) {
-        "1.21.3" -> listOf("1.21.3", "1.21.4", "1.21.5")
-        "1.21.6" -> listOf("1.21.6", "1.21.7", "1.21.8")
-        else -> listOf(mcVersion)
-    }
-
     displayName = "$modVersion for $loader $mcVersion"
     file = project.tasks.jar.get().archiveFile
     type = STABLE
@@ -127,7 +121,7 @@ publishMods {
     curseforge {
         accessToken = providers.environmentVariable("CURSEFORGE_API_KEY").get()
         projectId = "1195905"
-        minecraftVersions = mcVersions
+        minecraftVersions = listOf(mcVersion)
 
         clientRequired = true
         projectSlug = "toggle-visualize"
@@ -138,7 +132,7 @@ publishMods {
     modrinth {
         accessToken = providers.environmentVariable("MODRINTH_TOKEN").get()
         projectId = "brJIdf61"
-        minecraftVersions = mcVersions
+        minecraftVersions = listOf(mcVersion)
 
         requires("yacl", "kotlin-for-forge")
     }

@@ -1,0 +1,33 @@
+modLoader="kotlinforforge"
+loaderVersion="${loaderVersionRange}"
+license="MIT"
+issueTrackerURL="https://github.com/BlueSheep2804/ToggleVisualize/issues"
+
+[[mods]]
+modId="togglevisualize"
+version="${version}"
+displayName="Toggle Visualize"
+logoFile="assets/togglevisualize/icon.png"
+authors="BlueSheep2804"
+description="Visualize sprint and sneak toggling."
+
+[[dependencies.togglevisualize]]
+modId="neoforge"
+type="required"
+versionRange="${forgeVersionRange}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.togglevisualize]]
+modId="minecraft"
+type="required"
+versionRange="${minecraftVersionRange}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.togglevisualize]]
+modId="yet_another_config_lib_v3"
+type="required"
+versionRange="*"
+ordering="AFTER"
+side="BOTH"

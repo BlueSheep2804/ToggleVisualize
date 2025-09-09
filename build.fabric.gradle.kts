@@ -1,29 +1,23 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-	id("dev.architectury.loom") version "1.11-SNAPSHOT"
-	id("architectury-plugin") version "3.4-SNAPSHOT"
+	id("fabric-loom") version "1.10.5"
 	id("maven-publish")
 	id("org.jetbrains.kotlin.jvm") version "2.1.0"
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
-val minecraftVersion = stonecutter.current.version
-val javaVersion = if (stonecutter.eval(minecraftVersion, ">=1.20.5")) 21 else 17
-val loader = loom.platform.get().name.lowercase()
+val mcVersion = stonecutter.current.version
+val javaVersion = if (stonecutter.eval(mcVersion, ">=1.20.5")) 21 else 17
+val loader = "fabric"
 
 val modVersion = project.property("modVersion")
-version = "$modVersion+$minecraftVersion"
+version = "$modVersion+$mcVersion"
 group = project.property("mavenGroup") as String
 
 base {
 	archivesName.set(project.property("archivesBaseName") as String + "-$loader")
 }
-
-architectury.common(stonecutter.tree.branches.mapNotNull {
-	if (stonecutter.current.project !in it) null
-	else project.property("loom.platform") as String
-})
 
 repositories {
 	// Add repositories to retrieve artifacts from in here.
@@ -54,38 +48,28 @@ dependencies {
 	val modmenuVersion: String by project
 	val parchmentMappings: String by project
 
-	minecraft("com.mojang:minecraft:$minecraftVersion")
+	minecraft("com.mojang:minecraft:$mcVersion")
 	mappings(loom.layered {
 		officialMojangMappings()
 		if (parchmentMappings != "none") {
-			parchment("org.parchmentmc.data:parchment-$minecraftVersion:$parchmentMappings@zip")
+			parchment("org.parchmentmc.data:parchment-$mcVersion:$parchmentMappings@zip")
 		}
 	})
 
-	if (loader == "fabric") {
-		modImplementation("net.fabricmc:fabric-loader:${fabricVersion}")
+	modImplementation("net.fabricmc:fabric-loader:${fabricVersion}")
 
-		// Fabric API. This is technically optional, but you probably want it anyway.
-		modImplementation("net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}")
-		modImplementation("net.fabricmc:fabric-language-kotlin:${fabricKotlinVersion}")
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	modImplementation("net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}")
+	modImplementation("net.fabricmc:fabric-language-kotlin:${fabricKotlinVersion}")
+	modImplementation("com.terraformersmc:modmenu:${modmenuVersion}")
 
-		modImplementation("dev.isxander:yet-another-config-lib:${yaclVersion}")
-		modImplementation("com.terraformersmc:modmenu:${modmenuVersion}")
-	}
+	modImplementation("dev.isxander:yet-another-config-lib:${yaclVersion}")
 }
 
 loom {
 	runConfigs.all {
 		ideConfigGenerated(true)
 		runDir = "../../run"
-	}
-
-//	accessWidenerPath = rootProject.file("src/main/resources/togglevisualize.accesswidener")
-
-	decompilers {
-		get("vineflower").apply {
-			options.put("mark-corresponding-synthetics", "1")
-		}
 	}
 }
 
@@ -151,7 +135,7 @@ tasks.processResources {
 }
 
 publishMods {
-	val mcVersions = when(minecraftVersion) {
+	val mcVersions = when(mcVersion) {
 		"1.21.3" -> listOf("1.21.3", "1.21.4", "1.21.5")
 		"1.21.6" -> listOf("1.21.6", "1.21.7", "1.21.8")
 		else -> listOf(stonecutter.current.project)

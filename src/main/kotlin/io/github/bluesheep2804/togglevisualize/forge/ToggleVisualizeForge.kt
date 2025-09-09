@@ -25,7 +25,7 @@ object ToggleVisualizeForge {
 
     @SubscribeEvent
     fun registerGuiOverlays(event: RegisterGuiOverlaysEvent) {
-        event.registerAboveAll(ToggleVisualize.MOD_ID, HudOverlayForge())
+        event.registerAboveAll(ToggleVisualize.OVERLAY_ID, HudOverlayForge())
     }
 }
 *///?}

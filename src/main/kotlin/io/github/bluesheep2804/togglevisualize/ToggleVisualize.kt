@@ -7,6 +7,7 @@ import java.nio.file.Path
 
 object ToggleVisualize {
     const val MOD_ID = "togglevisualize"
+    const val OVERLAY_ID = "toggle_overlay"
     val logger = LoggerFactory.getLogger(MOD_ID)
     lateinit var config: ToggleVisualizeConfig
     val sprintOverlayTexture: ResourceLocation = rlMinecraft("textures/mob_effect/speed.png")

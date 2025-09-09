@@ -30,7 +30,7 @@ class ToggleVisualizeNeoforge {
         @SubscribeEvent
         @JvmStatic
         fun registerGuiOverlays(event: RegisterGuiLayersEvent) {
-            event.registerAboveAll(rl("toggle_overlay"), HudOverlay::renderOverlay)
+            event.registerAboveAll(rl(ToggleVisualize.OVERLAY_ID), HudOverlay::renderOverlay)
         }
     }
 }

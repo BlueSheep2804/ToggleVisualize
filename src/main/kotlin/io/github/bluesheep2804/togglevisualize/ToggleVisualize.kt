@@ -1,31 +1,25 @@
 package io.github.bluesheep2804.togglevisualize
 
-import net.fabricmc.api.ClientModInitializer
-//? if <1.21.6 {
-/*import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
-*///?} else {
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
-//?}
+import io.github.bluesheep2804.togglevisualize.common.ToggleVisualizeConfig
 import net.minecraft.resources.ResourceLocation
 import org.slf4j.LoggerFactory
+import java.nio.file.Path
 
-object ToggleVisualize : ClientModInitializer {
-    val logger = LoggerFactory.getLogger("togglevisualize")
+object ToggleVisualize {
+    const val MOD_ID = "togglevisualize"
+    const val OVERLAY_ID = "toggle_overlay"
+    val logger = LoggerFactory.getLogger(MOD_ID)
+    lateinit var config: ToggleVisualizeConfig
     val sprintOverlayTexture: ResourceLocation = rlMinecraft("textures/mob_effect/speed.png")
     val sneakOverlayTexture: ResourceLocation = rlMinecraft("textures/item/hopper.png")
     val flyingOverlayTexture: ResourceLocation = rlMinecraft("textures/item/elytra.png")
-    lateinit var config: ToggleVisualizeConfig
 
-    override fun onInitializeClient() {
-        ToggleVisualizeConfig.load()
+    fun init(configDir: Path) {
+        ToggleVisualizeConfig.init(configDir.resolve("togglevisualize.json5"))
         config = ToggleVisualizeConfig.instance
-        //? if <1.21.6 {
-        /*HudRenderCallback.EVENT.register(HudOverlay::renderOverlay)
-        *///?} else {
-        HudElementRegistry.addLast(rl("overlay"), HudOverlay::renderOverlay)
-        //?}
     }
 
+    @Suppress("DEPRECATION", "removal")
     fun rl(path: String): ResourceLocation {
         //? if <1.21 {
         /*return ResourceLocation("togglevisualize", path)
@@ -34,6 +28,7 @@ object ToggleVisualize : ClientModInitializer {
         //?}
     }
 
+    @Suppress("DEPRECATION", "removal")
     fun rlMinecraft(path: String): ResourceLocation {
         //? if <1.21 {
         /*return ResourceLocation("minecraft", path)

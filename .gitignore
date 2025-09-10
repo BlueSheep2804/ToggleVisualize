@@ -28,9 +28,10 @@ bin/
 
 *.DS_Store
 
-# fabric
+# minecraft
 
 run/
+run-forge/
 
 # java
 

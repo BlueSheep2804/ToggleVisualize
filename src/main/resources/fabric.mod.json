@@ -17,12 +17,12 @@
 	"entrypoints": {
 		"client": [
 			{
-				"value": "io.github.bluesheep2804.togglevisualize.ToggleVisualize",
+				"value": "io.github.bluesheep2804.togglevisualize.fabric.ToggleVisualizeFabric",
 				"adapter": "kotlin"
 			}
 		],
 		"modmenu": [
-			"io.github.bluesheep2804.togglevisualize.ModMenuIntegration"
+			"io.github.bluesheep2804.togglevisualize.fabric.ModMenuIntegration"
 		]
 	},
 	"depends": {

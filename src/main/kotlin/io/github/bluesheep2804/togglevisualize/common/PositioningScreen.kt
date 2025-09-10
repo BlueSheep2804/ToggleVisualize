@@ -1,10 +1,6 @@
-package io.github.bluesheep2804.togglevisualize
+package io.github.bluesheep2804.togglevisualize.common
 
-import io.github.bluesheep2804.togglevisualize.ToggleType.*
-import io.github.bluesheep2804.togglevisualize.ToggleVisualize.flyingOverlayTexture
-import io.github.bluesheep2804.togglevisualize.ToggleVisualize.logger
-import io.github.bluesheep2804.togglevisualize.ToggleVisualize.sneakOverlayTexture
-import io.github.bluesheep2804.togglevisualize.ToggleVisualize.sprintOverlayTexture
+import io.github.bluesheep2804.togglevisualize.ToggleVisualize
 import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -17,7 +13,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
 class PositioningScreen(private val yaclParent: Screen): Screen(Component.translatable("togglevisualize.config.positioning_tool.title")) {
-    private val config = ToggleVisualizeConfig.instance
+    private val config = ToggleVisualizeConfig.Companion.instance
     private var sprintPositionX = config.sprintPositionX
     private var sprintPositionY = config.sprintPositionY
     private var sprintTextPositionX = config.sprintTextPositionX
@@ -42,21 +38,34 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     private lateinit var selectedHowtoStringWidget: StringWidget
     private lateinit var selectionStringWidget: StringWidget
     private val selectionComponentKey = "togglevisualize.config.positioning_tool.selecting"
-    private val sprintIcon = imageWidget(sprintOverlayTexture)
-    private val sneakIcon = imageWidget(sneakOverlayTexture)
-    private val flyingIcon = imageWidget(flyingOverlayTexture)
+    private val sprintIcon = imageWidget(ToggleVisualize.sprintOverlayTexture)
+    private val sneakIcon = imageWidget(ToggleVisualize.sneakOverlayTexture)
+    private val flyingIcon = imageWidget(ToggleVisualize.flyingOverlayTexture)
     private lateinit var sprintText: StringWidget
     private lateinit var sneakText: StringWidget
     private lateinit var flyingText: StringWidget
 
     override fun init() {
-        howtoStringWidget = StringWidget(Component.translatable("togglevisualize.config.positioning_tool.howto").withStyle(ChatFormatting.GRAY), font)
-        selectedHowtoStringWidget = StringWidget(Component.translatable("togglevisualize.config.positioning_tool.howto.selected").withStyle(ChatFormatting.GRAY), font)
+        howtoStringWidget = StringWidget(
+            Component.translatable("togglevisualize.config.positioning_tool.howto").withStyle(ChatFormatting.GRAY), font
+        )
+        selectedHowtoStringWidget = StringWidget(
+            Component.translatable("togglevisualize.config.positioning_tool.howto.selected")
+                .withStyle(ChatFormatting.GRAY), font
+        )
         selectionStringWidget = StringWidget(Component.empty(), font)
 
-        sprintText = StringWidget(Component.translatable("key.sprint").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC), font)
-        sneakText = StringWidget(Component.translatable("key.sneak").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC), font)
-        flyingText = StringWidget(Component.translatable("item.minecraft.elytra").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC), font)
+        sprintText = StringWidget(
+            Component.translatable("key.sprint").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC),
+            font
+        )
+        sneakText = StringWidget(
+            Component.translatable("key.sneak").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC),
+            font
+        )
+        flyingText = StringWidget(
+            Component.translatable("item.minecraft.elytra").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC), font
+        )
 
         selectionStringWidget.width = width
         //? if >1.20.1 {
@@ -96,21 +105,21 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         val mouseX = rawMouseX.toInt()
         val mouseY = rawMouseY.toInt()
         when (activeToggleElement) {
-            Sprint -> {
+            ToggleType.Sprint -> {
                 (if (isTextElement) sprintText else sprintIcon)
                     .setPosition(
                         mouseX - mouseOffsetX,
                         mouseY - mouseOffsetY
                     )
             }
-            Sneak -> {
+            ToggleType.Sneak -> {
                 (if (isTextElement) sneakText else sneakIcon)
                     .setPosition(
                         mouseX - mouseOffsetX,
                         mouseY - mouseOffsetY
                     )
             }
-            Flying -> {
+            ToggleType.Flying -> {
                 (if (isTextElement) flyingText else flyingIcon)
                     .setPosition(
                         mouseX - mouseOffsetX,
@@ -175,7 +184,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         if (activeToggleElement != null) {
             if (button == 0) {
                 when (activeToggleElement) {
-                    Sprint -> {
+                    ToggleType.Sprint -> {
                         if (isTextElement) {
                             sprintTextPositionX = mouseX - mouseOffsetX
                             sprintTextPositionY = mouseY - mouseOffsetY
@@ -188,7 +197,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
                             config.sprintPositionY = sprintPositionY
                         }
                     }
-                    Sneak -> {
+                    ToggleType.Sneak -> {
                         if (isTextElement) {
                             sneakTextPositionX = mouseX - mouseOffsetX
                             sneakTextPositionY = mouseY - mouseOffsetY
@@ -201,7 +210,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
                             config.sneakPositionY = sneakPositionY
                         }
                     }
-                    Flying -> {
+                    ToggleType.Flying -> {
                         if (isTextElement) {
                             flyingTextPositionX = mouseX - mouseOffsetX
                             flyingTextPositionY = mouseY - mouseOffsetY
@@ -216,25 +225,25 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
                     }
                     else -> {}
                 }
-                ToggleVisualizeConfig.save()
+                ToggleVisualizeConfig.Companion.save()
             }
 
             when (activeToggleElement) {
-                Sprint -> {
+                ToggleType.Sprint -> {
                     if (isTextElement) {
                         sprintText.setPosition(sprintTextPositionX, sprintTextPositionY)
                     } else {
                         sprintIcon.setPosition(sprintPositionX, sprintPositionY)
                     }
                 }
-                Sneak -> {
+                ToggleType.Sneak -> {
                     if (isTextElement) {
                         sneakText.setPosition(sneakTextPositionX, sneakTextPositionY)
                     } else {
                         sneakIcon.setPosition(sneakPositionX, sneakPositionY)
                     }
                 }
-                Flying -> {
+                ToggleType.Flying -> {
                     if (isTextElement) {
                         flyingText.setPosition(flyingTextPositionX, flyingTextPositionY)
                     } else {
@@ -250,29 +259,29 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             activeToggleElement = null
             isTextElement = false
         } else if (sprintIcon.isHovered) {
-            activeToggleElement = Sprint
+            activeToggleElement = ToggleType.Sprint
             mouseOffsetX = mouseX - sprintPositionX
             mouseOffsetY = mouseY - sprintPositionY
         } else if (sprintText.isHovered) {
-            activeToggleElement = Sprint
+            activeToggleElement = ToggleType.Sprint
             isTextElement = true
             mouseOffsetX = mouseX - sprintTextPositionX
             mouseOffsetY = mouseY - sprintTextPositionY
         } else if (sneakIcon.isHovered) {
-            activeToggleElement = Sneak
+            activeToggleElement = ToggleType.Sneak
             mouseOffsetX = mouseX - sneakPositionX
             mouseOffsetY = mouseY - sneakPositionY
         } else if (sneakText.isHovered) {
-            activeToggleElement = Sneak
+            activeToggleElement = ToggleType.Sneak
             isTextElement = true
             mouseOffsetX = mouseX - sneakTextPositionX
             mouseOffsetY = mouseY - sneakTextPositionY
         } else if (flyingIcon.isHovered) {
-            activeToggleElement = Flying
+            activeToggleElement = ToggleType.Flying
             mouseOffsetX = mouseX - flyingPositionX
             mouseOffsetY = mouseY - flyingPositionY
         } else if (flyingText.isHovered) {
-            activeToggleElement = Flying
+            activeToggleElement = ToggleType.Flying
             isTextElement = true
             mouseOffsetX = mouseX - flyingTextPositionX
             mouseOffsetY = mouseY - flyingTextPositionY
@@ -288,14 +297,14 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     }
 
     override fun onClose() {
-        minecraft?.setScreen(ToggleVisualizeConfig.configScreen(yaclParent).generateScreen(yaclParent))
+        minecraft?.setScreen(ToggleVisualizeConfig.Companion.configScreen(yaclParent).generateScreen(yaclParent))
     }
 
     private fun changeSelectionStringWidget(toggle: ToggleType) {
         val toggleTypeComponent = Component.translatable(when (toggle) {
-            Sprint -> "key.sprint"
-            Sneak -> "key.sneak"
-            Flying -> "item.minecraft.elytra"
+            ToggleType.Sprint -> "key.sprint"
+            ToggleType.Sneak -> "key.sneak"
+            ToggleType.Flying -> "item.minecraft.elytra"
         })
 
         val widgetTypeComponent = Component.translatable(if (isTextElement) {
@@ -304,7 +313,8 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             "togglevisualize.config.option.indicator"
         })
 
-        selectionStringWidget.message = Component.translatable(selectionComponentKey, toggleTypeComponent, widgetTypeComponent).withStyle(ChatFormatting.GRAY)
+        selectionStringWidget.message = Component.translatable(selectionComponentKey, toggleTypeComponent, widgetTypeComponent).withStyle(
+            ChatFormatting.GRAY)
     }
 
     private fun imageWidget(imageLocation: ResourceLocation): ImageWidget {

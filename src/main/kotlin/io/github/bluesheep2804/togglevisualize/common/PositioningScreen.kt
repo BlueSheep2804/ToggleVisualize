@@ -69,8 +69,13 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         selectionStringWidget.visible = false
         howtoLayout.addChild(howtoStringWidget)
         howtoLayout.addChild(selectedHowtoStringWidget)
+        //? if >1.20.1 {
         descriptionLayout.addChild(howtoLayout)
         descriptionLayout.addChild(selectionStringWidget)
+        //?} else {
+        /*descriptionLayout.addChild(selectionStringWidget)
+        descriptionLayout.addChild(howtoLayout)
+        *///?}
 
         layout.addChild(descriptionLayout)
         layout.addChild(positionSettingLayout)

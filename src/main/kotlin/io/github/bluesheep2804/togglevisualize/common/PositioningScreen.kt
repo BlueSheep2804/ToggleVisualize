@@ -1,6 +1,5 @@
 package io.github.bluesheep2804.togglevisualize.common
 
-import io.github.bluesheep2804.togglevisualize.ToggleVisualize
 import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.AbstractWidget
@@ -14,18 +13,6 @@ import net.minecraft.resources.ResourceLocation
 
 class PositioningScreen(private val yaclParent: Screen): Screen(Component.translatable("togglevisualize.config.positioning_tool.title")) {
     private val config = ToggleVisualizeConfig.Companion.instance
-    private var sprintPositionX = config.sprintPositionX
-    private var sprintPositionY = config.sprintPositionY
-    private var sprintTextPositionX = config.sprintTextPositionX
-    private var sprintTextPositionY = config.sprintTextPositionY
-    private var sneakPositionX = config.sneakPositionX
-    private var sneakPositionY = config.sneakPositionY
-    private var sneakTextPositionX = config.sneakTextPositionX
-    private var sneakTextPositionY = config.sneakTextPositionY
-    private var flyingPositionX = config.flyingPositionX
-    private var flyingPositionY = config.flyingPositionY
-    private var flyingTextPositionX = config.flyingTextPositionX
-    private var flyingTextPositionY = config.flyingTextPositionY
     private var mouseOffsetX = 0
     private var mouseOffsetY = 0
     private var activeToggleElement: ToggleType? = null
@@ -38,12 +25,8 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     private lateinit var selectedHowtoStringWidget: StringWidget
     private lateinit var selectionStringWidget: StringWidget
     private val selectionComponentKey = "togglevisualize.config.positioning_tool.selecting"
-    private val sprintIcon = imageWidget(ToggleVisualize.sprintOverlayTexture)
-    private val sneakIcon = imageWidget(ToggleVisualize.sneakOverlayTexture)
-    private val flyingIcon = imageWidget(ToggleVisualize.flyingOverlayTexture)
-    private lateinit var sprintText: StringWidget
-    private lateinit var sneakText: StringWidget
-    private lateinit var flyingText: StringWidget
+    private val indicatorWidgets: MutableMap<ToggleType, ImageWidget> = mutableMapOf()
+    private val textWidgets: MutableMap<ToggleType, StringWidget> = mutableMapOf()
 
     override fun init() {
         howtoStringWidget = StringWidget(
@@ -55,17 +38,17 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         )
         selectionStringWidget = StringWidget(Component.empty(), font)
 
-        sprintText = StringWidget(
-            Component.translatable("key.sprint").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC),
-            font
-        )
-        sneakText = StringWidget(
-            Component.translatable("key.sneak").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC),
-            font
-        )
-        flyingText = StringWidget(
-            Component.translatable("item.minecraft.elytra").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC), font
-        )
+        ToggleType.entries.forEach {
+            if (it.showIndicator.get(config)) {
+                indicatorWidgets[it] = imageWidget(it.indicatorLocation)
+            }
+            if (it.showText.get(config)) {
+                textWidgets[it] = StringWidget(
+                    it.textComponent.copy().withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC),
+                    font
+                )
+            }
+        }
 
         selectionStringWidget.width = width
         //? if >1.20.1 {
@@ -79,12 +62,8 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         *///?}
 
         positionSettingLayout.setMinDimensions(width, height)
-        if (config.sprintShow) positionSettingLayout.addChild(sprintIcon)
-        if (config.sprintShowText) positionSettingLayout.addChild(sprintText)
-        if (config.sneakShow) positionSettingLayout.addChild(sneakIcon)
-        if (config.sneakShowText) positionSettingLayout.addChild(sneakText)
-        if (config.flyingShow) positionSettingLayout.addChild(flyingIcon)
-        if (config.flyingShowText) positionSettingLayout.addChild(flyingText)
+        indicatorWidgets.forEach { positionSettingLayout.addChild(it.value) }
+        textWidgets.forEach{ positionSettingLayout.addChild(it.value) }
 
         selectedHowtoStringWidget.visible = false
         selectionStringWidget.visible = false
@@ -102,31 +81,21 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     }
 
     override fun mouseMoved(rawMouseX: Double, rawMouseY: Double) {
+        if (activeToggleElement == null) return
+        if (!isTextElement && indicatorWidgets[activeToggleElement] == null) return
+        if (isTextElement && textWidgets[activeToggleElement] == null) return
         val mouseX = rawMouseX.toInt()
         val mouseY = rawMouseY.toInt()
-        when (activeToggleElement) {
-            ToggleType.Sprint -> {
-                (if (isTextElement) sprintText else sprintIcon)
-                    .setPosition(
-                        mouseX - mouseOffsetX,
-                        mouseY - mouseOffsetY
-                    )
-            }
-            ToggleType.Sneak -> {
-                (if (isTextElement) sneakText else sneakIcon)
-                    .setPosition(
-                        mouseX - mouseOffsetX,
-                        mouseY - mouseOffsetY
-                    )
-            }
-            ToggleType.Flying -> {
-                (if (isTextElement) flyingText else flyingIcon)
-                    .setPosition(
-                        mouseX - mouseOffsetX,
-                        mouseY - mouseOffsetY
-                    )
-            }
-            else -> {}
+        if (isTextElement) {
+            textWidgets[activeToggleElement]!!.setPosition(
+                mouseX - mouseOffsetX,
+                mouseY - mouseOffsetY
+            )
+        } else {
+            indicatorWidgets[activeToggleElement]!!.setPosition(
+                mouseX - mouseOffsetX,
+                mouseY - mouseOffsetY
+            )
         }
     }
 
@@ -137,12 +106,12 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         layout.setMinHeight(height)
         layout.arrangeElements()
 
-        sprintIcon.setPosition(sprintPositionX, sprintPositionY)
-        sprintText.setPosition(sprintTextPositionX, sprintTextPositionY)
-        sneakIcon.setPosition(sneakPositionX, sneakPositionY)
-        sneakText.setPosition(sneakTextPositionX, sneakTextPositionY)
-        flyingIcon.setPosition(flyingPositionX, flyingPositionY)
-        flyingText.setPosition(flyingTextPositionX, flyingTextPositionY)
+        indicatorWidgets.forEach {
+            it.value.setPosition(it.key.indicatorPosX.get(config), it.key.indicatorPosY.get(config))
+        }
+        textWidgets.forEach {
+            it.value.setPosition(it.key.textPosX.get(config), it.key.textPosY.get(config))
+        }
     }
 
     // 背景のぼかしを無効化
@@ -160,15 +129,9 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
 
         if (activeToggleElement != null) return
 
-        val rectangle = when {
-            sprintIcon.isHovered -> sprintIcon.rectangle
-            sprintText.isHovered -> sprintText.rectangle
-            sneakIcon.isHovered -> sneakIcon.rectangle
-            sneakText.isHovered -> sneakText.rectangle
-            flyingIcon.isHovered -> flyingIcon.rectangle
-            flyingText.isHovered -> flyingText.rectangle
-            else -> null
-        }
+        val rectangle = arrayOf(*indicatorWidgets.values.toTypedArray(), *textWidgets.values.toTypedArray()).firstOrNull {
+            it.isHovered
+        }?.rectangle
 
         if (rectangle != null){
             guiGraphics.renderOutline(
@@ -187,75 +150,20 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         val mouseX = rawMouseX.toInt()
         val mouseY = rawMouseY.toInt()
         if (activeToggleElement != null) {
-            if (button == 0) {
-                when (activeToggleElement) {
-                    ToggleType.Sprint -> {
-                        if (isTextElement) {
-                            sprintTextPositionX = mouseX - mouseOffsetX
-                            sprintTextPositionY = mouseY - mouseOffsetY
-                            config.sprintTextPositionX = sprintTextPositionX
-                            config.sprintTextPositionY = sprintTextPositionY
-                        } else {
-                            sprintPositionX = mouseX - mouseOffsetX
-                            sprintPositionY = mouseY - mouseOffsetY
-                            config.sprintPositionX = sprintPositionX
-                            config.sprintPositionY = sprintPositionY
-                        }
-                    }
-                    ToggleType.Sneak -> {
-                        if (isTextElement) {
-                            sneakTextPositionX = mouseX - mouseOffsetX
-                            sneakTextPositionY = mouseY - mouseOffsetY
-                            config.sneakTextPositionX = sneakTextPositionX
-                            config.sneakTextPositionY = sneakTextPositionY
-                        } else {
-                            sneakPositionX = mouseX - mouseOffsetX
-                            sneakPositionY = mouseY - mouseOffsetY
-                            config.sneakPositionX = sneakPositionX
-                            config.sneakPositionY = sneakPositionY
-                        }
-                    }
-                    ToggleType.Flying -> {
-                        if (isTextElement) {
-                            flyingTextPositionX = mouseX - mouseOffsetX
-                            flyingTextPositionY = mouseY - mouseOffsetY
-                            config.flyingTextPositionX = flyingTextPositionX
-                            config.flyingTextPositionY = flyingTextPositionY
-                        } else {
-                            flyingPositionX = mouseX - mouseOffsetX
-                            flyingPositionY = mouseY - mouseOffsetY
-                            config.flyingPositionX = flyingPositionX
-                            config.flyingPositionY = flyingPositionY
-                        }
-                    }
-                    else -> {}
+            if (isTextElement && textWidgets[activeToggleElement] != null) {
+                if (button == 0) {
+                    activeToggleElement!!.textPosX.set(config, mouseX - mouseOffsetX)
+                    activeToggleElement!!.textPosY.set(config, mouseY - mouseOffsetY)
                 }
-                ToggleVisualizeConfig.Companion.save()
-            }
-
-            when (activeToggleElement) {
-                ToggleType.Sprint -> {
-                    if (isTextElement) {
-                        sprintText.setPosition(sprintTextPositionX, sprintTextPositionY)
-                    } else {
-                        sprintIcon.setPosition(sprintPositionX, sprintPositionY)
-                    }
+                textWidgets[activeToggleElement]!!
+                    .setPosition(activeToggleElement!!.textPosX.get(config), activeToggleElement!!.textPosY.get(config))
+            } else if (!isTextElement && indicatorWidgets[activeToggleElement] != null) {
+                if (button == 0) {
+                    activeToggleElement!!.indicatorPosX.set(config, mouseX - mouseOffsetX)
+                    activeToggleElement!!.indicatorPosY.set(config, mouseY - mouseOffsetY)
                 }
-                ToggleType.Sneak -> {
-                    if (isTextElement) {
-                        sneakText.setPosition(sneakTextPositionX, sneakTextPositionY)
-                    } else {
-                        sneakIcon.setPosition(sneakPositionX, sneakPositionY)
-                    }
-                }
-                ToggleType.Flying -> {
-                    if (isTextElement) {
-                        flyingText.setPosition(flyingTextPositionX, flyingTextPositionY)
-                    } else {
-                        flyingIcon.setPosition(flyingPositionX, flyingPositionY)
-                    }
-                }
-                else -> {}
+                indicatorWidgets[activeToggleElement]!!
+                    .setPosition(activeToggleElement!!.indicatorPosX.get(config), activeToggleElement!!.indicatorPosY.get(config))
             }
 
             selectionStringWidget.visible = false
@@ -263,33 +171,19 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             selectedHowtoStringWidget.visible = false
             activeToggleElement = null
             isTextElement = false
-        } else if (sprintIcon.isHovered) {
-            activeToggleElement = ToggleType.Sprint
-            mouseOffsetX = mouseX - sprintPositionX
-            mouseOffsetY = mouseY - sprintPositionY
-        } else if (sprintText.isHovered) {
-            activeToggleElement = ToggleType.Sprint
-            isTextElement = true
-            mouseOffsetX = mouseX - sprintTextPositionX
-            mouseOffsetY = mouseY - sprintTextPositionY
-        } else if (sneakIcon.isHovered) {
-            activeToggleElement = ToggleType.Sneak
-            mouseOffsetX = mouseX - sneakPositionX
-            mouseOffsetY = mouseY - sneakPositionY
-        } else if (sneakText.isHovered) {
-            activeToggleElement = ToggleType.Sneak
-            isTextElement = true
-            mouseOffsetX = mouseX - sneakTextPositionX
-            mouseOffsetY = mouseY - sneakTextPositionY
-        } else if (flyingIcon.isHovered) {
-            activeToggleElement = ToggleType.Flying
-            mouseOffsetX = mouseX - flyingPositionX
-            mouseOffsetY = mouseY - flyingPositionY
-        } else if (flyingText.isHovered) {
-            activeToggleElement = ToggleType.Flying
-            isTextElement = true
-            mouseOffsetX = mouseX - flyingTextPositionX
-            mouseOffsetY = mouseY - flyingTextPositionY
+        } else {
+            val element = arrayOf(*indicatorWidgets.values.toTypedArray(), *textWidgets.values.toTypedArray()).firstOrNull {
+                it.isHovered
+            }
+            if (element != null) {
+                isTextElement = textWidgets.containsValue(element)
+                activeToggleElement = indicatorWidgets.entries.firstOrNull { it.value == element }?.key
+                    ?: textWidgets.entries.firstOrNull { it.value == element }?.key
+                mouseOffsetX = mouseX - activeToggleElement.let { if (isTextElement) it!!.textPosX else it!!.indicatorPosX }
+                    .get(config)
+                mouseOffsetY = mouseY - activeToggleElement.let { if (isTextElement) it!!.textPosY else it!!.indicatorPosY }
+                    .get(config)
+            }
         }
 
         if (activeToggleElement != null) {
@@ -302,24 +196,22 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     }
 
     override fun onClose() {
+        ToggleVisualizeConfig.Companion.save()
         minecraft?.setScreen(ToggleVisualizeConfig.Companion.configScreen(yaclParent).generateScreen(yaclParent))
     }
 
     private fun changeSelectionStringWidget(toggle: ToggleType) {
-        val toggleTypeComponent = Component.translatable(when (toggle) {
-            ToggleType.Sprint -> "key.sprint"
-            ToggleType.Sneak -> "key.sneak"
-            ToggleType.Flying -> "item.minecraft.elytra"
-        })
-
         val widgetTypeComponent = Component.translatable(if (isTextElement) {
             "togglevisualize.config.option.text"
         } else {
             "togglevisualize.config.option.indicator"
         })
 
-        selectionStringWidget.message = Component.translatable(selectionComponentKey, toggleTypeComponent, widgetTypeComponent).withStyle(
-            ChatFormatting.GRAY)
+        selectionStringWidget.message = Component.translatable(
+            selectionComponentKey,
+            toggle.textComponent,
+            widgetTypeComponent
+        ).withStyle(ChatFormatting.GRAY)
     }
 
     private fun imageWidget(imageLocation: ResourceLocation): ImageWidget {

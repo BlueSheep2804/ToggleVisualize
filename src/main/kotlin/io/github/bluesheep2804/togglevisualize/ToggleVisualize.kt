@@ -10,9 +10,6 @@ object ToggleVisualize {
     const val OVERLAY_ID = "toggle_overlay"
     val logger = LoggerFactory.getLogger(MOD_ID)
     lateinit var config: ToggleVisualizeConfig
-    val sprintOverlayTexture: ResourceLocation = rlMinecraft("textures/mob_effect/speed.png")
-    val sneakOverlayTexture: ResourceLocation = rlMinecraft("textures/item/hopper.png")
-    val flyingOverlayTexture: ResourceLocation = rlMinecraft("textures/item/elytra.png")
 
     fun init(configDir: Path) {
         ToggleVisualizeConfig.init(configDir.resolve("togglevisualize.json5"))

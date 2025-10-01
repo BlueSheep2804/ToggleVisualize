@@ -1,11 +1,9 @@
 package io.github.bluesheep2804.togglevisualize.common
 
-import io.github.bluesheep2804.togglevisualize.ToggleVisualize
 import io.github.bluesheep2804.togglevisualize.ToggleVisualize.config
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.CommonColors
 //? if >=1.21
@@ -28,57 +26,20 @@ object HudOverlay {
         val hideGui = options.hideGui
         if (debugScreen || hideGui || minecraftInstance.screen is PositioningScreen) return
 
-        val optionToggleSprint = options.toggleSprint().get()
-        val isSprintDown = options.keySprint.isDown
-        if (optionToggleSprint && isSprintDown) {
-            if (config.sprintShow) {
-                blit(guiGraphics,
-                    ToggleVisualize.sprintOverlayTexture, config.sprintPositionX, config.sprintPositionY)
-            }
-            if (config.sprintShowText) {
-                guiGraphics.drawString(
-                    minecraftInstance.font,
-                    Component.translatable("key.sprint").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
-                    config.sprintTextPositionX,
-                    config.sprintTextPositionY,
-                    CommonColors.WHITE
-                )
-            }
-        }
-
-        val optionToggleSneak = options.toggleCrouch().get()
-        val isSneakDown = options.keyShift.isDown
-        if (optionToggleSneak && isSneakDown) {
-            if (config.sneakShow) {
-                blit(guiGraphics,
-                    ToggleVisualize.sneakOverlayTexture, config.sneakPositionX, config.sneakPositionY)
-            }
-            if (config.sneakShowText) {
-                guiGraphics.drawString(
-                    minecraftInstance.font,
-                    Component.translatable("key.sneak").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
-                    config.sneakTextPositionX,
-                    config.sneakTextPositionY,
-                    CommonColors.WHITE
-                )
-            }
-        }
-
-        val player = minecraftInstance.player
-        val isFlying = player?.isFallFlying
-        if (isFlying == true) {
-            if (config.flyingShow) {
-                blit(guiGraphics,
-                    ToggleVisualize.flyingOverlayTexture, config.flyingPositionX, config.flyingPositionY)
-            }
-            if (config.flyingShowText) {
-                guiGraphics.drawString(
-                    minecraftInstance.font,
-                    Component.translatable("item.minecraft.elytra").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
-                    config.flyingTextPositionX,
-                    config.flyingTextPositionY,
-                    CommonColors.WHITE
-                )
+        ToggleType.entries.forEach {
+            if (it.condition.invoke()) {
+                if (it.showIndicator.get(config)) {
+                    blit(guiGraphics, it.indicatorLocation, it.indicatorPosX.get(config), it.indicatorPosY.get(config))
+                }
+                if (it.showText.get(config)) {
+                    guiGraphics.drawString(
+                        minecraftInstance.font,
+                        it.textComponent.copy().withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
+                        it.textPosX.get(config),
+                        it.textPosY.get(config),
+                        CommonColors.WHITE
+                    )
+                }
             }
         }
     }

@@ -151,6 +151,11 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     //?}
 
     override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+        //? if <1.20.2 {
+        /*if (minecraft?.level == null) {
+            renderBackground(guiGraphics)
+        }
+        *///?}
         super.render(guiGraphics, mouseX, mouseY, partialTick)
 
         if (activeToggleElement != null) return

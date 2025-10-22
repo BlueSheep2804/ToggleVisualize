@@ -1,5 +1,12 @@
 name: Release
-on: [workflow_dispatch] # Manual trigger
+on:
+  workflow_dispatch: # Manual trigger
+    inputs:
+      name:
+        description: 'Version name / "Mods" = All versions'
+        required: false
+        default: Mods
+        type: string
 
 permissions:
   contents: write

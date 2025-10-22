@@ -1,15 +1,21 @@
-# ToggleVisualize 1.1.1
+# ToggleVisualize 2.0.0
 
 ## New Features
-- Added support for Minecraft 1.21.6
+- Added support for Forge 1.20.1 and NeoForge 1.21.1
+- Added support for Fabric 1.21.9
+- Added toggle for item usage and attack introduced in 1.21.9
 
-## Known Issues
-- Opening the positioning tool from the title screen causes rendering issues (1.20.1)
+## Bug Fixes
+- Fixed a rendering bug when opening the Positioning Tool from the title screen in 1.20.1
+- Fixed an issue where the order of the Positioning Tool's descriptions was reversed in 1.20.1
 
 ---
 
 ## 新機能
-- Minecraft 1.21.6に対応
+- Forge 1.20.1、NeoForge 1.21.1に対応
+- Fabric 1.21.9に対応
+- 1.21.9で追加された、アイテムの使用と攻撃のトグルを追加
 
-## 既知の不具合
-- タイトルから位置調整ツールを開くと描画がおかしくなる(1.20.1)
+## バグ修正
+- 1.20.1で、タイトル画面から位置調整ツールを開いた時の描画バグを修正
+- 1.20.1で、位置調整ツールの説明文の順序が逆になっていた不具合を修正

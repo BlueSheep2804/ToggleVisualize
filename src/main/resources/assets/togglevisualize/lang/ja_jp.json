@@ -12,5 +12,7 @@
   "togglevisualize.config.positioning_tool.title": "位置調整ツール",
   "togglevisualize.config.positioning_tool.howto": "左クリックで選択します。",
   "togglevisualize.config.positioning_tool.howto.selected": "左クリックで位置を決めます。右クリックでキャンセルします。",
-  "togglevisualize.config.positioning_tool.selecting": "選択中: %s (%s)"
+  "togglevisualize.config.positioning_tool.selecting": "選択中: %s (%s)",
+  "togglevisualize.hud.use": "使用",
+  "togglevisualize.hud.attack": "攻撃"
 }

@@ -57,6 +57,34 @@ enum class ToggleType(
         ToggleVisualizeConfig::flyingShowText,
         ToggleVisualizeConfig::flyingTextPositionX,
         ToggleVisualizeConfig::flyingTextPositionY
+    //? if >1.21.8 {
+    ),
+    Attack(
+        rlMinecraft("textures/item/iron_sword.png"),
+        Component.translatable("togglevisualize.hud.attack"),
+        {
+            options.toggleAttack().get() && options.keyAttack.isDown
+        },
+        ToggleVisualizeConfig::attackShow,
+        ToggleVisualizeConfig::attackPositionX,
+        ToggleVisualizeConfig::attackPositionY,
+        ToggleVisualizeConfig::attackShowText,
+        ToggleVisualizeConfig::attackTextPositionX,
+        ToggleVisualizeConfig::attackTextPositionY
+    ),
+    Use(
+        rlMinecraft("textures/item/apple.png"),
+        Component.translatable("togglevisualize.hud.use"),
+        {
+            options.toggleUse().get() && options.keyUse.isDown
+        },
+        ToggleVisualizeConfig::useShow,
+        ToggleVisualizeConfig::usePositionX,
+        ToggleVisualizeConfig::usePositionY,
+        ToggleVisualizeConfig::useShowText,
+        ToggleVisualizeConfig::useTextPositionX,
+        ToggleVisualizeConfig::useTextPositionY
+    //?}
     );
 
     companion object {

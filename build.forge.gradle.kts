@@ -75,7 +75,7 @@ java {
 val buildAndCollect = tasks.register<Copy>("buildAndCollect") {
     group = "versioned"
     description = "Must run thorough 'chiseledBuild'"
-    from(tasks.jar.get().archiveFile)
+    from(project.tasks.getByName("reobfJar", Jar::class).archiveFile)
     into(rootProject.layout.buildDirectory.dir("libs/$modVersion/$loader"))
     dependsOn("build")
 }
@@ -117,7 +117,7 @@ publishMods {
     }
 
     displayName = "$modVersion for $loader $mcVersion"
-    file = project.tasks.jar.get().archiveFile
+    file = project.tasks.getByName("reobfJar", Jar::class).archiveFile
     type = STABLE
     modLoaders.add(loader)
     changelog = rootProject.file("changelog.md").readText()

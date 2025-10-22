@@ -27,8 +27,9 @@ jobs:
       - name: make gradlew executable
         run: chmod +x ./gradlew
       - name: build and publish mods
-        run: ./gradlew build publishMods
+        run: ./gradlew build publish$VERSION_NAME
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          VERSION_NAME: ${{ inputs.name }}

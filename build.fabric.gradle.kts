@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-	id("fabric-loom") version "1.10.5"
+	id("fabric-loom") version "1.11-SNAPSHOT"
 	id("maven-publish")
 	id("org.jetbrains.kotlin.jvm") version "2.1.0"
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
@@ -61,7 +61,9 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${fabricApiVersion}")
 	modImplementation("net.fabricmc:fabric-language-kotlin:${fabricKotlinVersion}")
-	modImplementation("com.terraformersmc:modmenu:${modmenuVersion}")
+	if (modmenuVersion != "none") {
+		modImplementation("com.terraformersmc:modmenu:${modmenuVersion}")
+	}
 
 	modImplementation("dev.isxander:yet-another-config-lib:${yaclVersion}")
 }

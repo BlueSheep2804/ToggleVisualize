@@ -1,6 +1,9 @@
 {
   "pack": {
     "description": "Toggle Visualize Resource",
-    "pack_format": ${packFormat}
+    "min_format": 15,
+    "max_format": 69,
+    "supported_formats": [15, 69],
+    "pack_format": 15
   }
 }

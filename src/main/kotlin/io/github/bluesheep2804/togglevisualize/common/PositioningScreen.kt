@@ -11,6 +11,11 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 
+//? if >1.21.8 {
+import net.minecraft.client.input.MouseButtonEvent
+import com.mojang.blaze3d.platform.cursor.CursorTypes
+//?}
+
 class PositioningScreen(private val yaclParent: Screen): Screen(Component.translatable("togglevisualize.config.positioning_tool.title")) {
     private val config = ToggleVisualizeConfig.Companion.instance
     private var mouseOffsetX = 0
@@ -139,7 +144,12 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         }?.rectangle
 
         if (rectangle != null){
-            guiGraphics.renderOutline(
+            //? if >1.21.8 {
+            guiGraphics.requestCursor(CursorTypes.RESIZE_ALL)
+            guiGraphics.submitOutline(
+            //?} else {
+            /*guiGraphics.renderOutline(
+            *///?}
                 rectangle.left()-1,
                 rectangle.top()-1,
                 rectangle.width+2,
@@ -149,8 +159,29 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         }
     }
 
-    override fun mouseClicked(rawMouseX: Double, rawMouseY: Double, button: Int): Boolean {
-        if (button > 1) return super.mouseClicked(rawMouseX, rawMouseY, button)
+    override fun mouseClicked(
+        //? if >1.21.8 {
+        event: MouseButtonEvent,
+        bl: Boolean
+        //?} else {
+        /*rawMouseX: Double,
+        rawMouseY: Double,
+        button: Int
+        *///?}
+    ): Boolean {
+        //? if >1.21.8 {
+        val button = event.button()
+        val rawMouseX = event.x()
+        val rawMouseY = event.y()
+        //?}
+
+        if (button > 1) {
+            //? if >1.21.8 {
+            return super.mouseClicked(event, bl)
+            //?} else {
+            /*return super.mouseClicked(rawMouseX, rawMouseY, button)
+            *///?}
+        }
 
         val mouseX = rawMouseX.toInt()
         val mouseY = rawMouseY.toInt()
@@ -197,7 +228,11 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             howtoStringWidget.visible = false
             selectedHowtoStringWidget.visible = true
         }
-        return super.mouseClicked(rawMouseX, rawMouseY, button)
+        //? if >1.21.8 {
+        return super.mouseClicked(event, bl)
+        //?} else {
+        /*return super.mouseClicked(rawMouseX, rawMouseY, button)
+        *///?}
     }
 
     override fun onClose() {

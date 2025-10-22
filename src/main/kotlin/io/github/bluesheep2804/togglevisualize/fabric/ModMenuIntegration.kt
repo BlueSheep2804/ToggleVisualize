@@ -1,4 +1,4 @@
-//? if fabric {
+//? if fabric && modmenu {
 package io.github.bluesheep2804.togglevisualize.fabric
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory

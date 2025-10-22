@@ -1,10 +1,11 @@
 plugins {
     id("dev.kikugie.stonecutter")
 }
-stonecutter active "1.21.6-fabric"
+stonecutter active "1.21.9-fabric"
 
 stonecutter parameters {
     constants.match(node.metadata.project.substringAfterLast("-"), "fabric", "forge", "neoforge")
+    constants["modmenu"] = (node.project.property("modmenuVersion") as String) != "none"
 }
 
 tasks.register("buildAndCollectAll") {

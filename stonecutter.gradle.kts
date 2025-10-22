@@ -18,7 +18,7 @@ stonecutter.tasks {
     order("publishModrinth")
 }
 
-for (version in stonecutter.versions.map { it.project }.distinct()) tasks.register("publish$version") {
+for (project in stonecutter.versions.map { it.project }.distinct()) tasks.register("publish$project") {
     group = "publishing"
-    dependsOn(stonecutter.tasks.named("publishMods") { metadata.version == version })
+    dependsOn(stonecutter.tasks.named("publishMods") { metadata.project == project })
 }

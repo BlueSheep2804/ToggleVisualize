@@ -29,14 +29,31 @@ object HudOverlay {
         ToggleType.entries.forEach {
             if (it.condition.invoke()) {
                 if (it.showIndicator.get(config)) {
-                    blit(guiGraphics, it.indicatorLocation, it.indicatorPosX.get(config), it.indicatorPosY.get(config))
+                    blit(
+                        guiGraphics,
+                        it.indicatorLocation,
+                        it.indicatorPosX.get(config),
+                        it.indicatorPosY.get(config),
+                        it.indicatorAnchorPoint.get(config)
+                    )
                 }
                 if (it.showText.get(config)) {
+                    val anchorPoint = it.textAnchorPoint.get(config)
+                    val posX = anchorPoint.calculateX(
+                        minecraftInstance.font.width(it.textComponent),
+                        guiGraphics.guiWidth(),
+                        it.textPosX.get(config)
+                    )
+                    val posY = anchorPoint.calculateY(
+                        minecraftInstance.font.lineHeight,
+                        guiGraphics.guiHeight(),
+                        it.textPosY.get(config)
+                    )
                     guiGraphics.drawString(
                         minecraftInstance.font,
                         it.textComponent.copy().withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
-                        it.textPosX.get(config),
-                        it.textPosY.get(config),
+                        posX,
+                        posY,
                         CommonColors.WHITE
                     )
                 }
@@ -44,12 +61,14 @@ object HudOverlay {
         }
     }
 
-    fun blit(guiGraphics: GuiGraphics, texture: ResourceLocation, x: Int, y: Int) {
+    fun blit(guiGraphics: GuiGraphics, texture: ResourceLocation, x: Int, y: Int, anchorPoint: AnchorPoint) {
+        val posX = anchorPoint.calculateX(16, guiGraphics.guiWidth(), x)
+        val posY = anchorPoint.calculateY(16, guiGraphics.guiHeight(), y)
         //? if <1.21.2 {
         /*guiGraphics.blit(
             texture,
-            x,
-            y,
+            posX,
+            posY,
             0F,
             0F,
             16,
@@ -65,8 +84,8 @@ object HudOverlay {
             RenderPipelines.GUI_TEXTURED,
             //?}
             texture,
-            x,
-            y,
+            posX,
+            posY,
             0F,
             0F,
             16,

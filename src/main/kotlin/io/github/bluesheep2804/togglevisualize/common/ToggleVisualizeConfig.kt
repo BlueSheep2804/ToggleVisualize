@@ -5,6 +5,7 @@ import dev.isxander.yacl3.api.ConfigCategory
 import dev.isxander.yacl3.api.Option
 import dev.isxander.yacl3.api.OptionGroup
 import dev.isxander.yacl3.api.YetAnotherConfigLib
+import dev.isxander.yacl3.api.controller.EnumControllerBuilder
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler
@@ -27,6 +28,9 @@ class ToggleVisualizeConfig {
     var sneakPositionY = 32
 
     @SerialEntry
+    var sneakAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
     var sneakShowText = false
 
     @SerialEntry
@@ -34,6 +38,9 @@ class ToggleVisualizeConfig {
 
     @SerialEntry
     var sneakTextPositionY = 36
+
+    @SerialEntry
+    var sneakTextAnchorPoint = AnchorPoint.LEFT_TOP
 
     @SerialEntry
     var sprintShow = true
@@ -45,6 +52,9 @@ class ToggleVisualizeConfig {
     var sprintPositionY = 16
 
     @SerialEntry
+    var sprintAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
     var sprintShowText = false
 
     @SerialEntry
@@ -52,6 +62,9 @@ class ToggleVisualizeConfig {
 
     @SerialEntry
     var sprintTextPositionY = 20
+
+    @SerialEntry
+    var sprintTextAnchorPoint = AnchorPoint.LEFT_TOP
 
     //? if >1.21.8 {
     @SerialEntry
@@ -64,6 +77,9 @@ class ToggleVisualizeConfig {
     var attackPositionY = 48
 
     @SerialEntry
+    var attackAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
     var attackShowText = false
 
     @SerialEntry
@@ -71,6 +87,9 @@ class ToggleVisualizeConfig {
 
     @SerialEntry
     var attackTextPositionY = 52
+
+    @SerialEntry
+    var attackTextAnchorPoint = AnchorPoint.LEFT_TOP
 
     @SerialEntry
     var useShow = true
@@ -82,6 +101,9 @@ class ToggleVisualizeConfig {
     var usePositionY = 64
 
     @SerialEntry
+    var useAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
     var useShowText = false
 
     @SerialEntry
@@ -89,6 +111,9 @@ class ToggleVisualizeConfig {
 
     @SerialEntry
     var useTextPositionY = 68
+
+    @SerialEntry
+    var useTextAnchorPoint = AnchorPoint.LEFT_TOP
     //?}
 
     @SerialEntry
@@ -101,6 +126,9 @@ class ToggleVisualizeConfig {
     var flyingPositionY = /*? if >1.21.8 {*/ 80 /*?} else {*/ /*48 *//*?}*/
 
     @SerialEntry
+    var flyingAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
     var flyingShowText = false
 
     @SerialEntry
@@ -108,6 +136,9 @@ class ToggleVisualizeConfig {
 
     @SerialEntry
     var flyingTextPositionY = /*? if >1.21.8 {*/ 84 /*?} else {*/ /*52 *//*?}*/
+
+    @SerialEntry
+    var flyingTextAnchorPoint = AnchorPoint.LEFT_TOP
 
     companion object {
         private val configId = rl("config")
@@ -179,6 +210,12 @@ class ToggleVisualizeConfig {
                                             { config.sneakPositionY },
                                             { newVal -> config.sneakPositionY = newVal }
                                         ))
+                                    .option(anchorPointOption(
+                                        "indicatorAnchorPoint",
+                                        defaultConfig.sneakAnchorPoint,
+                                        { config.sneakAnchorPoint },
+                                        { newVal -> config.sneakAnchorPoint = newVal }
+                                    ))
                                     .option(
                                         booleanOption(
                                             "text",
@@ -199,6 +236,12 @@ class ToggleVisualizeConfig {
                                             { config.sneakTextPositionY },
                                             { newVal -> config.sneakTextPositionY = newVal }
                                         ))
+                                    .option(anchorPointOption(
+                                        "textAnchorPoint",
+                                        defaultConfig.sneakTextAnchorPoint,
+                                        { config.sneakTextAnchorPoint },
+                                        { newVal -> config.sneakTextAnchorPoint = newVal }
+                                    ))
                                     .build())
                             .group(
                                 OptionGroup.createBuilder()
@@ -223,6 +266,12 @@ class ToggleVisualizeConfig {
                                             { config.sprintPositionY },
                                             { newVal -> config.sprintPositionY = newVal }
                                         ))
+                                    .option(anchorPointOption(
+                                        "indicatorAnchorPoint",
+                                        defaultConfig.sprintAnchorPoint,
+                                        { config.sprintAnchorPoint },
+                                        { newVal -> config.sprintAnchorPoint = newVal }
+                                    ))
                                     .option(
                                         booleanOption(
                                             "text",
@@ -243,6 +292,12 @@ class ToggleVisualizeConfig {
                                             { config.sprintTextPositionY },
                                             { newVal -> config.sprintTextPositionY = newVal }
                                         ))
+                                    .option(anchorPointOption(
+                                        "textAnchorPoint",
+                                        defaultConfig.sprintTextAnchorPoint,
+                                        { config.sprintTextAnchorPoint },
+                                        { newVal -> config.sprintTextAnchorPoint = newVal }
+                                    ))
                                     .build())
                             //? if >1.21.8 {
                             .group(
@@ -268,6 +323,12 @@ class ToggleVisualizeConfig {
                                             { config.attackPositionY },
                                             { newVal -> config.attackPositionY = newVal }
                                         ))
+                                    .option(anchorPointOption(
+                                        "indicatorAnchorPoint",
+                                        defaultConfig.attackAnchorPoint,
+                                        { config.attackAnchorPoint },
+                                        { newVal -> config.attackAnchorPoint = newVal }
+                                    ))
                                     .option(
                                         booleanOption(
                                             "text",
@@ -288,6 +349,12 @@ class ToggleVisualizeConfig {
                                             { config.attackTextPositionY },
                                             { newVal -> config.attackTextPositionY = newVal }
                                         ))
+                                    .option(anchorPointOption(
+                                        "textAnchorPoint",
+                                        defaultConfig.attackTextAnchorPoint,
+                                        { config.attackTextAnchorPoint },
+                                        { newVal -> config.attackTextAnchorPoint = newVal }
+                                    ))
                                     .build())
                             .group(
                                 OptionGroup.createBuilder()
@@ -312,6 +379,12 @@ class ToggleVisualizeConfig {
                                             { config.usePositionY },
                                             { newVal -> config.usePositionY = newVal }
                                         ))
+                                    .option(anchorPointOption(
+                                        "indicatorAnchorPoint",
+                                        defaultConfig.useAnchorPoint,
+                                        { config.useAnchorPoint },
+                                        { newVal -> config.useAnchorPoint = newVal }
+                                    ))
                                     .option(
                                         booleanOption(
                                             "text",
@@ -332,6 +405,12 @@ class ToggleVisualizeConfig {
                                             { config.useTextPositionY },
                                             { newVal -> config.useTextPositionY = newVal }
                                         ))
+                                    .option(anchorPointOption(
+                                        "textAnchorPoint",
+                                        defaultConfig.useTextAnchorPoint,
+                                        { config.useTextAnchorPoint },
+                                        { newVal -> config.useTextAnchorPoint = newVal }
+                                    ))
                                     .build())
                             //?}
                             .group(
@@ -357,6 +436,12 @@ class ToggleVisualizeConfig {
                                             { config.flyingPositionY },
                                             { newVal -> config.flyingPositionY = newVal }
                                         ))
+                                    .option(anchorPointOption(
+                                        "indicatorAnchorPoint",
+                                        defaultConfig.flyingAnchorPoint,
+                                        { config.flyingAnchorPoint },
+                                        { newVal -> config.flyingAnchorPoint = newVal }
+                                    ))
                                     .option(
                                         booleanOption(
                                             "text",
@@ -377,6 +462,12 @@ class ToggleVisualizeConfig {
                                             { config.flyingTextPositionY },
                                             { newVal -> config.flyingTextPositionY = newVal }
                                         ))
+                                    .option(anchorPointOption(
+                                        "textAnchorPoint",
+                                        defaultConfig.flyingTextAnchorPoint,
+                                        { config.flyingTextAnchorPoint },
+                                        { newVal -> config.flyingTextAnchorPoint = newVal }
+                                    ))
                                     .build())
                             .build())
             }
@@ -402,7 +493,19 @@ class ToggleVisualizeConfig {
                     getter,
                     setter
                 )
-                .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
+                .controller(IntegerFieldControllerBuilder::create)
+                .build()
+        }
+
+        private fun anchorPointOption(id: String, defaultValue: AnchorPoint, getter: () -> AnchorPoint, setter: (AnchorPoint) -> Unit): Option<AnchorPoint> {
+            return Option.createBuilder<AnchorPoint>()
+                .name(Component.translatable("togglevisualize.config.option.$id"))
+                .binding(
+                    defaultValue,
+                    getter,
+                    setter
+                )
+                .controller { opt -> EnumControllerBuilder.create(opt).enumClass(AnchorPoint::class.java) }
                 .build()
         }
     }

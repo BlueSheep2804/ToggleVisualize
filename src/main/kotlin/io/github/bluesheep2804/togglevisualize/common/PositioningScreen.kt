@@ -32,6 +32,8 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     private val selectionComponentKey = "togglevisualize.config.positioning_tool.selecting"
     private val indicatorWidgets: MutableMap<ToggleType, ImageWidget> = mutableMapOf()
     private val textWidgets: MutableMap<ToggleType, StringWidget> = mutableMapOf()
+    private val indicatorAnchorPoints: MutableMap<ToggleType, AnchorPoint> = mutableMapOf()
+    private val textAnchorPoints: MutableMap<ToggleType, AnchorPoint> = mutableMapOf()
 
     override fun init() {
         howtoStringWidget = StringWidget(
@@ -53,6 +55,9 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
                     font
                 )
             }
+
+            indicatorAnchorPoints[it] = it.indicatorAnchorPoint.get(config)
+            textAnchorPoints[it] = it.textAnchorPoint.get(config)
         }
 
         selectionStringWidget.width = width
@@ -98,13 +103,17 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         val mouseY = rawMouseY.toInt()
         if (isTextElement) {
             textWidgets[activeToggleElement]!!.setPosition(
-                mouseX - mouseOffsetX,
-                mouseY - mouseOffsetY
+                textAnchorPoints[activeToggleElement]!!.calculateX(
+                    font.width(activeToggleElement!!.textComponent),
+                    width,
+                    mouseX - mouseOffsetX
+                ),
+                textAnchorPoints[activeToggleElement]!!.calculateY(font.lineHeight, height, mouseY - mouseOffsetY)
             )
         } else {
             indicatorWidgets[activeToggleElement]!!.setPosition(
-                mouseX - mouseOffsetX,
-                mouseY - mouseOffsetY
+                indicatorAnchorPoints[activeToggleElement]!!.calculateX(16, width, mouseX - mouseOffsetX),
+                indicatorAnchorPoints[activeToggleElement]!!.calculateY(16, height, mouseY - mouseOffsetY)
             )
         }
     }
@@ -117,10 +126,22 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         layout.arrangeElements()
 
         indicatorWidgets.forEach {
-            it.value.setPosition(it.key.indicatorPosX.get(config), it.key.indicatorPosY.get(config))
+            val posX = it.key.indicatorPosX.get(config)
+            val posY = it.key.indicatorPosY.get(config)
+            val anchorPoint = it.key.indicatorAnchorPoint.get(config)
+            it.value.setPosition(
+                anchorPoint.calculateX(16, width, posX),
+                anchorPoint.calculateY(16, height, posY)
+            )
         }
         textWidgets.forEach {
-            it.value.setPosition(it.key.textPosX.get(config), it.key.textPosY.get(config))
+            val posX = it.key.textPosX.get(config)
+            val posY = it.key.textPosY.get(config)
+            val anchorPoint = it.key.textAnchorPoint.get(config)
+            it.value.setPosition(
+                anchorPoint.calculateX(font.width(it.key.textComponent), width, posX),
+                anchorPoint.calculateY(font.lineHeight, height, posY)
+            )
         }
     }
 
@@ -187,19 +208,31 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         val mouseY = rawMouseY.toInt()
         if (activeToggleElement != null) {
             if (isTextElement && textWidgets[activeToggleElement] != null) {
+                val anchorPoint = textAnchorPoints[activeToggleElement]!!
                 if (button == 0) {
                     activeToggleElement!!.textPosX.set(config, mouseX - mouseOffsetX)
                     activeToggleElement!!.textPosY.set(config, mouseY - mouseOffsetY)
                 }
                 textWidgets[activeToggleElement]!!
-                    .setPosition(activeToggleElement!!.textPosX.get(config), activeToggleElement!!.textPosY.get(config))
+                    .setPosition(
+                        anchorPoint.calculateX(
+                            font.width(activeToggleElement!!.textComponent),
+                            width,
+                            activeToggleElement!!.textPosX.get(config)
+                        ),
+                        anchorPoint.calculateY(font.lineHeight, height, activeToggleElement!!.textPosY.get(config))
+                    )
             } else if (!isTextElement && indicatorWidgets[activeToggleElement] != null) {
+                val anchorPoint = indicatorAnchorPoints[activeToggleElement]!!
                 if (button == 0) {
                     activeToggleElement!!.indicatorPosX.set(config, mouseX - mouseOffsetX)
                     activeToggleElement!!.indicatorPosY.set(config, mouseY - mouseOffsetY)
                 }
                 indicatorWidgets[activeToggleElement]!!
-                    .setPosition(activeToggleElement!!.indicatorPosX.get(config), activeToggleElement!!.indicatorPosY.get(config))
+                    .setPosition(
+                        anchorPoint.calculateX(16, width, activeToggleElement!!.indicatorPosX.get(config)),
+                        anchorPoint.calculateY(16, height, activeToggleElement!!.indicatorPosY.get(config))
+                    )
             }
 
             selectionStringWidget.visible = false

@@ -10,6 +10,7 @@ import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import kotlin.reflect.KMutableProperty1
 
 //? if >1.21.8 {
 import net.minecraft.client.input.MouseButtonEvent
@@ -241,17 +242,55 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             activeToggleElement = null
             isTextElement = false
         } else {
-            val element = arrayOf(*indicatorWidgets.values.toTypedArray(), *textWidgets.values.toTypedArray()).firstOrNull {
+            val hoveredElement = arrayOf(*indicatorWidgets.values.toTypedArray(), *textWidgets.values.toTypedArray()).firstOrNull {
                 it.isHovered
             }
-            if (element != null) {
-                isTextElement = textWidgets.containsValue(element)
-                activeToggleElement = indicatorWidgets.entries.firstOrNull { it.value == element }?.key
-                    ?: textWidgets.entries.firstOrNull { it.value == element }?.key
-                mouseOffsetX = mouseX - activeToggleElement.let { if (isTextElement) it!!.textPosX else it!!.indicatorPosX }
-                    .get(config)
-                mouseOffsetY = mouseY - activeToggleElement.let { if (isTextElement) it!!.textPosY else it!!.indicatorPosY }
-                    .get(config)
+            if (hoveredElement != null) {
+                isTextElement = textWidgets.containsValue(hoveredElement)
+                val hoveredToggleType = if (isTextElement) {
+                    textWidgets.entries.first { it.value == hoveredElement }.key
+                } else {
+                    indicatorWidgets.entries.first { it.value == hoveredElement }.key
+                }
+
+                if (button == 0) {
+                    activeToggleElement = hoveredToggleType
+                    mouseOffsetX = mouseX - activeToggleElement.let { if (isTextElement) it!!.textPosX else it!!.indicatorPosX }
+                        .get(config)
+                    mouseOffsetY = mouseY - activeToggleElement.let { if (isTextElement) it!!.textPosY else it!!.indicatorPosY }
+                        .get(config)
+                } else {
+                    if (isTextElement) {
+                        val anchorPoint = textAnchorPoints[hoveredToggleType]!!
+                        hoveredToggleType.textAnchorPoint.set(config, anchorPoint.next())
+                        textAnchorPoints[hoveredToggleType] = anchorPoint.next()
+
+                        adjustPosition(
+                            config,
+                            anchorPoint,
+                            anchorPoint.next(),
+                            hoveredToggleType.textPosX,
+                            hoveredToggleType.textPosY,
+                            font.width(hoveredToggleType.textComponent),
+                            font.lineHeight
+                        )
+                    } else {
+                        val anchorPoint = indicatorAnchorPoints[hoveredToggleType]!!
+                        hoveredToggleType.indicatorAnchorPoint.set(config, anchorPoint.next())
+                        indicatorAnchorPoints[hoveredToggleType] = anchorPoint.next()
+
+                        adjustPosition(
+                            config,
+                            anchorPoint,
+                            anchorPoint.next(),
+                            hoveredToggleType.indicatorPosX,
+                            hoveredToggleType.indicatorPosY,
+                            16,
+                            16
+                        )
+                    }
+                    repositionElements()
+                }
             }
         }
 
@@ -271,6 +310,27 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     override fun onClose() {
         ToggleVisualizeConfig.Companion.save()
         minecraft?.setScreen(ToggleVisualizeConfig.Companion.configScreen(yaclParent).generateScreen(yaclParent))
+    }
+
+    private fun adjustPosition(
+        config: ToggleVisualizeConfig,
+        oldAnchorPoint: AnchorPoint,
+        newAnchorPoint: AnchorPoint,
+        posX: KMutableProperty1<ToggleVisualizeConfig, Int>,
+        posY: KMutableProperty1<ToggleVisualizeConfig, Int>,
+        elementWidth: Int,
+        elementHeight: Int
+    ) {
+        val offsetX = oldAnchorPoint.calculateDeltaX(newAnchorPoint, elementWidth, width)
+        val offsetY = oldAnchorPoint.calculateDeltaY(newAnchorPoint, elementHeight, height)
+        posX.set(
+            config,
+            posX.get(config) + offsetX
+        )
+        posY.set(
+            config,
+            posY.get(config) + offsetY
+        )
     }
 
     private fun changeSelectionStringWidget(toggle: ToggleType) {

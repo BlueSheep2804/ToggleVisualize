@@ -25,4 +25,17 @@ enum class AnchorPoint(val x: Float, val y: Float): NameableEnum {
     fun calculateY(height: Int, screenHeight: Int, offsetY: Int): Int {
         return (screenHeight * y + offsetY - height * y).toInt()
     }
+
+    fun calculateDeltaX(other: AnchorPoint, width: Int, screenWidth: Int): Int {
+        return calculateX(width, screenWidth, 0) - other.calculateX(width, screenWidth, 0)
+    }
+
+    fun calculateDeltaY(other: AnchorPoint, height: Int, screenHeight: Int): Int {
+        return calculateY(height, screenHeight, 0) - other.calculateY(height, screenHeight, 0)
+    }
+
+    fun next(): AnchorPoint {
+        val values = entries.toTypedArray()
+        return values[(ordinal + 1) % values.size]
+    }
 }

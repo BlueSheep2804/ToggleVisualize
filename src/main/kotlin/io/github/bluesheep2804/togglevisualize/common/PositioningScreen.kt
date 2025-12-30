@@ -296,48 +296,17 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             activeToggleElement = null
             isTextElement = false
         } else {
-            val hoveredWidget = getHoveredWidget()
-            if (hoveredWidget != null) {
-                isTextElement = textWidgets.containsValue(hoveredWidget)
-                val hoveredToggleType = getHoveredToggleType(hoveredWidget)
+            if (button == 0) {
+                val hoveredWidget = getHoveredWidget()
+                if (hoveredWidget != null) {
+                    isTextElement = textWidgets.containsValue(hoveredWidget)
+                    val hoveredToggleType = getHoveredToggleType(hoveredWidget)
 
-                if (button == 0) {
                     activeToggleElement = hoveredToggleType
                     mouseOffsetX = mouseX - activeToggleElement.let { if (isTextElement) it!!.textPosX else it!!.indicatorPosX }
                         .get(config)
                     mouseOffsetY = mouseY - activeToggleElement.let { if (isTextElement) it!!.textPosY else it!!.indicatorPosY }
                         .get(config)
-                } else {
-                    if (isTextElement) {
-                        val anchorPoint = textAnchorPoints[hoveredToggleType]!!
-                        hoveredToggleType.textAnchorPoint.set(config, anchorPoint.next())
-                        textAnchorPoints[hoveredToggleType] = anchorPoint.next()
-
-                        adjustPosition(
-                            config,
-                            anchorPoint,
-                            anchorPoint.next(),
-                            hoveredToggleType.textPosX,
-                            hoveredToggleType.textPosY,
-                            font.width(hoveredToggleType.textComponent),
-                            font.lineHeight
-                        )
-                    } else {
-                        val anchorPoint = indicatorAnchorPoints[hoveredToggleType]!!
-                        hoveredToggleType.indicatorAnchorPoint.set(config, anchorPoint.next())
-                        indicatorAnchorPoints[hoveredToggleType] = anchorPoint.next()
-
-                        adjustPosition(
-                            config,
-                            anchorPoint,
-                            anchorPoint.next(),
-                            hoveredToggleType.indicatorPosX,
-                            hoveredToggleType.indicatorPosY,
-                            16,
-                            16
-                        )
-                    }
-                    repositionElements()
                 }
             }
         }

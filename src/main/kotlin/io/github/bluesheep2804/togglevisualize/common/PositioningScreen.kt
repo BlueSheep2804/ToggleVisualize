@@ -21,7 +21,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     private val config = ToggleVisualizeConfig.Companion.instance
     private var mouseOffsetX = 0
     private var mouseOffsetY = 0
-    private var activeToggleElement: ToggleType? = null
+    private var activeToggleType: ToggleType? = null
     private var isTextElement: Boolean = false
     private val layout = FrameLayout()
     private lateinit var descriptionLayout: LinearLayout
@@ -97,30 +97,30 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     }
 
     override fun mouseMoved(rawMouseX: Double, rawMouseY: Double) {
-        if (activeToggleElement == null) return
-        if (!isTextElement && indicatorWidgets[activeToggleElement] == null) return
-        if (isTextElement && textWidgets[activeToggleElement] == null) return
+        if (activeToggleType == null) return
+        if (!isTextElement && indicatorWidgets[activeToggleType] == null) return
+        if (isTextElement && textWidgets[activeToggleType] == null) return
         val mouseX = rawMouseX.toInt()
         val mouseY = rawMouseY.toInt()
         if (isTextElement) {
-            textWidgets[activeToggleElement]!!.setPosition(
-                textAnchorPoints[activeToggleElement]!!.calculateX(
-                    font.width(activeToggleElement!!.textComponent),
+            textWidgets[activeToggleType]!!.setPosition(
+                textAnchorPoints[activeToggleType]!!.calculateX(
+                    font.width(activeToggleType!!.textComponent),
                     width,
                     mouseX - mouseOffsetX
                 ),
-                textAnchorPoints[activeToggleElement]!!.calculateY(font.lineHeight, height, mouseY - mouseOffsetY)
+                textAnchorPoints[activeToggleType]!!.calculateY(font.lineHeight, height, mouseY - mouseOffsetY)
             )
         } else {
-            indicatorWidgets[activeToggleElement]!!.setPosition(
-                indicatorAnchorPoints[activeToggleElement]!!.calculateX(16, width, mouseX - mouseOffsetX),
-                indicatorAnchorPoints[activeToggleElement]!!.calculateY(16, height, mouseY - mouseOffsetY)
+            indicatorWidgets[activeToggleType]!!.setPosition(
+                indicatorAnchorPoints[activeToggleType]!!.calculateX(16, width, mouseX - mouseOffsetX),
+                indicatorAnchorPoints[activeToggleType]!!.calculateY(16, height, mouseY - mouseOffsetY)
             )
         }
     }
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
-        if (activeToggleElement != null) return false
+        if (activeToggleType != null) return false
         val hoveredWidget = getHoveredWidget() ?: return false
         val hoveredToggleType = getHoveredToggleType(hoveredWidget)
 
@@ -199,7 +199,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         *///?}
         super.render(guiGraphics, mouseX, mouseY, partialTick)
 
-        if (activeToggleElement != null) return
+        if (activeToggleType != null) return
 
         val hoveredWidget = getHoveredWidget()
         if (hoveredWidget != null) {
@@ -261,39 +261,39 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
 
         val mouseX = rawMouseX.toInt()
         val mouseY = rawMouseY.toInt()
-        if (activeToggleElement != null) {
-            if (isTextElement && textWidgets[activeToggleElement] != null) {
-                val anchorPoint = textAnchorPoints[activeToggleElement]!!
+        if (activeToggleType != null) {
+            if (isTextElement && textWidgets[activeToggleType] != null) {
+                val anchorPoint = textAnchorPoints[activeToggleType]!!
                 if (button == 0) {
-                    activeToggleElement!!.textPosX.set(config, mouseX - mouseOffsetX)
-                    activeToggleElement!!.textPosY.set(config, mouseY - mouseOffsetY)
+                    activeToggleType!!.textPosX.set(config, mouseX - mouseOffsetX)
+                    activeToggleType!!.textPosY.set(config, mouseY - mouseOffsetY)
                 }
-                textWidgets[activeToggleElement]!!
+                textWidgets[activeToggleType]!!
                     .setPosition(
                         anchorPoint.calculateX(
-                            font.width(activeToggleElement!!.textComponent),
+                            font.width(activeToggleType!!.textComponent),
                             width,
-                            activeToggleElement!!.textPosX.get(config)
+                            activeToggleType!!.textPosX.get(config)
                         ),
-                        anchorPoint.calculateY(font.lineHeight, height, activeToggleElement!!.textPosY.get(config))
+                        anchorPoint.calculateY(font.lineHeight, height, activeToggleType!!.textPosY.get(config))
                     )
-            } else if (!isTextElement && indicatorWidgets[activeToggleElement] != null) {
-                val anchorPoint = indicatorAnchorPoints[activeToggleElement]!!
+            } else if (!isTextElement && indicatorWidgets[activeToggleType] != null) {
+                val anchorPoint = indicatorAnchorPoints[activeToggleType]!!
                 if (button == 0) {
-                    activeToggleElement!!.indicatorPosX.set(config, mouseX - mouseOffsetX)
-                    activeToggleElement!!.indicatorPosY.set(config, mouseY - mouseOffsetY)
+                    activeToggleType!!.indicatorPosX.set(config, mouseX - mouseOffsetX)
+                    activeToggleType!!.indicatorPosY.set(config, mouseY - mouseOffsetY)
                 }
-                indicatorWidgets[activeToggleElement]!!
+                indicatorWidgets[activeToggleType]!!
                     .setPosition(
-                        anchorPoint.calculateX(16, width, activeToggleElement!!.indicatorPosX.get(config)),
-                        anchorPoint.calculateY(16, height, activeToggleElement!!.indicatorPosY.get(config))
+                        anchorPoint.calculateX(16, width, activeToggleType!!.indicatorPosX.get(config)),
+                        anchorPoint.calculateY(16, height, activeToggleType!!.indicatorPosY.get(config))
                     )
             }
 
             selectionStringWidget.visible = false
             howtoStringWidget.visible = true
             selectedHowtoStringWidget.visible = false
-            activeToggleElement = null
+            activeToggleType = null
             isTextElement = false
         } else {
             if (button == 0) {
@@ -302,17 +302,17 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
                     isTextElement = textWidgets.containsValue(hoveredWidget)
                     val hoveredToggleType = getHoveredToggleType(hoveredWidget)
 
-                    activeToggleElement = hoveredToggleType
-                    mouseOffsetX = mouseX - activeToggleElement.let { if (isTextElement) it!!.textPosX else it!!.indicatorPosX }
+                    activeToggleType = hoveredToggleType
+                    mouseOffsetX = mouseX - activeToggleType.let { if (isTextElement) it!!.textPosX else it!!.indicatorPosX }
                         .get(config)
-                    mouseOffsetY = mouseY - activeToggleElement.let { if (isTextElement) it!!.textPosY else it!!.indicatorPosY }
+                    mouseOffsetY = mouseY - activeToggleType.let { if (isTextElement) it!!.textPosY else it!!.indicatorPosY }
                         .get(config)
                 }
             }
         }
 
-        if (activeToggleElement != null) {
-            changeSelectionStringWidget(activeToggleElement!!)
+        if (activeToggleType != null) {
+            changeSelectionStringWidget(activeToggleType!!)
             selectionStringWidget.visible = true
             howtoStringWidget.visible = false
             selectedHowtoStringWidget.visible = true

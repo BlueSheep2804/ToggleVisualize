@@ -119,6 +119,46 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         }
     }
 
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
+        if (activeToggleElement != null) return false
+        val hoveredWidget = getHoveredWidget() ?: return false
+        val hoveredToggleType = getHoveredToggleType(hoveredWidget)
+
+        if (textWidgets.containsValue(hoveredWidget)) {
+            val anchorPoint = textAnchorPoints[hoveredToggleType]!!
+            val newAnchorPoint = if (scrollY > 0) anchorPoint.previous() else anchorPoint.next()
+            hoveredToggleType.textAnchorPoint.set(config, newAnchorPoint)
+            textAnchorPoints[hoveredToggleType] = newAnchorPoint
+
+            adjustPosition(
+                config,
+                anchorPoint,
+                newAnchorPoint,
+                hoveredToggleType.textPosX,
+                hoveredToggleType.textPosY,
+                font.width(hoveredToggleType.textComponent),
+                font.lineHeight
+            )
+        } else {
+            val anchorPoint = indicatorAnchorPoints[hoveredToggleType]!!
+            val newAnchorPoint = if (scrollY > 0) anchorPoint.previous() else anchorPoint.next()
+            hoveredToggleType.indicatorAnchorPoint.set(config, newAnchorPoint)
+            indicatorAnchorPoints[hoveredToggleType] = newAnchorPoint
+
+            adjustPosition(
+                config,
+                anchorPoint,
+                newAnchorPoint,
+                hoveredToggleType.indicatorPosX,
+                hoveredToggleType.indicatorPosY,
+                16,
+                16
+            )
+        }
+
+        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
+    }
+
     override fun repositionElements() {
         descriptionLayout.arrangeElements()
 
@@ -161,11 +201,25 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
 
         if (activeToggleElement != null) return
 
-        val rectangle = arrayOf(*indicatorWidgets.values.toTypedArray(), *textWidgets.values.toTypedArray()).firstOrNull {
-            it.isHovered
-        }?.rectangle
+        val hoveredWidget = getHoveredWidget()
+        if (hoveredWidget != null) {
+            isTextElement = textWidgets.containsValue(hoveredWidget)
+            val hoveredToggleType = getHoveredToggleType(hoveredWidget)
 
-        if (rectangle != null){
+            val anchorPoint = (if (isTextElement) hoveredToggleType.textAnchorPoint else hoveredToggleType.indicatorAnchorPoint).get(config)
+            guiGraphics.setTooltipForNextFrame(
+                listOf(
+                    anchorPoint.previous().previous().displayName.copy().withStyle(ChatFormatting.DARK_GRAY),
+                    anchorPoint.previous().displayName.copy().withStyle(ChatFormatting.GRAY),
+                    anchorPoint.displayName.copy().withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.WHITE),
+                    anchorPoint.next().displayName.copy().withStyle(ChatFormatting.GRAY),
+                    anchorPoint.next().next().displayName.copy().withStyle(ChatFormatting.DARK_GRAY)
+                ).map { it.visualOrderText },
+                mouseX + 4,
+                mouseY + 16
+            )
+
+            val rectangle = hoveredWidget.rectangle
             //? if >1.21.8 {
             guiGraphics.requestCursor(CursorTypes.RESIZE_ALL)
             guiGraphics.submitOutline(
@@ -242,16 +296,10 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             activeToggleElement = null
             isTextElement = false
         } else {
-            val hoveredElement = arrayOf(*indicatorWidgets.values.toTypedArray(), *textWidgets.values.toTypedArray()).firstOrNull {
-                it.isHovered
-            }
-            if (hoveredElement != null) {
-                isTextElement = textWidgets.containsValue(hoveredElement)
-                val hoveredToggleType = if (isTextElement) {
-                    textWidgets.entries.first { it.value == hoveredElement }.key
-                } else {
-                    indicatorWidgets.entries.first { it.value == hoveredElement }.key
-                }
+            val hoveredWidget = getHoveredWidget()
+            if (hoveredWidget != null) {
+                isTextElement = textWidgets.containsValue(hoveredWidget)
+                val hoveredToggleType = getHoveredToggleType(hoveredWidget)
 
                 if (button == 0) {
                     activeToggleElement = hoveredToggleType
@@ -331,6 +379,20 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             config,
             posY.get(config) + offsetY
         )
+    }
+
+    private fun getHoveredWidget(): AbstractWidget? {
+        return arrayOf(*indicatorWidgets.values.toTypedArray(), *textWidgets.values.toTypedArray()).firstOrNull {
+            it.isHovered
+        }
+    }
+
+    private fun getHoveredToggleType(hoveredWidget: AbstractWidget): ToggleType {
+        return if (textWidgets.containsValue(hoveredWidget)) {
+            textWidgets.entries.first { it.value == hoveredWidget }.key
+        } else {
+            indicatorWidgets.entries.first { it.value == hoveredWidget }.key
+        }
     }
 
     private fun changeSelectionStringWidget(toggle: ToggleType) {

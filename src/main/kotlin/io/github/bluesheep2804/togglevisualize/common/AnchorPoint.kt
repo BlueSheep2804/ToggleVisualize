@@ -38,4 +38,9 @@ enum class AnchorPoint(val x: Float, val y: Float): NameableEnum {
         val values = entries.toTypedArray()
         return values[(ordinal + 1) % values.size]
     }
+
+    fun previous(): AnchorPoint {
+        val values = entries.toTypedArray()
+        return values[(ordinal - 1 + values.size) % values.size]
+    }
 }

@@ -21,8 +21,10 @@
   "togglevisualize.config.option.textAnchorPoint": "テキストの原点",
   "togglevisualize.config.option.open_positioning_tool": "位置調整ツールを開く",
   "togglevisualize.config.positioning_tool.title": "位置調整ツール",
-  "togglevisualize.config.positioning_tool.howto": "左クリックで選択します。",
-  "togglevisualize.config.positioning_tool.howto.selected": "左クリックで位置を決めます。右クリックでキャンセルします。",
+  "togglevisualize.config.positioning_tool.howto.left_click": "左クリック : 選択",
+  "togglevisualize.config.positioning_tool.howto.scroll": "スクロール : 原点を変更",
+  "togglevisualize.config.positioning_tool.howto.selected.left_click": "左クリック : 位置の決定",
+  "togglevisualize.config.positioning_tool.howto.selected.right_click": "右クリック : キャンセル",
   "togglevisualize.config.positioning_tool.selecting": "選択中: %s (%s)",
   "togglevisualize.hud.use": "使用",
   "togglevisualize.hud.attack": "攻撃"

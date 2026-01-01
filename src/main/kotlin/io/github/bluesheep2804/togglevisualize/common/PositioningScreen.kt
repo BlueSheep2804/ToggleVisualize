@@ -24,11 +24,10 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     private var activeToggleType: ToggleType? = null
     private var isTextElement: Boolean = false
     private val layout = FrameLayout()
-    private lateinit var descriptionLayout: LinearLayout
-    private val howtoLayout = FrameLayout()
+    private val descriptionLayout = FrameLayout()
+    private lateinit var howtoLayout: LinearLayout
+    private lateinit var selectedHowtoLayout: LinearLayout
     private val positionSettingLayout = FrameLayout()
-    private lateinit var howtoStringWidget: StringWidget
-    private lateinit var selectedHowtoStringWidget: StringWidget
     private lateinit var selectionStringWidget: StringWidget
     private val selectionComponentKey = "togglevisualize.config.positioning_tool.selecting"
     private val indicatorWidgets: MutableMap<ToggleType, ImageWidget> = mutableMapOf()
@@ -37,12 +36,29 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     private val textAnchorPoints: MutableMap<ToggleType, AnchorPoint> = mutableMapOf()
 
     override fun init() {
-        howtoStringWidget = StringWidget(
-            Component.translatable("togglevisualize.config.positioning_tool.howto").withStyle(ChatFormatting.GRAY), font
+        val howtoStringWidgets = listOf(
+            StringWidget(
+                Component.translatable("togglevisualize.config.positioning_tool.howto.left_click")
+                    .withStyle(ChatFormatting.GRAY),
+                font
+            ),
+            StringWidget(
+                Component.translatable("togglevisualize.config.positioning_tool.howto.scroll")
+                    .withStyle(ChatFormatting.GRAY),
+                font
+            )
         )
-        selectedHowtoStringWidget = StringWidget(
-            Component.translatable("togglevisualize.config.positioning_tool.howto.selected")
-                .withStyle(ChatFormatting.GRAY), font
+        val selectedHowtoStringWidgets = listOf(
+            StringWidget(
+                Component.translatable("togglevisualize.config.positioning_tool.howto.selected.left_click")
+                    .withStyle(ChatFormatting.GRAY),
+                font
+            ),
+            StringWidget(
+                Component.translatable("togglevisualize.config.positioning_tool.howto.selected.right_click")
+                    .withStyle(ChatFormatting.GRAY),
+                font
+            )
         )
         selectionStringWidget = StringWidget(Component.empty(), font)
 
@@ -63,30 +79,40 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
 
         selectionStringWidget.width = width
         //? if >1.20.1 {
-        descriptionLayout = LinearLayout.vertical()
-        descriptionLayout.defaultCellSetting().align(0.5f, 0.5f)
-        descriptionLayout.spacing(4)
+        howtoLayout = LinearLayout.vertical()
+        howtoLayout.defaultCellSetting().align(0.5f, 0.5f)
+        howtoLayout.spacing(2)
+
+        selectedHowtoLayout = LinearLayout.vertical()
+        selectedHowtoLayout.defaultCellSetting().align(0.5f, 0.5f)
+        selectedHowtoLayout.spacing(2)
         //?} else {
-        /*descriptionLayout = LinearLayout(0, 0, LinearLayout.Orientation.VERTICAL)
-        descriptionLayout.defaultChildLayoutSetting().align(0.5f, 0.5f)
-        descriptionLayout.defaultChildLayoutSetting().padding(4)
+        /*howtoLayout = LinearLayout(0, 0, LinearLayout.Orientation.VERTICAL)
+        howtoLayout.defaultChildLayoutSetting().align(0.5f, 0.5f)
+        howtoLayout.defaultChildLayoutSetting().padding(2)
+
+        selectedHowtoLayout = LinearLayout(0, 0, LinearLayout.Orientation.VERTICAL)
+        selectedHowtoLayout.defaultChildLayoutSetting().align(0.5f, 0.5f)
+        selectedHowtoLayout.defaultChildLayoutSetting().padding(4)
         *///?}
 
         positionSettingLayout.setMinDimensions(width, height)
         indicatorWidgets.forEach { positionSettingLayout.addChild(it.value) }
         textWidgets.forEach{ positionSettingLayout.addChild(it.value) }
 
-        selectedHowtoStringWidget.visible = false
+        selectedHowtoStringWidgets.forEach { it.visible = false }
         selectionStringWidget.visible = false
-        howtoLayout.addChild(howtoStringWidget)
-        howtoLayout.addChild(selectedHowtoStringWidget)
         //? if >1.20.1 {
-        descriptionLayout.addChild(howtoLayout)
-        descriptionLayout.addChild(selectionStringWidget)
+        howtoStringWidgets.forEach(howtoLayout::addChild)
+        selectedHowtoStringWidgets.forEach(selectedHowtoLayout::addChild)
+        selectedHowtoLayout.addChild(selectionStringWidget)
         //?} else {
-        /*descriptionLayout.addChild(selectionStringWidget)
-        descriptionLayout.addChild(howtoLayout)
+        /*howtoStringWidgets.forEach(howtoLayout::addChild)
+        selectedHowtoStringWidgets.forEach(selectedHowtoLayout::addChild)
+        selectedHowtoLayout.addChild(selectionStringWidget)
         *///?}
+        descriptionLayout.addChild(howtoLayout)
+        descriptionLayout.addChild(selectedHowtoLayout)
 
         layout.addChild(descriptionLayout)
         layout.addChild(positionSettingLayout)
@@ -290,9 +316,8 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
                     )
             }
 
-            selectionStringWidget.visible = false
-            howtoStringWidget.visible = true
-            selectedHowtoStringWidget.visible = false
+            howtoLayout.visitWidgets { it.visible = true }
+            selectedHowtoLayout.visitWidgets { it.visible = false }
             activeToggleType = null
             isTextElement = false
         } else {
@@ -313,9 +338,8 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
 
         if (activeToggleType != null) {
             changeSelectionStringWidget(activeToggleType!!)
-            selectionStringWidget.visible = true
-            howtoStringWidget.visible = false
-            selectedHowtoStringWidget.visible = true
+            howtoLayout.visitWidgets { it.visible = false }
+            selectedHowtoLayout.visitWidgets { it.visible = true }
         }
         //? if >1.21.8 {
         return super.mouseClicked(event, bl)

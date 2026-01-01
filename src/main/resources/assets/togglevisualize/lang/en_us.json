@@ -23,8 +23,8 @@
   "togglevisualize.config.positioning_tool.title": "Positioning Tool",
   "togglevisualize.config.positioning_tool.howto.left_click": "Left click: Select",
   "togglevisualize.config.positioning_tool.howto.scroll": "Scroll: Change anchor point",
-  "togglevisualize.config.positioning_tool.howto.selected.left_click": "Left click: Confirm position.",
-  "togglevisualize.config.positioning_tool.howto.selected.right_click": "Right click: Cancel.",
+  "togglevisualize.config.positioning_tool.howto.selected.left_click": "Left click: Confirm position",
+  "togglevisualize.config.positioning_tool.howto.selected.right_click": "Right click: Cancel",
   "togglevisualize.config.positioning_tool.selecting": "Selecting: %s (%s)",
   "togglevisualize.hud.use": "Use",
   "togglevisualize.hud.attack": "Attack"

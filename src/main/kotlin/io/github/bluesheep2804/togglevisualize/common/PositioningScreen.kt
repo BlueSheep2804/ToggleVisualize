@@ -81,17 +81,25 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         //? if >1.20.1 {
         howtoLayout = LinearLayout.vertical()
         howtoLayout.defaultCellSetting().align(0.5f, 0.5f)
-        howtoLayout.spacing(2)
+        howtoLayout.spacing(4)
 
         selectedHowtoLayout = LinearLayout.vertical()
         selectedHowtoLayout.defaultCellSetting().align(0.5f, 0.5f)
-        selectedHowtoLayout.spacing(2)
+        selectedHowtoLayout.spacing(4)
         //?} else {
-        /*howtoLayout = LinearLayout(0, 0, LinearLayout.Orientation.VERTICAL)
+        /*howtoLayout = LinearLayout(
+            0,
+            howtoStringWidgets.sumOf { it.height } + 12,
+            LinearLayout.Orientation.VERTICAL
+        )
         howtoLayout.defaultChildLayoutSetting().align(0.5f, 0.5f)
-        howtoLayout.defaultChildLayoutSetting().padding(2)
+        howtoLayout.defaultChildLayoutSetting().padding(4)
 
-        selectedHowtoLayout = LinearLayout(0, 0, LinearLayout.Orientation.VERTICAL)
+        selectedHowtoLayout = LinearLayout(
+            0,
+            selectedHowtoStringWidgets.sumOf { it.height } + selectionStringWidget.height + 16,
+            LinearLayout.Orientation.VERTICAL
+        )
         selectedHowtoLayout.defaultChildLayoutSetting().align(0.5f, 0.5f)
         selectedHowtoLayout.defaultChildLayoutSetting().padding(4)
         *///?}
@@ -102,15 +110,11 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
 
         selectedHowtoStringWidgets.forEach { it.visible = false }
         selectionStringWidget.visible = false
-        //? if >1.20.1 {
+
         howtoStringWidgets.forEach(howtoLayout::addChild)
         selectedHowtoStringWidgets.forEach(selectedHowtoLayout::addChild)
         selectedHowtoLayout.addChild(selectionStringWidget)
-        //?} else {
-        /*howtoStringWidgets.forEach(howtoLayout::addChild)
-        selectedHowtoStringWidgets.forEach(selectedHowtoLayout::addChild)
-        selectedHowtoLayout.addChild(selectionStringWidget)
-        *///?}
+
         descriptionLayout.addChild(howtoLayout)
         descriptionLayout.addChild(selectedHowtoLayout)
 
@@ -145,7 +149,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         }
     }
 
-    override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
+    override fun mouseScrolled(mouseX: Double, mouseY: Double/*? if >1.20.1 {*/, scrollX: Double/*?}*/, scrollY: Double): Boolean {
         if (activeToggleType != null) return false
         val hoveredWidget = getHoveredWidget() ?: return false
         val hoveredToggleType = getHoveredToggleType(hoveredWidget)
@@ -182,7 +186,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             )
         }
 
-        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
+        return super.mouseScrolled(mouseX, mouseY/*? if >1.20.1 {*/, scrollX/*?}*/, scrollY)
     }
 
     override fun repositionElements() {
@@ -233,7 +237,12 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             val hoveredToggleType = getHoveredToggleType(hoveredWidget)
 
             val anchorPoint = (if (isTextElement) hoveredToggleType.textAnchorPoint else hoveredToggleType.indicatorAnchorPoint).get(config)
+            //? if <1.21.6 {
+            /*guiGraphics.renderTooltip(
+                font,
+            *///?} else {
             guiGraphics.setTooltipForNextFrame(
+            //?}
                 listOf(
                     anchorPoint.previous().previous().displayName.copy().withStyle(ChatFormatting.DARK_GRAY),
                     anchorPoint.previous().displayName.copy().withStyle(ChatFormatting.GRAY),

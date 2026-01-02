@@ -7,7 +7,7 @@ plugins {
 }
 
 val mcVersion = stonecutter.current.version
-val javaVersion = if (stonecutter.eval(mcVersion, ">=1.20.5")) 21 else 17
+val projectJavaVersion = if (stonecutter.eval(mcVersion, ">=1.20.5")) 21 else 17
 val loader = "forge"
 
 val modVersion = project.property("modVersion")
@@ -30,6 +30,7 @@ legacyForge {
     runs {
         configureEach {
             gameDirectory = file("../../run-forge/")
+            jvmArgument("-XX:+AllowEnhancedClassRedefinition")
         }
         register("client") {
             client()
@@ -57,19 +58,24 @@ dependencies {
 }
 
 kotlin {
-    val jvm = if (javaVersion == 21)
-        JvmTarget.JVM_21 else JvmTarget.JVM_17
+    val jvm = JvmTarget.valueOf("JVM_${projectJavaVersion}")
     compilerOptions {
         jvmTarget.set(jvm)
     }
 }
 
 java {
-    val java = if (javaVersion == 21)
-        JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+    val java = JavaVersion.valueOf("VERSION_$projectJavaVersion")
 
     sourceCompatibility = java
     targetCompatibility = java
+}
+
+tasks.withType<JavaExec>().configureEach {
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(projectJavaVersion))
+        vendor.set(JvmVendorSpec.JETBRAINS)
+    }
 }
 
 val buildAndCollect = tasks.register<Copy>("buildAndCollect") {

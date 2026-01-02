@@ -8,7 +8,7 @@ plugins {
 }
 
 val mcVersion = stonecutter.current.version
-val javaVersion = if (stonecutter.eval(mcVersion, ">=1.20.5")) 21 else 17
+val projectJavaVersion = if (stonecutter.eval(mcVersion, ">=1.20.5")) 21 else 17
 val loader = "fabric"
 
 val modVersion = project.property("modVersion")
@@ -72,12 +72,12 @@ loom {
 	runConfigs.all {
 		ideConfigGenerated(true)
 		runDir = "../../run"
+		vmArg("-XX:+AllowEnhancedClassRedefinition")
 	}
 }
 
 kotlin {
-	val jvm = if (javaVersion == 21)
-		JvmTarget.JVM_21 else JvmTarget.JVM_17
+	val jvm = JvmTarget.valueOf("JVM_${projectJavaVersion}")
 	compilerOptions {
 		jvmTarget.set(jvm)
 	}
@@ -89,11 +89,17 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	val java = if (javaVersion == 21)
-		JavaVersion.VERSION_21 else JavaVersion.VERSION_17
+	val java = JavaVersion.valueOf("VERSION_$projectJavaVersion")
 
 	sourceCompatibility = java
 	targetCompatibility = java
+}
+
+tasks.withType<JavaExec>().configureEach {
+	javaLauncher = javaToolchains.launcherFor {
+		languageVersion.set(JavaLanguageVersion.of(projectJavaVersion))
+		vendor.set(JvmVendorSpec.JETBRAINS)
+	}
 }
 
 val buildAndCollect = tasks.register<Copy>("buildAndCollect") {
@@ -123,7 +129,7 @@ tasks.processResources {
 	filesMatching("fabric.mod.json") {
 		expand(mapOf(
 			"version" to version,
-			"javaVersion" to javaVersion,
+			"javaVersion" to projectJavaVersion,
 			"minecraftVersion" to stonecutter.current.project,
 			"yaclVersion" to project.property("yaclVersion")
 		))

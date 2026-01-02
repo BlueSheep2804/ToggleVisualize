@@ -15,9 +15,11 @@ enum class ToggleType(
     val showIndicator: KMutableProperty1<ToggleVisualizeConfig, Boolean>,
     val indicatorPosX: KMutableProperty1<ToggleVisualizeConfig, Int>,
     val indicatorPosY: KMutableProperty1<ToggleVisualizeConfig, Int>,
+    val indicatorAnchorPoint: KMutableProperty1<ToggleVisualizeConfig, AnchorPoint>,
     val showText: KMutableProperty1<ToggleVisualizeConfig, Boolean>,
     val textPosX: KMutableProperty1<ToggleVisualizeConfig, Int>,
     val textPosY: KMutableProperty1<ToggleVisualizeConfig, Int>,
+    val textAnchorPoint: KMutableProperty1<ToggleVisualizeConfig, AnchorPoint>
 ) {
     Sprint(
         rlMinecraft("textures/item/iron_boots.png"),
@@ -28,9 +30,11 @@ enum class ToggleType(
         ToggleVisualizeConfig::sprintShow,
         ToggleVisualizeConfig::sprintPositionX,
         ToggleVisualizeConfig::sprintPositionY,
+        ToggleVisualizeConfig::sprintAnchorPoint,
         ToggleVisualizeConfig::sprintShowText,
         ToggleVisualizeConfig::sprintTextPositionX,
-        ToggleVisualizeConfig::sprintTextPositionY
+        ToggleVisualizeConfig::sprintTextPositionY,
+        ToggleVisualizeConfig::sprintTextAnchorPoint
     ),
     Sneak(
         rlMinecraft("textures/item/hopper.png"),
@@ -41,9 +45,11 @@ enum class ToggleType(
         ToggleVisualizeConfig::sneakShow,
         ToggleVisualizeConfig::sneakPositionX,
         ToggleVisualizeConfig::sneakPositionY,
+        ToggleVisualizeConfig::sneakAnchorPoint,
         ToggleVisualizeConfig::sneakShowText,
         ToggleVisualizeConfig::sneakTextPositionX,
-        ToggleVisualizeConfig::sneakTextPositionY
+        ToggleVisualizeConfig::sneakTextPositionY,
+        ToggleVisualizeConfig::sneakTextAnchorPoint
     ),
     Flying(
         rlMinecraft("textures/item/elytra.png"),
@@ -54,10 +60,12 @@ enum class ToggleType(
         ToggleVisualizeConfig::flyingShow,
         ToggleVisualizeConfig::flyingPositionX,
         ToggleVisualizeConfig::flyingPositionY,
+        ToggleVisualizeConfig::flyingAnchorPoint,
         ToggleVisualizeConfig::flyingShowText,
         ToggleVisualizeConfig::flyingTextPositionX,
-        ToggleVisualizeConfig::flyingTextPositionY
-    //? if >1.21.8 {
+        ToggleVisualizeConfig::flyingTextPositionY,
+        ToggleVisualizeConfig::flyingTextAnchorPoint
+        //? if >1.21.8 {
     ),
     Attack(
         rlMinecraft("textures/item/iron_sword.png"),
@@ -68,9 +76,11 @@ enum class ToggleType(
         ToggleVisualizeConfig::attackShow,
         ToggleVisualizeConfig::attackPositionX,
         ToggleVisualizeConfig::attackPositionY,
+        ToggleVisualizeConfig::attackAnchorPoint,
         ToggleVisualizeConfig::attackShowText,
         ToggleVisualizeConfig::attackTextPositionX,
-        ToggleVisualizeConfig::attackTextPositionY
+        ToggleVisualizeConfig::attackTextPositionY,
+        ToggleVisualizeConfig::attackTextAnchorPoint
     ),
     Use(
         rlMinecraft("textures/item/apple.png"),
@@ -81,10 +91,12 @@ enum class ToggleType(
         ToggleVisualizeConfig::useShow,
         ToggleVisualizeConfig::usePositionX,
         ToggleVisualizeConfig::usePositionY,
+        ToggleVisualizeConfig::useAnchorPoint,
         ToggleVisualizeConfig::useShowText,
         ToggleVisualizeConfig::useTextPositionX,
-        ToggleVisualizeConfig::useTextPositionY
-    //?}
+        ToggleVisualizeConfig::useTextPositionY,
+        ToggleVisualizeConfig::useTextAnchorPoint
+        //?}
     );
 
     companion object {

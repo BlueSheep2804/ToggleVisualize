@@ -10,6 +10,7 @@ import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import kotlin.reflect.KMutableProperty1
 
 //? if >1.21.8 {
 import net.minecraft.client.input.MouseButtonEvent
@@ -20,26 +21,44 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     private val config = ToggleVisualizeConfig.Companion.instance
     private var mouseOffsetX = 0
     private var mouseOffsetY = 0
-    private var activeToggleElement: ToggleType? = null
+    private var activeToggleType: ToggleType? = null
     private var isTextElement: Boolean = false
     private val layout = FrameLayout()
-    private lateinit var descriptionLayout: LinearLayout
-    private val howtoLayout = FrameLayout()
+    private val descriptionLayout = FrameLayout()
+    private lateinit var howtoLayout: LinearLayout
+    private lateinit var selectedHowtoLayout: LinearLayout
     private val positionSettingLayout = FrameLayout()
-    private lateinit var howtoStringWidget: StringWidget
-    private lateinit var selectedHowtoStringWidget: StringWidget
     private lateinit var selectionStringWidget: StringWidget
     private val selectionComponentKey = "togglevisualize.config.positioning_tool.selecting"
     private val indicatorWidgets: MutableMap<ToggleType, ImageWidget> = mutableMapOf()
     private val textWidgets: MutableMap<ToggleType, StringWidget> = mutableMapOf()
+    private val indicatorAnchorPoints: MutableMap<ToggleType, AnchorPoint> = mutableMapOf()
+    private val textAnchorPoints: MutableMap<ToggleType, AnchorPoint> = mutableMapOf()
 
     override fun init() {
-        howtoStringWidget = StringWidget(
-            Component.translatable("togglevisualize.config.positioning_tool.howto").withStyle(ChatFormatting.GRAY), font
+        val howtoStringWidgets = listOf(
+            StringWidget(
+                Component.translatable("togglevisualize.config.positioning_tool.howto.left_click")
+                    .withStyle(ChatFormatting.GRAY),
+                font
+            ),
+            StringWidget(
+                Component.translatable("togglevisualize.config.positioning_tool.howto.scroll")
+                    .withStyle(ChatFormatting.GRAY),
+                font
+            )
         )
-        selectedHowtoStringWidget = StringWidget(
-            Component.translatable("togglevisualize.config.positioning_tool.howto.selected")
-                .withStyle(ChatFormatting.GRAY), font
+        val selectedHowtoStringWidgets = listOf(
+            StringWidget(
+                Component.translatable("togglevisualize.config.positioning_tool.howto.selected.left_click")
+                    .withStyle(ChatFormatting.GRAY),
+                font
+            ),
+            StringWidget(
+                Component.translatable("togglevisualize.config.positioning_tool.howto.selected.right_click")
+                    .withStyle(ChatFormatting.GRAY),
+                font
+            )
         )
         selectionStringWidget = StringWidget(Component.empty(), font)
 
@@ -53,34 +72,51 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
                     font
                 )
             }
+
+            indicatorAnchorPoints[it] = it.indicatorAnchorPoint.get(config)
+            textAnchorPoints[it] = it.textAnchorPoint.get(config)
         }
 
         selectionStringWidget.width = width
         //? if >1.20.1 {
-        descriptionLayout = LinearLayout.vertical()
-        descriptionLayout.defaultCellSetting().align(0.5f, 0.5f)
-        descriptionLayout.spacing(4)
+        howtoLayout = LinearLayout.vertical()
+        howtoLayout.defaultCellSetting().align(0.5f, 0.5f)
+        howtoLayout.spacing(4)
+
+        selectedHowtoLayout = LinearLayout.vertical()
+        selectedHowtoLayout.defaultCellSetting().align(0.5f, 0.5f)
+        selectedHowtoLayout.spacing(4)
         //?} else {
-        /*descriptionLayout = LinearLayout(0, 0, LinearLayout.Orientation.VERTICAL)
-        descriptionLayout.defaultChildLayoutSetting().align(0.5f, 0.5f)
-        descriptionLayout.defaultChildLayoutSetting().padding(4)
+        /*howtoLayout = LinearLayout(
+            0,
+            howtoStringWidgets.sumOf { it.height } + 12,
+            LinearLayout.Orientation.VERTICAL
+        )
+        howtoLayout.defaultChildLayoutSetting().align(0.5f, 0.5f)
+        howtoLayout.defaultChildLayoutSetting().padding(4)
+
+        selectedHowtoLayout = LinearLayout(
+            0,
+            selectedHowtoStringWidgets.sumOf { it.height } + selectionStringWidget.height + 16,
+            LinearLayout.Orientation.VERTICAL
+        )
+        selectedHowtoLayout.defaultChildLayoutSetting().align(0.5f, 0.5f)
+        selectedHowtoLayout.defaultChildLayoutSetting().padding(4)
         *///?}
 
         positionSettingLayout.setMinDimensions(width, height)
         indicatorWidgets.forEach { positionSettingLayout.addChild(it.value) }
         textWidgets.forEach{ positionSettingLayout.addChild(it.value) }
 
-        selectedHowtoStringWidget.visible = false
+        selectedHowtoStringWidgets.forEach { it.visible = false }
         selectionStringWidget.visible = false
-        howtoLayout.addChild(howtoStringWidget)
-        howtoLayout.addChild(selectedHowtoStringWidget)
-        //? if >1.20.1 {
+
+        howtoStringWidgets.forEach(howtoLayout::addChild)
+        selectedHowtoStringWidgets.forEach(selectedHowtoLayout::addChild)
+        selectedHowtoLayout.addChild(selectionStringWidget)
+
         descriptionLayout.addChild(howtoLayout)
-        descriptionLayout.addChild(selectionStringWidget)
-        //?} else {
-        /*descriptionLayout.addChild(selectionStringWidget)
-        descriptionLayout.addChild(howtoLayout)
-        *///?}
+        descriptionLayout.addChild(selectedHowtoLayout)
 
         layout.addChild(descriptionLayout)
         layout.addChild(positionSettingLayout)
@@ -91,22 +127,66 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     }
 
     override fun mouseMoved(rawMouseX: Double, rawMouseY: Double) {
-        if (activeToggleElement == null) return
-        if (!isTextElement && indicatorWidgets[activeToggleElement] == null) return
-        if (isTextElement && textWidgets[activeToggleElement] == null) return
+        if (activeToggleType == null) return
+        if (!isTextElement && indicatorWidgets[activeToggleType] == null) return
+        if (isTextElement && textWidgets[activeToggleType] == null) return
         val mouseX = rawMouseX.toInt()
         val mouseY = rawMouseY.toInt()
         if (isTextElement) {
-            textWidgets[activeToggleElement]!!.setPosition(
-                mouseX - mouseOffsetX,
-                mouseY - mouseOffsetY
+            textWidgets[activeToggleType]!!.setPosition(
+                textAnchorPoints[activeToggleType]!!.calculateX(
+                    font.width(activeToggleType!!.textComponent),
+                    width,
+                    mouseX - mouseOffsetX
+                ),
+                textAnchorPoints[activeToggleType]!!.calculateY(font.lineHeight, height, mouseY - mouseOffsetY)
             )
         } else {
-            indicatorWidgets[activeToggleElement]!!.setPosition(
-                mouseX - mouseOffsetX,
-                mouseY - mouseOffsetY
+            indicatorWidgets[activeToggleType]!!.setPosition(
+                indicatorAnchorPoints[activeToggleType]!!.calculateX(16, width, mouseX - mouseOffsetX),
+                indicatorAnchorPoints[activeToggleType]!!.calculateY(16, height, mouseY - mouseOffsetY)
             )
         }
+    }
+
+    override fun mouseScrolled(mouseX: Double, mouseY: Double/*? if >1.20.1 {*/, scrollX: Double/*?}*/, scrollY: Double): Boolean {
+        if (activeToggleType != null) return false
+        val hoveredWidget = getHoveredWidget() ?: return false
+        val hoveredToggleType = getHoveredToggleType(hoveredWidget)
+
+        if (textWidgets.containsValue(hoveredWidget)) {
+            val anchorPoint = textAnchorPoints[hoveredToggleType]!!
+            val newAnchorPoint = if (scrollY > 0) anchorPoint.previous() else anchorPoint.next()
+            hoveredToggleType.textAnchorPoint.set(config, newAnchorPoint)
+            textAnchorPoints[hoveredToggleType] = newAnchorPoint
+
+            adjustPosition(
+                config,
+                anchorPoint,
+                newAnchorPoint,
+                hoveredToggleType.textPosX,
+                hoveredToggleType.textPosY,
+                font.width(hoveredToggleType.textComponent),
+                font.lineHeight
+            )
+        } else {
+            val anchorPoint = indicatorAnchorPoints[hoveredToggleType]!!
+            val newAnchorPoint = if (scrollY > 0) anchorPoint.previous() else anchorPoint.next()
+            hoveredToggleType.indicatorAnchorPoint.set(config, newAnchorPoint)
+            indicatorAnchorPoints[hoveredToggleType] = newAnchorPoint
+
+            adjustPosition(
+                config,
+                anchorPoint,
+                newAnchorPoint,
+                hoveredToggleType.indicatorPosX,
+                hoveredToggleType.indicatorPosY,
+                16,
+                16
+            )
+        }
+
+        return super.mouseScrolled(mouseX, mouseY/*? if >1.20.1 {*/, scrollX/*?}*/, scrollY)
     }
 
     override fun repositionElements() {
@@ -117,10 +197,22 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         layout.arrangeElements()
 
         indicatorWidgets.forEach {
-            it.value.setPosition(it.key.indicatorPosX.get(config), it.key.indicatorPosY.get(config))
+            val posX = it.key.indicatorPosX.get(config)
+            val posY = it.key.indicatorPosY.get(config)
+            val anchorPoint = it.key.indicatorAnchorPoint.get(config)
+            it.value.setPosition(
+                anchorPoint.calculateX(16, width, posX),
+                anchorPoint.calculateY(16, height, posY)
+            )
         }
         textWidgets.forEach {
-            it.value.setPosition(it.key.textPosX.get(config), it.key.textPosY.get(config))
+            val posX = it.key.textPosX.get(config)
+            val posY = it.key.textPosY.get(config)
+            val anchorPoint = it.key.textAnchorPoint.get(config)
+            it.value.setPosition(
+                anchorPoint.calculateX(font.width(it.key.textComponent), width, posX),
+                anchorPoint.calculateY(font.lineHeight, height, posY)
+            )
         }
     }
 
@@ -137,13 +229,32 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         *///?}
         super.render(guiGraphics, mouseX, mouseY, partialTick)
 
-        if (activeToggleElement != null) return
+        if (activeToggleType != null) return
 
-        val rectangle = arrayOf(*indicatorWidgets.values.toTypedArray(), *textWidgets.values.toTypedArray()).firstOrNull {
-            it.isHovered
-        }?.rectangle
+        val hoveredWidget = getHoveredWidget()
+        if (hoveredWidget != null) {
+            isTextElement = textWidgets.containsValue(hoveredWidget)
+            val hoveredToggleType = getHoveredToggleType(hoveredWidget)
 
-        if (rectangle != null){
+            val anchorPoint = (if (isTextElement) textAnchorPoints else indicatorAnchorPoints)[hoveredToggleType]!!
+            //? if <1.21.6 {
+            /*guiGraphics.renderTooltip(
+                font,
+            *///?} else {
+            guiGraphics.setTooltipForNextFrame(
+            //?}
+                listOf(
+                    anchorPoint.previous().previous().displayName.copy().withStyle(ChatFormatting.DARK_GRAY),
+                    anchorPoint.previous().displayName.copy().withStyle(ChatFormatting.GRAY),
+                    anchorPoint.displayName.copy().withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.WHITE),
+                    anchorPoint.next().displayName.copy().withStyle(ChatFormatting.GRAY),
+                    anchorPoint.next().next().displayName.copy().withStyle(ChatFormatting.DARK_GRAY)
+                ).map { it.visualOrderText },
+                mouseX + 4,
+                mouseY + 16
+            )
+
+            val rectangle = hoveredWidget.rectangle
             //? if >1.21.8 {
             guiGraphics.requestCursor(CursorTypes.RESIZE_ALL)
             guiGraphics.submitOutline(
@@ -185,48 +296,59 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
 
         val mouseX = rawMouseX.toInt()
         val mouseY = rawMouseY.toInt()
-        if (activeToggleElement != null) {
-            if (isTextElement && textWidgets[activeToggleElement] != null) {
+        if (activeToggleType != null) {
+            if (isTextElement && textWidgets[activeToggleType] != null) {
+                val anchorPoint = textAnchorPoints[activeToggleType]!!
                 if (button == 0) {
-                    activeToggleElement!!.textPosX.set(config, mouseX - mouseOffsetX)
-                    activeToggleElement!!.textPosY.set(config, mouseY - mouseOffsetY)
+                    activeToggleType!!.textPosX.set(config, mouseX - mouseOffsetX)
+                    activeToggleType!!.textPosY.set(config, mouseY - mouseOffsetY)
                 }
-                textWidgets[activeToggleElement]!!
-                    .setPosition(activeToggleElement!!.textPosX.get(config), activeToggleElement!!.textPosY.get(config))
-            } else if (!isTextElement && indicatorWidgets[activeToggleElement] != null) {
+                textWidgets[activeToggleType]!!
+                    .setPosition(
+                        anchorPoint.calculateX(
+                            font.width(activeToggleType!!.textComponent),
+                            width,
+                            activeToggleType!!.textPosX.get(config)
+                        ),
+                        anchorPoint.calculateY(font.lineHeight, height, activeToggleType!!.textPosY.get(config))
+                    )
+            } else if (!isTextElement && indicatorWidgets[activeToggleType] != null) {
+                val anchorPoint = indicatorAnchorPoints[activeToggleType]!!
                 if (button == 0) {
-                    activeToggleElement!!.indicatorPosX.set(config, mouseX - mouseOffsetX)
-                    activeToggleElement!!.indicatorPosY.set(config, mouseY - mouseOffsetY)
+                    activeToggleType!!.indicatorPosX.set(config, mouseX - mouseOffsetX)
+                    activeToggleType!!.indicatorPosY.set(config, mouseY - mouseOffsetY)
                 }
-                indicatorWidgets[activeToggleElement]!!
-                    .setPosition(activeToggleElement!!.indicatorPosX.get(config), activeToggleElement!!.indicatorPosY.get(config))
+                indicatorWidgets[activeToggleType]!!
+                    .setPosition(
+                        anchorPoint.calculateX(16, width, activeToggleType!!.indicatorPosX.get(config)),
+                        anchorPoint.calculateY(16, height, activeToggleType!!.indicatorPosY.get(config))
+                    )
             }
 
-            selectionStringWidget.visible = false
-            howtoStringWidget.visible = true
-            selectedHowtoStringWidget.visible = false
-            activeToggleElement = null
+            howtoLayout.visitWidgets { it.visible = true }
+            selectedHowtoLayout.visitWidgets { it.visible = false }
+            activeToggleType = null
             isTextElement = false
         } else {
-            val element = arrayOf(*indicatorWidgets.values.toTypedArray(), *textWidgets.values.toTypedArray()).firstOrNull {
-                it.isHovered
-            }
-            if (element != null) {
-                isTextElement = textWidgets.containsValue(element)
-                activeToggleElement = indicatorWidgets.entries.firstOrNull { it.value == element }?.key
-                    ?: textWidgets.entries.firstOrNull { it.value == element }?.key
-                mouseOffsetX = mouseX - activeToggleElement.let { if (isTextElement) it!!.textPosX else it!!.indicatorPosX }
-                    .get(config)
-                mouseOffsetY = mouseY - activeToggleElement.let { if (isTextElement) it!!.textPosY else it!!.indicatorPosY }
-                    .get(config)
+            if (button == 0) {
+                val hoveredWidget = getHoveredWidget()
+                if (hoveredWidget != null) {
+                    isTextElement = textWidgets.containsValue(hoveredWidget)
+                    val hoveredToggleType = getHoveredToggleType(hoveredWidget)
+
+                    activeToggleType = hoveredToggleType
+                    mouseOffsetX = mouseX - activeToggleType.let { if (isTextElement) it!!.textPosX else it!!.indicatorPosX }
+                        .get(config)
+                    mouseOffsetY = mouseY - activeToggleType.let { if (isTextElement) it!!.textPosY else it!!.indicatorPosY }
+                        .get(config)
+                }
             }
         }
 
-        if (activeToggleElement != null) {
-            changeSelectionStringWidget(activeToggleElement!!)
-            selectionStringWidget.visible = true
-            howtoStringWidget.visible = false
-            selectedHowtoStringWidget.visible = true
+        if (activeToggleType != null) {
+            changeSelectionStringWidget(activeToggleType!!)
+            howtoLayout.visitWidgets { it.visible = false }
+            selectedHowtoLayout.visitWidgets { it.visible = true }
         }
         //? if >1.21.8 {
         return super.mouseClicked(event, bl)
@@ -238,6 +360,41 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     override fun onClose() {
         ToggleVisualizeConfig.Companion.save()
         minecraft?.setScreen(ToggleVisualizeConfig.Companion.configScreen(yaclParent).generateScreen(yaclParent))
+    }
+
+    private fun adjustPosition(
+        config: ToggleVisualizeConfig,
+        oldAnchorPoint: AnchorPoint,
+        newAnchorPoint: AnchorPoint,
+        posX: KMutableProperty1<ToggleVisualizeConfig, Int>,
+        posY: KMutableProperty1<ToggleVisualizeConfig, Int>,
+        elementWidth: Int,
+        elementHeight: Int
+    ) {
+        val offsetX = oldAnchorPoint.calculateDeltaX(newAnchorPoint, elementWidth, width)
+        val offsetY = oldAnchorPoint.calculateDeltaY(newAnchorPoint, elementHeight, height)
+        posX.set(
+            config,
+            posX.get(config) + offsetX
+        )
+        posY.set(
+            config,
+            posY.get(config) + offsetY
+        )
+    }
+
+    private fun getHoveredWidget(): AbstractWidget? {
+        return arrayOf(*indicatorWidgets.values.toTypedArray(), *textWidgets.values.toTypedArray()).firstOrNull {
+            it.isHovered
+        }
+    }
+
+    private fun getHoveredToggleType(hoveredWidget: AbstractWidget): ToggleType {
+        return if (textWidgets.containsValue(hoveredWidget)) {
+            textWidgets.entries.first { it.value == hoveredWidget }.key
+        } else {
+            indicatorWidgets.entries.first { it.value == hoveredWidget }.key
+        }
     }
 
     private fun changeSelectionStringWidget(toggle: ToggleType) {

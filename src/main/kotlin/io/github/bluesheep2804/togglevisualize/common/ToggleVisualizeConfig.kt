@@ -5,6 +5,7 @@ import dev.isxander.yacl3.api.ConfigCategory
 import dev.isxander.yacl3.api.Option
 import dev.isxander.yacl3.api.OptionGroup
 import dev.isxander.yacl3.api.YetAnotherConfigLib
+import dev.isxander.yacl3.api.controller.EnumControllerBuilder
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler
@@ -27,6 +28,9 @@ class ToggleVisualizeConfig {
     var sneakPositionY = 32
 
     @SerialEntry
+    var sneakAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
     var sneakShowText = false
 
     @SerialEntry
@@ -34,6 +38,9 @@ class ToggleVisualizeConfig {
 
     @SerialEntry
     var sneakTextPositionY = 36
+
+    @SerialEntry
+    var sneakTextAnchorPoint = AnchorPoint.LEFT_TOP
 
     @SerialEntry
     var sprintShow = true
@@ -45,6 +52,9 @@ class ToggleVisualizeConfig {
     var sprintPositionY = 16
 
     @SerialEntry
+    var sprintAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
     var sprintShowText = false
 
     @SerialEntry
@@ -52,6 +62,9 @@ class ToggleVisualizeConfig {
 
     @SerialEntry
     var sprintTextPositionY = 20
+
+    @SerialEntry
+    var sprintTextAnchorPoint = AnchorPoint.LEFT_TOP
 
     //? if >1.21.8 {
     @SerialEntry
@@ -64,6 +77,9 @@ class ToggleVisualizeConfig {
     var attackPositionY = 48
 
     @SerialEntry
+    var attackAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
     var attackShowText = false
 
     @SerialEntry
@@ -71,6 +87,9 @@ class ToggleVisualizeConfig {
 
     @SerialEntry
     var attackTextPositionY = 52
+
+    @SerialEntry
+    var attackTextAnchorPoint = AnchorPoint.LEFT_TOP
 
     @SerialEntry
     var useShow = true
@@ -82,6 +101,9 @@ class ToggleVisualizeConfig {
     var usePositionY = 64
 
     @SerialEntry
+    var useAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
     var useShowText = false
 
     @SerialEntry
@@ -89,6 +111,9 @@ class ToggleVisualizeConfig {
 
     @SerialEntry
     var useTextPositionY = 68
+
+    @SerialEntry
+    var useTextAnchorPoint = AnchorPoint.LEFT_TOP
     //?}
 
     @SerialEntry
@@ -101,6 +126,9 @@ class ToggleVisualizeConfig {
     var flyingPositionY = /*? if >1.21.8 {*/ 80 /*?} else {*/ /*48 *//*?}*/
 
     @SerialEntry
+    var flyingAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
     var flyingShowText = false
 
     @SerialEntry
@@ -108,6 +136,9 @@ class ToggleVisualizeConfig {
 
     @SerialEntry
     var flyingTextPositionY = /*? if >1.21.8 {*/ 84 /*?} else {*/ /*52 *//*?}*/
+
+    @SerialEntry
+    var flyingTextAnchorPoint = AnchorPoint.LEFT_TOP
 
     companion object {
         private val configId = rl("config")
@@ -160,306 +191,322 @@ class ToggleVisualizeConfig {
                                 OptionGroup.createBuilder()
                                     .name(Component.translatable("key.sneak"))
                                     .option(
-                                        Option.createBuilder<Boolean>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicator"))
-                                            .binding(
-                                                defaultConfig.sneakShow,
-                                                { config.sneakShow },
-                                                { newVal -> config.sneakShow = newVal })
-                                            .controller(TickBoxControllerBuilder::create)
-                                            .build()
+                                        booleanOption(
+                                            "indicator",
+                                            defaultConfig.sneakShow,
+                                            { config.sneakShow },
+                                            { newVal -> config.sneakShow = newVal }
+                                        )
                                     )
+                                    .option(intOption(
+                                            "indicatorPositionX",
+                                            defaultConfig.sneakPositionX,
+                                            { config.sneakPositionX },
+                                            { newVal -> config.sneakPositionX = newVal }
+                                        ))
+                                    .option(intOption(
+                                            "indicatorPositionY",
+                                            defaultConfig.sneakPositionY,
+                                            { config.sneakPositionY },
+                                            { newVal -> config.sneakPositionY = newVal }
+                                        ))
+                                    .option(anchorPointOption(
+                                        "indicatorAnchorPoint",
+                                        defaultConfig.sneakAnchorPoint,
+                                        { config.sneakAnchorPoint },
+                                        { newVal -> config.sneakAnchorPoint = newVal }
+                                    ))
                                     .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionX"))
-                                            .binding(
-                                                defaultConfig.sneakPositionX,
-                                                { config.sneakPositionX },
-                                                { newVal -> config.sneakPositionX = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionY"))
-                                            .binding(
-                                                defaultConfig.sneakPositionY,
-                                                { config.sneakPositionY },
-                                                { newVal -> config.sneakPositionY = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Boolean>()
-                                            .name(Component.translatable("togglevisualize.config.option.text"))
-                                            .binding(
-                                                defaultConfig.sneakShowText,
-                                                { config.sneakShowText },
-                                                { newVal -> config.sneakShowText = newVal })
-                                            .controller(TickBoxControllerBuilder::create)
-                                            .build()
+                                        booleanOption(
+                                            "text",
+                                            defaultConfig.sneakShowText,
+                                            { config.sneakShowText },
+                                            { newVal -> config.sneakShowText = newVal }
+                                        )
                                     )
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.textPositionX"))
-                                            .binding(
-                                                defaultConfig.sneakTextPositionX,
-                                                { config.sneakTextPositionX },
-                                                { newVal -> config.sneakTextPositionX = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.textPositionY"))
-                                            .binding(
-                                                defaultConfig.sneakTextPositionY,
-                                                { config.sneakTextPositionY },
-                                                { newVal -> config.sneakTextPositionY = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
+                                    .option(intOption(
+                                            "textPositionX",
+                                            defaultConfig.sneakTextPositionX,
+                                            { config.sneakTextPositionX },
+                                            { newVal -> config.sneakTextPositionX = newVal }
+                                        ))
+                                    .option(intOption(
+                                            "textPositionY",
+                                            defaultConfig.sneakTextPositionY,
+                                            { config.sneakTextPositionY },
+                                            { newVal -> config.sneakTextPositionY = newVal }
+                                        ))
+                                    .option(anchorPointOption(
+                                        "textAnchorPoint",
+                                        defaultConfig.sneakTextAnchorPoint,
+                                        { config.sneakTextAnchorPoint },
+                                        { newVal -> config.sneakTextAnchorPoint = newVal }
+                                    ))
                                     .build())
                             .group(
                                 OptionGroup.createBuilder()
                                     .name(Component.translatable("key.sprint"))
                                     .option(
-                                        Option.createBuilder<Boolean>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicator"))
-                                            .binding(
-                                                defaultConfig.sprintShow,
-                                                { config.sprintShow },
-                                                { newVal -> config.sprintShow = newVal })
-                                            .controller(TickBoxControllerBuilder::create)
-                                            .build()
+                                        booleanOption(
+                                            "indicator",
+                                            defaultConfig.sprintShow,
+                                            { config.sprintShow },
+                                            { newVal -> config.sprintShow = newVal }
+                                        )
                                     )
+                                    .option(intOption(
+                                            "indicatorPositionX",
+                                            defaultConfig.sprintPositionX,
+                                            { config.sprintPositionX },
+                                            { newVal -> config.sprintPositionX = newVal }
+                                        ))
+                                    .option(intOption(
+                                            "indicatorPositionY",
+                                            defaultConfig.sprintPositionY,
+                                            { config.sprintPositionY },
+                                            { newVal -> config.sprintPositionY = newVal }
+                                        ))
+                                    .option(anchorPointOption(
+                                        "indicatorAnchorPoint",
+                                        defaultConfig.sprintAnchorPoint,
+                                        { config.sprintAnchorPoint },
+                                        { newVal -> config.sprintAnchorPoint = newVal }
+                                    ))
                                     .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionX"))
-                                            .binding(
-                                                defaultConfig.sprintPositionX,
-                                                { config.sprintPositionX },
-                                                { newVal -> config.sprintPositionX = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionY"))
-                                            .binding(
-                                                defaultConfig.sprintPositionY,
-                                                { config.sprintPositionY },
-                                                { newVal -> config.sprintPositionY = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Boolean>()
-                                            .name(Component.translatable("togglevisualize.config.option.text"))
-                                            .binding(
-                                                defaultConfig.sprintShowText,
-                                                { config.sprintShowText },
-                                                { newVal -> config.sprintShowText = newVal })
-                                            .controller(TickBoxControllerBuilder::create)
-                                            .build()
+                                        booleanOption(
+                                            "text",
+                                            defaultConfig.sprintShowText,
+                                            { config.sprintShowText },
+                                            { newVal -> config.sprintShowText = newVal }
+                                        )
                                     )
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.textPositionX"))
-                                            .binding(
-                                                defaultConfig.sprintTextPositionX,
-                                                { config.sprintTextPositionX },
-                                                { newVal -> config.sprintTextPositionX = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.textPositionY"))
-                                            .binding(
-                                                defaultConfig.sprintTextPositionY,
-                                                { config.sprintTextPositionY },
-                                                { newVal -> config.sprintTextPositionY = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
+                                    .option(intOption(
+                                            "textPositionX",
+                                            defaultConfig.sprintTextPositionX,
+                                            { config.sprintTextPositionX },
+                                            { newVal -> config.sprintTextPositionX = newVal }
+                                        ))
+                                    .option(intOption(
+                                            "textPositionY",
+                                            defaultConfig.sprintTextPositionY,
+                                            { config.sprintTextPositionY },
+                                            { newVal -> config.sprintTextPositionY = newVal }
+                                        ))
+                                    .option(anchorPointOption(
+                                        "textAnchorPoint",
+                                        defaultConfig.sprintTextAnchorPoint,
+                                        { config.sprintTextAnchorPoint },
+                                        { newVal -> config.sprintTextAnchorPoint = newVal }
+                                    ))
                                     .build())
                             //? if >1.21.8 {
                             .group(
                                 OptionGroup.createBuilder()
                                     .name(Component.translatable("key.attack"))
                                     .option(
-                                        Option.createBuilder<Boolean>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicator"))
-                                            .binding(
-                                                defaultConfig.attackShow,
-                                                { config.attackShow },
-                                                { newVal -> config.attackShow = newVal })
-                                            .controller(TickBoxControllerBuilder::create)
-                                            .build()
+                                        booleanOption(
+                                            "indicator",
+                                            defaultConfig.attackShow,
+                                            { config.attackShow },
+                                            { newVal -> config.attackShow = newVal }
+                                        )
                                     )
+                                    .option(intOption(
+                                            "indicatorPositionX",
+                                            defaultConfig.attackPositionX,
+                                            { config.attackPositionX },
+                                            { newVal -> config.attackPositionX = newVal }
+                                        ))
+                                    .option(intOption(
+                                            "indicatorPositionY",
+                                            defaultConfig.attackPositionY,
+                                            { config.attackPositionY },
+                                            { newVal -> config.attackPositionY = newVal }
+                                        ))
+                                    .option(anchorPointOption(
+                                        "indicatorAnchorPoint",
+                                        defaultConfig.attackAnchorPoint,
+                                        { config.attackAnchorPoint },
+                                        { newVal -> config.attackAnchorPoint = newVal }
+                                    ))
                                     .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionX"))
-                                            .binding(
-                                                defaultConfig.attackPositionX,
-                                                { config.attackPositionX },
-                                                { newVal -> config.attackPositionX = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionY"))
-                                            .binding(
-                                                defaultConfig.attackPositionY,
-                                                { config.attackPositionY },
-                                                { newVal -> config.attackPositionY = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Boolean>()
-                                            .name(Component.translatable("togglevisualize.config.option.text"))
-                                            .binding(
-                                                defaultConfig.attackShowText,
-                                                { config.attackShowText },
-                                                { newVal -> config.attackShowText = newVal })
-                                            .controller(TickBoxControllerBuilder::create)
-                                            .build()
+                                        booleanOption(
+                                            "text",
+                                            defaultConfig.attackShowText,
+                                            { config.attackShowText },
+                                            { newVal -> config.attackShowText = newVal }
+                                        )
                                     )
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.textPositionX"))
-                                            .binding(
-                                                defaultConfig.attackTextPositionX,
-                                                { config.attackTextPositionX },
-                                                { newVal -> config.attackTextPositionX = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.textPositionY"))
-                                            .binding(
-                                                defaultConfig.attackTextPositionY,
-                                                { config.attackTextPositionY },
-                                                { newVal -> config.attackTextPositionY = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
+                                    .option(intOption(
+                                            "textPositionX",
+                                            defaultConfig.attackTextPositionX,
+                                            { config.attackTextPositionX },
+                                            { newVal -> config.attackTextPositionX = newVal }
+                                        ))
+                                    .option(intOption(
+                                            "textPositionY",
+                                            defaultConfig.attackTextPositionY,
+                                            { config.attackTextPositionY },
+                                            { newVal -> config.attackTextPositionY = newVal }
+                                        ))
+                                    .option(anchorPointOption(
+                                        "textAnchorPoint",
+                                        defaultConfig.attackTextAnchorPoint,
+                                        { config.attackTextAnchorPoint },
+                                        { newVal -> config.attackTextAnchorPoint = newVal }
+                                    ))
                                     .build())
                             .group(
                                 OptionGroup.createBuilder()
                                     .name(Component.translatable("key.use"))
                                     .option(
-                                        Option.createBuilder<Boolean>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicator"))
-                                            .binding(
-                                                defaultConfig.useShow,
-                                                { config.useShow },
-                                                { newVal -> config.useShow = newVal })
-                                            .controller(TickBoxControllerBuilder::create)
-                                            .build()
+                                        booleanOption(
+                                            "indicator",
+                                            defaultConfig.useShow,
+                                            { config.useShow },
+                                            { newVal -> config.useShow = newVal }
+                                        )
                                     )
+                                    .option(intOption(
+                                            "indicatorPositionX",
+                                            defaultConfig.usePositionX,
+                                            { config.usePositionX },
+                                            { newVal -> config.usePositionX = newVal }
+                                        ))
+                                    .option(intOption(
+                                            "indicatorPositionY",
+                                            defaultConfig.usePositionY,
+                                            { config.usePositionY },
+                                            { newVal -> config.usePositionY = newVal }
+                                        ))
+                                    .option(anchorPointOption(
+                                        "indicatorAnchorPoint",
+                                        defaultConfig.useAnchorPoint,
+                                        { config.useAnchorPoint },
+                                        { newVal -> config.useAnchorPoint = newVal }
+                                    ))
                                     .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionX"))
-                                            .binding(
-                                                defaultConfig.usePositionX,
-                                                { config.usePositionX },
-                                                { newVal -> config.usePositionX = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionY"))
-                                            .binding(
-                                                defaultConfig.usePositionY,
-                                                { config.usePositionY },
-                                                { newVal -> config.usePositionY = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Boolean>()
-                                            .name(Component.translatable("togglevisualize.config.option.text"))
-                                            .binding(
-                                                defaultConfig.useShowText,
-                                                { config.useShowText },
-                                                { newVal -> config.useShowText = newVal })
-                                            .controller(TickBoxControllerBuilder::create)
-                                            .build()
+                                        booleanOption(
+                                            "text",
+                                            defaultConfig.useShowText,
+                                            { config.useShowText },
+                                            { newVal -> config.useShowText = newVal }
+                                        )
                                     )
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.textPositionX"))
-                                            .binding(
-                                                defaultConfig.useTextPositionX,
-                                                { config.useTextPositionX },
-                                                { newVal -> config.useTextPositionX = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.textPositionY"))
-                                            .binding(
-                                                defaultConfig.useTextPositionY,
-                                                { config.useTextPositionY },
-                                                { newVal -> config.useTextPositionY = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
+                                    .option(intOption(
+                                            "textPositionX",
+                                            defaultConfig.useTextPositionX,
+                                            { config.useTextPositionX },
+                                            { newVal -> config.useTextPositionX = newVal }
+                                        ))
+                                    .option(intOption(
+                                            "textPositionY",
+                                            defaultConfig.useTextPositionY,
+                                            { config.useTextPositionY },
+                                            { newVal -> config.useTextPositionY = newVal }
+                                        ))
+                                    .option(anchorPointOption(
+                                        "textAnchorPoint",
+                                        defaultConfig.useTextAnchorPoint,
+                                        { config.useTextAnchorPoint },
+                                        { newVal -> config.useTextAnchorPoint = newVal }
+                                    ))
                                     .build())
                             //?}
                             .group(
                                 OptionGroup.createBuilder()
                                     .name(Component.translatable("item.minecraft.elytra"))
                                     .option(
-                                        Option.createBuilder<Boolean>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicator"))
-                                            .binding(
-                                                defaultConfig.flyingShow,
-                                                { config.flyingShow },
-                                                { newVal -> config.flyingShow = newVal })
-                                            .controller(TickBoxControllerBuilder::create)
-                                            .build()
+                                        booleanOption(
+                                            "indicator",
+                                            defaultConfig.flyingShow,
+                                            { config.flyingShow },
+                                            { newVal -> config.flyingShow = newVal }
+                                        )
                                     )
+                                    .option(intOption(
+                                            "indicatorPositionX",
+                                            defaultConfig.flyingPositionX,
+                                            { config.flyingPositionX },
+                                            { newVal -> config.flyingPositionX = newVal }
+                                        ))
+                                    .option(intOption(
+                                            "indicatorPositionY",
+                                            defaultConfig.flyingPositionY,
+                                            { config.flyingPositionY },
+                                            { newVal -> config.flyingPositionY = newVal }
+                                        ))
+                                    .option(anchorPointOption(
+                                        "indicatorAnchorPoint",
+                                        defaultConfig.flyingAnchorPoint,
+                                        { config.flyingAnchorPoint },
+                                        { newVal -> config.flyingAnchorPoint = newVal }
+                                    ))
                                     .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionX"))
-                                            .binding(
-                                                defaultConfig.flyingPositionX,
-                                                { config.flyingPositionX },
-                                                { newVal -> config.flyingPositionX = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.indicatorPositionY"))
-                                            .binding(
-                                                defaultConfig.flyingPositionY,
-                                                { config.flyingPositionY },
-                                                { newVal -> config.flyingPositionY = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Boolean>()
-                                            .name(Component.translatable("togglevisualize.config.option.text"))
-                                            .binding(
-                                                defaultConfig.flyingShowText,
-                                                { config.flyingShowText },
-                                                { newVal -> config.flyingShowText = newVal })
-                                            .controller(TickBoxControllerBuilder::create)
-                                            .build()
+                                        booleanOption(
+                                            "text",
+                                            defaultConfig.flyingShowText,
+                                            { config.flyingShowText },
+                                            { newVal -> config.flyingShowText = newVal }
+                                        )
                                     )
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.textPositionX"))
-                                            .binding(
-                                                defaultConfig.flyingTextPositionX,
-                                                { config.flyingTextPositionX },
-                                                { newVal -> config.flyingTextPositionX = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
-                                    .option(
-                                        Option.createBuilder<Int>()
-                                            .name(Component.translatable("togglevisualize.config.option.textPositionY"))
-                                            .binding(
-                                                defaultConfig.flyingTextPositionY,
-                                                { config.flyingTextPositionY },
-                                                { newVal -> config.flyingTextPositionY = newVal })
-                                            .controller { opt -> IntegerFieldControllerBuilder.create(opt).min(0) }
-                                            .build())
+                                    .option(intOption(
+                                            "textPositionX",
+                                            defaultConfig.flyingTextPositionX,
+                                            { config.flyingTextPositionX },
+                                            { newVal -> config.flyingTextPositionX = newVal }
+                                        ))
+                                    .option(intOption(
+                                            "textPositionY",
+                                            defaultConfig.flyingTextPositionY,
+                                            { config.flyingTextPositionY },
+                                            { newVal -> config.flyingTextPositionY = newVal }
+                                        ))
+                                    .option(anchorPointOption(
+                                        "textAnchorPoint",
+                                        defaultConfig.flyingTextAnchorPoint,
+                                        { config.flyingTextAnchorPoint },
+                                        { newVal -> config.flyingTextAnchorPoint = newVal }
+                                    ))
                                     .build())
                             .build())
             }
+        }
+
+        private fun booleanOption(id: String, defaultValue: Boolean, getter: () -> Boolean, setter: (Boolean) -> Unit): Option<Boolean> {
+            return Option.createBuilder<Boolean>()
+                .name(Component.translatable("togglevisualize.config.option.$id"))
+                .binding(
+                    defaultValue,
+                    getter,
+                    setter
+                )
+                .controller(TickBoxControllerBuilder::create)
+                .build()
+        }
+
+        private fun intOption(id: String, defaultValue: Int, getter: () -> Int, setter: (Int) -> Unit): Option<Int> {
+            return Option.createBuilder<Int>()
+                .name(Component.translatable("togglevisualize.config.option.$id"))
+                .binding(
+                    defaultValue,
+                    getter,
+                    setter
+                )
+                .controller(IntegerFieldControllerBuilder::create)
+                .build()
+        }
+
+        private fun anchorPointOption(id: String, defaultValue: AnchorPoint, getter: () -> AnchorPoint, setter: (AnchorPoint) -> Unit): Option<AnchorPoint> {
+            return Option.createBuilder<AnchorPoint>()
+                .name(Component.translatable("togglevisualize.config.option.$id"))
+                .binding(
+                    defaultValue,
+                    getter,
+                    setter
+                )
+                .controller { opt -> EnumControllerBuilder.create(opt).enumClass(AnchorPoint::class.java) }
+                .build()
         }
     }
 }

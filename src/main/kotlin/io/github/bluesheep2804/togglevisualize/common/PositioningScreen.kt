@@ -236,7 +236,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             isTextElement = textWidgets.containsValue(hoveredWidget)
             val hoveredToggleType = getHoveredToggleType(hoveredWidget)
 
-            val anchorPoint = (if (isTextElement) hoveredToggleType.textAnchorPoint else hoveredToggleType.indicatorAnchorPoint).get(config)
+            val anchorPoint = (if (isTextElement) textAnchorPoints else indicatorAnchorPoints)[hoveredToggleType]!!
             //? if <1.21.6 {
             /*guiGraphics.renderTooltip(
                 font,

@@ -1,14 +1,16 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
+	id("org.jetbrains.kotlin.jvm")
 	id("fabric-loom") version "1.11-SNAPSHOT"
-	id("maven-publish")
-	id("org.jetbrains.kotlin.jvm") version "2.1.0"
 	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
 val mcVersion = stonecutter.current.version
-val projectJavaVersion = if (stonecutter.eval(mcVersion, ">=1.20.5")) 21 else 17
+val projectJavaVersion = when {
+	stonecutter.eval(mcVersion, ">=1.20.5") -> 21
+	else -> 17
+}
 val loader = "fabric"
 
 val modVersion = project.property("modVersion")
@@ -123,14 +125,14 @@ if (stonecutter.current.isActive) {
 }
 
 tasks.processResources {
-	inputs.property("minecraft", stonecutter.current.project)
+	inputs.property("minecraft", mcVersion)
 
 	exclude("META-INF/mods.toml", "META-INF/neoforge.mods.toml")
 	filesMatching("fabric.mod.json") {
 		expand(mapOf(
 			"version" to version,
 			"javaVersion" to projectJavaVersion,
-			"minecraftVersion" to stonecutter.current.project,
+			"minecraftVersion" to mcVersion,
 			"yaclVersion" to project.property("yaclVersion")
 		))
 	}

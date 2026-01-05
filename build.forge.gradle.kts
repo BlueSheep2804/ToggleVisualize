@@ -1,13 +1,16 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.1.0"
+    id("org.jetbrains.kotlin.jvm")
     id("net.neoforged.moddev.legacyforge") version "2.0.107"
     id("me.modmuss50.mod-publish-plugin") version "0.8.4"
 }
 
 val mcVersion = stonecutter.current.version
-val projectJavaVersion = if (stonecutter.eval(mcVersion, ">=1.20.5")) 21 else 17
+val projectJavaVersion = when {
+    stonecutter.eval(mcVersion, ">=1.20.5") -> 21
+    else -> 17
+}
 val loader = "forge"
 
 val modVersion = project.property("modVersion")

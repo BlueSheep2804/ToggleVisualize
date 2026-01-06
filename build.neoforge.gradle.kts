@@ -14,7 +14,7 @@ val projectJavaVersion = when {
 val loader = "neoforge"
 
 val modVersion = project.property("modVersion")
-version = "$modVersion+$mcVersion"
+version = "$modVersion+$mcVersion-$loader"
 group = project.property("mavenGroup") as String
 
 base {

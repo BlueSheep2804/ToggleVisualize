@@ -1,23 +1,19 @@
-# ToggleVisualize 2.0.0/2.0.1
+# ToggleVisualize 2.1.0
 
 ## New Features
-- Added support for Forge 1.20.1 and NeoForge 1.21.1
-- Added support for Fabric 1.21.9
-- Added toggle for item usage and attack introduced in 1.21.9
+- Added anchor/origin points
+  - Allows anchoring elements relative to screen edges or corners
+  - Anchor can be switched with the mouse wheel from the Positioning Tool
 
 ## Bug Fixes
-- Fixed a rendering bug when opening the Positioning Tool from the title screen in 1.20.1
-- Fixed an issue where the order of the Positioning Tool's descriptions was reversed in 1.20.1
-- (2.0.1) Fixed an issue that caused the mod to crash on Forge only when it was loaded.
+- Fixed an issue in versions 1.21.9 and later where the selected element's text in the Positioning Tool was not properly centered
 
 ---
 
 ## 新機能
-- Forge 1.20.1、NeoForge 1.21.1に対応
-- Fabric 1.21.9に対応
-- 1.21.9で追加された、アイテムの使用と攻撃のトグルを追加
+- 原点を追加
+  - 画面の端や角を基準にして要素を配置できるようになりました
+  - 位置調整ツールからは、マウスホイールで原点を切り替えられます
 
 ## バグ修正
-- 1.20.1で、タイトル画面から位置調整ツールを開いた時の描画バグを修正
-- 1.20.1で、位置調整ツールの説明文の順序が逆になっていた不具合を修正
-- (2.0.1) Forgeのみ、modが読み込まれた際にクラッシュする問題を修正
+- 1.21.9以降のバージョンで、位置調整ツールの選択中の要素テキストが中央寄りになっていなかった問題を修正

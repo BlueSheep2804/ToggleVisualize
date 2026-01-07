@@ -409,6 +409,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             toggle.textComponent,
             widgetTypeComponent
         ).withStyle(ChatFormatting.GRAY)
+        repositionElements()
     }
 
     private fun imageWidget(imageLocation: ResourceLocation): ImageWidget {

@@ -18,7 +18,7 @@ version = "$modVersion+$mcVersion-$loader"
 group = project.property("mavenGroup") as String
 
 base {
-	archivesName.set(project.property("archivesBaseName") as String + "-$loader")
+	archivesName.set(project.property("archivesBaseName") as String)
 }
 
 repositories {

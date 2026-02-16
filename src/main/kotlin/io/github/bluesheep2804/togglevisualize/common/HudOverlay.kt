@@ -20,8 +20,10 @@ object HudOverlay {
         val options = minecraftInstance.options
         //? if <1.20.2 {
         /*val debugScreen = options.renderDebug
+        *///?} else if <1.21.9 {
+        /*val debugScreen = minecraftInstance.debugOverlay.showDebugScreen()
         *///?} else {
-        val debugScreen = minecraftInstance.debugOverlay.showDebugScreen()
+        val debugScreen = minecraftInstance.debugEntries.isF3Visible
         //?}
         val hideGui = options.hideGui
         if (debugScreen || hideGui || minecraftInstance.screen is PositioningScreen) return

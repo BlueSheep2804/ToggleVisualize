@@ -137,7 +137,7 @@ tasks.processResources {
 		))
 	}
 	filesMatching("pack.mcmeta") {
-		expand("packFormat" to project.property("packFormat"))
+		expand(mapOf("packFormat" to project.property("packFormat")))
 	}
 }
 

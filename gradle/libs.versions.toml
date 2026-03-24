@@ -1,0 +1,14 @@
+[versions]
+kotlin-version = "2.1.0"
+stonecutter-version = "0.7.10"
+modpublishplugin-version = "0.8.4"
+moddevgradle-version = "2.0.107"
+loom-version = "1.13-SNAPSHOT"
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
+stonecutter = { id = "dev.kikugie.stonecutter", version.ref = "stonecutter-version" }
+modpublishplugin = { id = "me.modmuss50.mod-publish-plugin", version.ref = "modpublishplugin-version" }
+moddevgradle = { id = "net.neoforged.moddev", version.ref = "moddevgradle-version" }
+moddevgradle-legacy = { id = "net.neoforged.moddev.legacyforge", version.ref = "moddevgradle-version" }
+loom = { id = "fabric-loom", version.ref = "loom-version" }

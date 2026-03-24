@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-	id("org.jetbrains.kotlin.jvm")
-	id("fabric-loom") version "1.11-SNAPSHOT"
-	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
+	alias(libs.plugins.kotlin)
+	alias(libs.plugins.modpublishplugin)
+	alias(libs.plugins.loom)
 }
 
 val mcVersion = stonecutter.current.version

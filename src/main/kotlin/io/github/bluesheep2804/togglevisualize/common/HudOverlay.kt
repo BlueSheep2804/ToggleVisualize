@@ -6,11 +6,11 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.resources.Identifier
 import net.minecraft.util.CommonColors
-//? if >=1.21
+//? if >= 1.21
 import net.minecraft.client.DeltaTracker
-//? if >=1.21.6 {
+//? if >= 1.21.6 {
 import net.minecraft.client.renderer.RenderPipelines
-//?} else if >=1.21.2 {
+//?} else if >= 1.21.2 {
 /*import net.minecraft.client.renderer.RenderType
 *///?}
 
@@ -73,25 +73,13 @@ object HudOverlay {
     fun blit(guiGraphics: GuiGraphicsExtractor, texture: Identifier, x: Int, y: Int, anchorPoint: AnchorPoint) {
         val posX = anchorPoint.calculateX(16, guiGraphics.guiWidth(), x)
         val posY = anchorPoint.calculateY(16, guiGraphics.guiHeight(), y)
-        //? if <1.21.2 {
-        /*guiGraphics.blit(
-            texture,
-            posX,
-            posY,
-            0F,
-            0F,
-            16,
-            16,
-            16,
-            16
-        )
-        *///?} else {
+
         guiGraphics.blit(
-            //? if <1.21.6 {
-            /*RenderType::guiTexturedOverlay,
-            *///?} else {
+            //? if >= 1.21.6 {
             RenderPipelines.GUI_TEXTURED,
-            //?}
+            //?} else if >= 1.21.2{
+            /*RenderType::guiTexturedOverlay,
+            *///?}
             texture,
             posX,
             posY,
@@ -102,6 +90,5 @@ object HudOverlay {
             16,
             16
         )
-        //?}
     }
 }

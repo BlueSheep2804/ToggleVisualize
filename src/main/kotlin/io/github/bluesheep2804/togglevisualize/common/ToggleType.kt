@@ -65,7 +65,7 @@ enum class ToggleType(
         ToggleVisualizeConfig::flyingTextPositionX,
         ToggleVisualizeConfig::flyingTextPositionY,
         ToggleVisualizeConfig::flyingTextAnchorPoint
-        //? if >1.21.8 {
+        //? if >= 1.21.9 {
     ),
     Attack(
         rlMinecraft("textures/item/iron_sword.png"),

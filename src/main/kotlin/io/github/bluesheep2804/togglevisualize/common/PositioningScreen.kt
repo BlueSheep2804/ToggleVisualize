@@ -78,7 +78,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         }
 
         selectionStringWidget.width = width
-        //? if >1.20.1 {
+        //? if >= 1.20.2 {
         howtoLayout = LinearLayout.vertical()
         howtoLayout.defaultCellSetting().align(0.5f, 0.5f)
         howtoLayout.spacing(4)
@@ -217,15 +217,22 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     }
 
     // 背景のぼかしを無効化
-    //? if >=26.1 {
-    override fun extractBlurredBackground(graphics: GuiGraphicsExtractor) {}
-    //?} else if >1.20.4 {
-    /*override fun renderBlurredBackground(/*? if >1.20.4 <1.21.3 {*//*patialTick: Float*//*?} else if >=1.21.6 {*/guiGraphics: GuiGraphicsExtractor/*?}*/) {}
+    //? if >= 26.1 {
+    override fun extractBlurredBackground(guiGraphics: GuiGraphicsExtractor) {}
+    //?} else if >= 1.20.5 {
+    /*override fun renderBlurredBackground(
+        //? if >= 1.21.6 {
+        guiGraphics: GuiGraphicsExtractor
+        //?} else if <1.21.3 {
+        /*patialTick: Float
+        *///?}
+    ) {}
     *///?}
 
-    //~ if >=26.1 'render' -> 'extractRenderState'
+    //~ if >= 26.1 'render' -> 'extractRenderState'
     override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
-        //? if <1.20.2 {
+        // 1.20.1で描画がリセットされない不具合の対策
+        //? if <= 1.20.1 {
         /*if (minecraft?.level == null) {
             renderBackground(guiGraphics)
         }
@@ -241,12 +248,12 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             val hoveredToggleType = getHoveredToggleType(hoveredWidget)
 
             val anchorPoint = (if (isTextElement) textAnchorPoints else indicatorAnchorPoints)[hoveredToggleType]!!
-            //? if <1.21.6 {
+            //? if >= 1.21.6 {
+            guiGraphics.setTooltipForNextFrame(
+            //?} else {
             /*guiGraphics.renderTooltip(
                 font,
-            *///?} else {
-            guiGraphics.setTooltipForNextFrame(
-            //?}
+            *///?}
                 listOf(
                     anchorPoint.previous().previous().displayName.copy().withStyle(ChatFormatting.DARK_GRAY),
                     anchorPoint.previous().displayName.copy().withStyle(ChatFormatting.GRAY),
@@ -263,24 +270,25 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             //? if >=1.21.9
             guiGraphics.requestCursor(CursorTypes.RESIZE_ALL)
 
-            //? if >= 26.1 {
-            guiGraphics.outline(
-            //?} else if >=1.21.9 {
-            /*guiGraphics.submitOutline(
-            *///?} else {
-            /*guiGraphics.renderOutline(
-            *///?}
-                rectangle.left()-1,
-                rectangle.top()-1,
-                rectangle.width+2,
-                rectangle.height+2,
-                -1
-            )
+            guiGraphics
+                //? if >= 26.1 {
+                .outline(
+                //?} else if >=1.21.9 {
+                /*.submitOutline(
+                *///?} else {
+                /*.renderOutline(
+                *///?}
+                    rectangle.left()-1,
+                    rectangle.top()-1,
+                    rectangle.width+2,
+                    rectangle.height+2,
+                    -1
+                )
         }
     }
 
     override fun mouseClicked(
-        //? if >1.21.8 {
+        //? if >= 1.21.9 {
         event: MouseButtonEvent,
         bl: Boolean
         //?} else {
@@ -289,14 +297,14 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         button: Int
         *///?}
     ): Boolean {
-        //? if >1.21.8 {
+        //? if >= 1.21.9 {
         val button = event.button()
         val rawMouseX = event.x()
         val rawMouseY = event.y()
         //?}
 
         if (button > 1) {
-            //? if >1.21.8 {
+            //? if >= 1.21.9 {
             return super.mouseClicked(event, bl)
             //?} else {
             /*return super.mouseClicked(rawMouseX, rawMouseY, button)
@@ -359,7 +367,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             howtoLayout.visitWidgets { it.visible = false }
             selectedHowtoLayout.visitWidgets { it.visible = true }
         }
-        //? if >1.21.8 {
+        //? if >= 1.21.9 {
         return super.mouseClicked(event, bl)
         //?} else {
         /*return super.mouseClicked(rawMouseX, rawMouseY, button)
@@ -422,7 +430,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     }
 
     private fun imageWidget(imageLocation: Identifier): ImageWidget {
-        //? if >1.20.1 {
+        //? if >= 1.20.2 {
         return ImageWidget.texture(
             16,
             16,

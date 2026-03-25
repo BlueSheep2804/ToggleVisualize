@@ -1,7 +1,7 @@
 package io.github.bluesheep2804.togglevisualize
 
 import io.github.bluesheep2804.togglevisualize.common.ToggleVisualizeConfig
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import org.slf4j.LoggerFactory
 import java.nio.file.Path
 
@@ -17,20 +17,20 @@ object ToggleVisualize {
     }
 
     @Suppress("DEPRECATION", "removal")
-    fun rl(path: String): ResourceLocation {
+    fun rl(path: String): Identifier {
         //? if <1.21 {
-        /*return ResourceLocation("togglevisualize", path)
+        /*return Identifier("togglevisualize", path)
         *///?} else {
-        return ResourceLocation.fromNamespaceAndPath("togglevisualize", path)
+        return Identifier.fromNamespaceAndPath("togglevisualize", path)
         //?}
     }
 
     @Suppress("DEPRECATION", "removal")
-    fun rlMinecraft(path: String): ResourceLocation {
+    fun rlMinecraft(path: String): Identifier {
         //? if <1.21 {
-        /*return ResourceLocation("minecraft", path)
+        /*return Identifier("minecraft", path)
         *///?} else {
-        return ResourceLocation.withDefaultNamespace(path)
+        return Identifier.withDefaultNamespace(path)
         //?}
     }
 }

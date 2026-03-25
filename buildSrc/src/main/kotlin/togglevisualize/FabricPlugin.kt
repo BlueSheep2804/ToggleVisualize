@@ -1,11 +1,16 @@
 package togglevisualize
 
 import dev.kikugie.stonecutter.build.StonecutterBuildExtension
+import net.fabricmc.loom.util.Constants
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.Configuration
+import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 import org.gradle.kotlin.dsl.the
 
 open class FabricPlugin : Plugin<Project> {
@@ -19,14 +24,16 @@ open class FabricPlugin : Plugin<Project> {
         plugins.apply("net.fabricmc.fabric-loom")
 
         val names = listOf(
-            "api", "implementation", "compileOnly", "runtimeOnly", "localRuntime"
+            JavaPlugin.API_CONFIGURATION_NAME,
+            JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME,
+            JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME,
+            JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME,
+            Constants.Configurations.LOCAL_RUNTIME
         )
 
         for (it in names) {
-            val loomified = "mod" + it.replaceFirstChar(Char::uppercaseChar)
-            configurations.register(loomified) {
-                extendsFrom(configurations.named(it).get())
-            }
+            val modConfiguration: Provider<Configuration> = configurations.register("mod" + it.uppercaseFirstChar())
+            configurations.named(it) { extendsFrom(modConfiguration.get()) }
         }
 
         configurations.register("mappings") {

@@ -3,8 +3,8 @@ package io.github.bluesheep2804.togglevisualize.common
 import io.github.bluesheep2804.togglevisualize.ToggleVisualize.config
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.client.gui.GuiGraphicsExtractor
+import net.minecraft.resources.Identifier
 import net.minecraft.util.CommonColors
 //? if >=1.21
 import net.minecraft.client.DeltaTracker
@@ -15,16 +15,21 @@ import net.minecraft.client.renderer.RenderPipelines
 *///?}
 
 object HudOverlay {
-    fun renderOverlay(guiGraphics: GuiGraphics, deltaTracker: /*? if <1.21 {*//*Float*//*?} else {*/ DeltaTracker /*?}*/) {
+    fun renderOverlay(guiGraphics: GuiGraphicsExtractor, deltaTracker: /*? if <1.21 {*//*Float*//*?} else {*/ DeltaTracker /*?}*/) {
         val minecraftInstance = Minecraft.getInstance()
         val options = minecraftInstance.options
-        //? if <1.20.2 {
-        /*val debugScreen = options.renderDebug
-        *///?} else if <1.21.9 {
-        /*val debugScreen = minecraftInstance.debugOverlay.showDebugScreen()
-        *///?} else {
-        val debugScreen = minecraftInstance.debugEntries.isF3Visible
-        //?}
+
+        val debugScreen =
+            //? if >= 26.1 {
+            minecraftInstance.debugEntries.isOverlayVisible
+            //?} else if >= 1.21.9 {
+            /*minecraftInstance.debugEntries.isF3Visible
+            *///?} else if >= 1.20.2 {
+            /*minecraftInstance.debugOverlay.showDebugScreen()
+            *///?} else {
+            /*options.renderDebug
+            *///?}
+
         val hideGui = options.hideGui
         if (debugScreen || hideGui || minecraftInstance.screen is PositioningScreen) return
 
@@ -51,7 +56,9 @@ object HudOverlay {
                         guiGraphics.guiHeight(),
                         it.textPosY.get(config)
                     )
-                    guiGraphics.drawString(
+
+                    //~ if >= 26.1 'drawString' -> 'text'
+                    guiGraphics.text(
                         minecraftInstance.font,
                         it.textComponent.copy().withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY),
                         posX,
@@ -63,7 +70,7 @@ object HudOverlay {
         }
     }
 
-    fun blit(guiGraphics: GuiGraphics, texture: ResourceLocation, x: Int, y: Int, anchorPoint: AnchorPoint) {
+    fun blit(guiGraphics: GuiGraphicsExtractor, texture: Identifier, x: Int, y: Int, anchorPoint: AnchorPoint) {
         val posX = anchorPoint.calculateX(16, guiGraphics.guiWidth(), x)
         val posY = anchorPoint.calculateY(16, guiGraphics.guiHeight(), y)
         //? if <1.21.2 {

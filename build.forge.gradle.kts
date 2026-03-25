@@ -8,10 +8,18 @@ plugins {
 
 val mcVersion = stonecutter.current.version
 val projectJavaVersion = when {
-    stonecutter.eval(mcVersion, ">=1.20.5") -> 21
+    sc.current.parsed >= "26.1" -> 25
+    sc.current.parsed >= "1.20.5" -> 21
     else -> 17
 }
 val loader = "forge"
+
+stonecutter {
+    replacements.string(current.parsed >= "1.21.11") {
+        replace("ResourceLocation", "Identifier")
+        replace("GuiGraphics", "GuiGraphicsExtractor")
+    }
+}
 
 val modVersion = project.property("modVersion")
 version = "$modVersion+$mcVersion-$loader"

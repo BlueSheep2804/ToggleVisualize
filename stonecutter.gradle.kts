@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.stonecutter)
 }
-stonecutter active "1.21.9-fabric"
+stonecutter active "26.1-fabric"
 
 stonecutter parameters {
     constants.match(node.metadata.project.substringAfterLast("-"), "fabric", "forge", "neoforge")

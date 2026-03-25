@@ -8,7 +8,6 @@ import net.fabricmc.loader.api.FabricLoader
 //? if <1.21.6 {
 /*import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 *///?} else {
-import io.github.bluesheep2804.togglevisualize.ToggleVisualize.rl
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
 //?}
 
@@ -18,7 +17,7 @@ object ToggleVisualizeFabric : ClientModInitializer {
         //? if <1.21.6 {
         /*HudRenderCallback.EVENT.register(HudOverlay::renderOverlay)
         *///?} else {
-        HudElementRegistry.addLast(rl(ToggleVisualize.OVERLAY_ID), HudOverlay::renderOverlay)
+        HudElementRegistry.addLast(ToggleVisualize.rl(ToggleVisualize.OVERLAY_ID), HudOverlay::renderOverlay)
         //?}
     }
 }

@@ -1,7 +1,7 @@
 package io.github.bluesheep2804.togglevisualize.common
 
 import net.minecraft.ChatFormatting
-import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.ImageWidget
 import net.minecraft.client.gui.components.StringWidget
@@ -9,7 +9,7 @@ import net.minecraft.client.gui.layouts.FrameLayout
 import net.minecraft.client.gui.layouts.LinearLayout
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import kotlin.reflect.KMutableProperty1
 
 //? if >1.21.8 {
@@ -217,17 +217,21 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     }
 
     // 背景のぼかしを無効化
-    //? if >1.20.4 {
-    override fun renderBlurredBackground(/*? if >1.20.4 <1.21.3 {*//*patialTick: Float*//*?} else if >=1.21.6 {*/guiGraphics: GuiGraphics/*?}*/) {}
-    //?}
+    //? if >=26.1 {
+    override fun extractBlurredBackground(graphics: GuiGraphicsExtractor) {}
+    //?} else if >1.20.4 {
+    /*override fun renderBlurredBackground(/*? if >1.20.4 <1.21.3 {*//*patialTick: Float*//*?} else if >=1.21.6 {*/guiGraphics: GuiGraphicsExtractor/*?}*/) {}
+    *///?}
 
-    override fun render(guiGraphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+    //~ if >=26.1 'render' -> 'extractRenderState'
+    override fun extractRenderState(guiGraphics: GuiGraphicsExtractor, mouseX: Int, mouseY: Int, partialTick: Float) {
         //? if <1.20.2 {
         /*if (minecraft?.level == null) {
             renderBackground(guiGraphics)
         }
         *///?}
-        super.render(guiGraphics, mouseX, mouseY, partialTick)
+        //~ if >=26.1 'render' -> 'extractRenderState'
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick)
 
         if (activeToggleType != null) return
 
@@ -255,10 +259,15 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             )
 
             val rectangle = hoveredWidget.rectangle
-            //? if >1.21.8 {
+
+            //? if >=1.21.9
             guiGraphics.requestCursor(CursorTypes.RESIZE_ALL)
-            guiGraphics.submitOutline(
-            //?} else {
+
+            //? if >= 26.1 {
+            guiGraphics.outline(
+            //?} else if >=1.21.9 {
+            /*guiGraphics.submitOutline(
+            *///?} else {
             /*guiGraphics.renderOutline(
             *///?}
                 rectangle.left()-1,
@@ -412,7 +421,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         repositionElements()
     }
 
-    private fun imageWidget(imageLocation: ResourceLocation): ImageWidget {
+    private fun imageWidget(imageLocation: Identifier): ImageWidget {
         //? if >1.20.1 {
         return ImageWidget.texture(
             16,

@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
 	alias(libs.plugins.kotlin)
 	alias(libs.plugins.modpublishplugin)
-	alias(libs.plugins.loom)
+	id("togglevisualize.fabric")
 }
 
 val mcVersion = stonecutter.current.version
@@ -51,12 +51,14 @@ dependencies {
 	val parchmentMappings: String by project
 
 	minecraft("com.mojang:minecraft:$mcVersion")
-	mappings(loom.layered {
-		officialMojangMappings()
-		if (parchmentMappings != "none") {
-			parchment("org.parchmentmc.data:parchment-$mcVersion:$parchmentMappings@zip")
-		}
-	})
+	if (!fabric.isNew) {
+		mappings(loom.layered {
+			officialMojangMappings()
+			if (parchmentMappings != "none") {
+				parchment("org.parchmentmc.data:parchment-$mcVersion:$parchmentMappings@zip")
+			}
+		})
+	}
 
 	modImplementation("net.fabricmc:fabric-loader:${fabricVersion}")
 
@@ -107,7 +109,7 @@ tasks.withType<JavaExec>().configureEach {
 val buildAndCollect = tasks.register<Copy>("buildAndCollect") {
 	group = "versioned"
 	description = "Must run thorough 'chiseledBuild'"
-	from(tasks.remapJar.get().archiveFile)
+	from(fabric.modJar.get().archiveFile)
 	into(rootProject.layout.buildDirectory.dir("libs/$modVersion/$loader"))
 	dependsOn("build")
 }
@@ -150,7 +152,7 @@ publishMods {
 	}
 
 	displayName = "$modVersion for $loader $mcVersion"
-	file = project.tasks.remapJar.get().archiveFile
+	file = fabric.modJar.get().archiveFile
 	type = STABLE
 	modLoaders.add(loader)
 	changelog = rootProject.file("changelog.md").readText()

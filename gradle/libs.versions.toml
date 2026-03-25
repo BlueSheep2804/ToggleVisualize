@@ -1,9 +1,14 @@
 [versions]
-kotlin-version = "2.1.0"
+kotlin-version = "2.2.0"
 stonecutter-version = "0.9"
 modpublishplugin-version = "0.8.4"
 moddevgradle-version = "2.0.107"
-loom-version = "1.13-SNAPSHOT"
+loom-version = "1.15-SNAPSHOT"
+
+[libraries]
+stonecutter = { group = "dev.kikugie", name = "stonecutter", version.ref = "stonecutter-version" }
+loom = { group = "net.fabricmc", name = "fabric-loom", version.ref = "loom-version" }
+loom-remap = { group = "net.fabricmc.fabric-loom-remap", name = "net.fabricmc.fabric-loom-remap.gradle.plugin", version.ref = "loom-version" }
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
@@ -11,4 +16,3 @@ stonecutter = { id = "dev.kikugie.stonecutter", version.ref = "stonecutter-versi
 modpublishplugin = { id = "me.modmuss50.mod-publish-plugin", version.ref = "modpublishplugin-version" }
 moddevgradle = { id = "net.neoforged.moddev", version.ref = "moddevgradle-version" }
 moddevgradle-legacy = { id = "net.neoforged.moddev.legacyforge", version.ref = "moddevgradle-version" }
-loom = { id = "fabric-loom", version.ref = "loom-version" }

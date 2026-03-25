@@ -13,6 +13,15 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 import org.gradle.kotlin.dsl.the
 
+/**
+ * fabric-loomの難読化版、非難読化版の差分を吸収するGradleプラグイン。
+ * Kikugie氏の実装を元に、Matt Sturgeon氏の改良を参考にしつつ、少し変更を加えている。
+ * @author Kikugie
+ * @author Matt Sturgeon
+ * @author BlueSheep2804
+ * @see <a href="https://discord.com/channels/1135884510613995590/1192572106056142951/1485634997837893653">オリジナル</a>
+ * @see <a href="https://github.com/MinecraftFreecam/Freecam/blob/accbafa7ab093990cf4aecb2bcd281b8fd1df53f/build-logic/loom-adapter/src/main/kotlin/net/xolt/freecam/gradle/LoomAdapterPlugin.kt">Matt Sturgeon氏の実装(Freecam)</a>
+ */
 open class FabricPlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         val current = the<StonecutterBuildExtension>().current.parsed

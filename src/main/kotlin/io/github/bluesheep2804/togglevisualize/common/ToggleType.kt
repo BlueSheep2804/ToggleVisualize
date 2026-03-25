@@ -5,11 +5,11 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.Options
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.Identifier
 import kotlin.reflect.KMutableProperty1
 
 enum class ToggleType(
-    val indicatorLocation: ResourceLocation,
+    val indicatorLocation: Identifier,
     val textComponent: MutableComponent,
     val condition: () -> Boolean,
     val showIndicator: KMutableProperty1<ToggleVisualizeConfig, Boolean>,
@@ -65,7 +65,7 @@ enum class ToggleType(
         ToggleVisualizeConfig::flyingTextPositionX,
         ToggleVisualizeConfig::flyingTextPositionY,
         ToggleVisualizeConfig::flyingTextAnchorPoint
-        //? if >1.21.8 {
+        //? if >= 1.21.9 {
     ),
     Attack(
         rlMinecraft("textures/item/iron_sword.png"),

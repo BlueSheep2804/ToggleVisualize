@@ -1,17 +1,25 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("org.jetbrains.kotlin.jvm")
-    id("net.neoforged.moddev") version "2.0.107"
-    id("me.modmuss50.mod-publish-plugin") version "0.8.4"
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.modpublishplugin)
+    alias(libs.plugins.moddevgradle)
 }
 
 val mcVersion = stonecutter.current.version
 val projectJavaVersion = when {
-    stonecutter.eval(mcVersion, ">=1.20.5") -> 21
+    sc.current.parsed >= "26.1" -> 25
+    sc.current.parsed >= "1.20.5" -> 21
     else -> 17
 }
 val loader = "neoforge"
+
+stonecutter {
+    replacements.string(current.parsed >= "1.21.11") {
+        replace("ResourceLocation", "Identifier")
+        replace("GuiGraphics", "GuiGraphicsExtractor")
+    }
+}
 
 val modVersion = project.property("modVersion")
 version = "$modVersion+$mcVersion-$loader"
@@ -114,7 +122,7 @@ tasks.named<ProcessResources>("processResources") {
         ))
     }
     filesMatching("pack.mcmeta") {
-        expand("packFormat" to project.property("packFormat"))
+        expand(mapOf("packFormat" to project.property("packFormat")))
     }
 }
 

@@ -9,9 +9,9 @@ pluginManagement {
 }
 
 plugins {
-	id("dev.kikugie.stonecutter") version "0.7.10"
+	id("dev.kikugie.stonecutter") version "0.9"
 	id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
-	id("org.jetbrains.kotlin.jvm") version "2.1.0" apply false
+	id("org.jetbrains.kotlin.jvm") version "2.3.0" apply false
 }
 
 stonecutter {
@@ -21,8 +21,8 @@ stonecutter {
 		}
 		mc("forge", "1.20.1")
 		mc("neoforge", "1.21.1")
-		mc("fabric", "1.20.1", "1.20.4", "1.20.6", "1.21.1", "1.21.3", "1.21.6", "1.21.9")
-		vcsVersion = "1.21.9-fabric"
+		mc("fabric", "1.20.1", "1.20.4", "1.20.6", "1.21.1", "1.21.3", "1.21.6", "1.21.9", "26.1")
+		vcsVersion = "26.1-fabric"
 	}
 }
 

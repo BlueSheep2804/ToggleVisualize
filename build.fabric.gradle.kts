@@ -1,17 +1,25 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-	id("org.jetbrains.kotlin.jvm")
-	id("fabric-loom") version "1.11-SNAPSHOT"
-	id("me.modmuss50.mod-publish-plugin") version "0.8.4"
+	alias(libs.plugins.kotlin)
+	alias(libs.plugins.modpublishplugin)
+	id("togglevisualize.fabric")
 }
 
 val mcVersion = stonecutter.current.version
 val projectJavaVersion = when {
-	stonecutter.eval(mcVersion, ">=1.20.5") -> 21
+	sc.current.parsed >= "26.1" -> 25
+	sc.current.parsed >= "1.20.5" -> 21
 	else -> 17
 }
 val loader = "fabric"
+
+stonecutter {
+	replacements.string(current.parsed >= "1.21.11") {
+		replace("ResourceLocation", "Identifier")
+		replace("GuiGraphics", "GuiGraphicsExtractor")
+	}
+}
 
 val modVersion = project.property("modVersion")
 version = "$modVersion+$mcVersion-$loader"
@@ -51,12 +59,14 @@ dependencies {
 	val parchmentMappings: String by project
 
 	minecraft("com.mojang:minecraft:$mcVersion")
-	mappings(loom.layered {
-		officialMojangMappings()
-		if (parchmentMappings != "none") {
-			parchment("org.parchmentmc.data:parchment-$mcVersion:$parchmentMappings@zip")
-		}
-	})
+	if (!fabric.isNew) {
+		mappings(loom.layered {
+			officialMojangMappings()
+			if (parchmentMappings != "none") {
+				parchment("org.parchmentmc.data:parchment-$mcVersion:$parchmentMappings@zip")
+			}
+		})
+	}
 
 	modImplementation("net.fabricmc:fabric-loader:${fabricVersion}")
 
@@ -107,7 +117,7 @@ tasks.withType<JavaExec>().configureEach {
 val buildAndCollect = tasks.register<Copy>("buildAndCollect") {
 	group = "versioned"
 	description = "Must run thorough 'chiseledBuild'"
-	from(tasks.remapJar.get().archiveFile)
+	from(fabric.modJar.get().archiveFile)
 	into(rootProject.layout.buildDirectory.dir("libs/$modVersion/$loader"))
 	dependsOn("build")
 }
@@ -137,7 +147,7 @@ tasks.processResources {
 		))
 	}
 	filesMatching("pack.mcmeta") {
-		expand("packFormat" to project.property("packFormat"))
+		expand(mapOf("packFormat" to project.property("packFormat")))
 	}
 }
 
@@ -150,7 +160,7 @@ publishMods {
 	}
 
 	displayName = "$modVersion for $loader $mcVersion"
-	file = project.tasks.remapJar.get().archiveFile
+	file = fabric.modJar.get().archiveFile
 	type = STABLE
 	modLoaders.add(loader)
 	changelog = rootProject.file("changelog.md").readText()

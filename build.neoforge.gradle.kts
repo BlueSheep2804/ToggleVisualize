@@ -34,10 +34,13 @@ neoForge {
 
     validateAccessTransformers.set(true)
 
-    parchment {
-        mappingsVersion = project.property("parchmentMappings") as String
-        minecraftVersion = mcVersion
+    if ((project.property("parchmentMappings") as String) != "[VERSIONED]") {
+        parchment {
+            mappingsVersion = project.property("parchmentMappings") as String
+            minecraftVersion = mcVersion
+        }
     }
+
     runs {
         configureEach {
             gameDirectory = file("../../run-forge/")

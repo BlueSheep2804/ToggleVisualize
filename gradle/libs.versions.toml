@@ -2,7 +2,7 @@
 kotlin-version = "2.3.0"
 stonecutter-version = "0.9"
 modpublishplugin-version = "0.8.4"
-moddevgradle-version = "2.0.107"
+moddevgradle-version = "2.0.141"
 loom-version = "1.15-SNAPSHOT"
 
 [libraries]

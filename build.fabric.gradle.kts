@@ -151,6 +151,12 @@ tasks.processResources {
 	}
 }
 
+tasks.jar {
+	from(sc.branch.project.file("LICENSE")) {
+		rename { "${it}_${project.property("archivesBaseName")}" }
+	}
+}
+
 publishMods {
 	val mcVersions = when(mcVersion) {
 		"1.21.3" -> listOf("1.21.3", "1.21.4", "1.21.5")

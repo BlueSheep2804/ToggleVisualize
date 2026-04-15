@@ -130,6 +130,11 @@ tasks.named<ProcessResources>("processResources") {
 }
 
 publishMods {
+    val mcVersions = when(mcVersion) {
+        "26.1" -> listOf("26.1", "26.1.1", "26.1.2")
+        else -> listOf(mcVersion)
+    }
+
     displayName = "$modVersion for $loader $mcVersion"
     file = project.tasks.jar.get().archiveFile
     type = STABLE
@@ -141,7 +146,7 @@ publishMods {
     curseforge {
         accessToken = providers.environmentVariable("CURSEFORGE_API_KEY").get()
         projectId = "1195905"
-        minecraftVersions = listOf(mcVersion)
+        minecraftVersions = mcVersions
 
         clientRequired = true
         projectSlug = "toggle-visualize"
@@ -152,7 +157,7 @@ publishMods {
     modrinth {
         accessToken = providers.environmentVariable("MODRINTH_TOKEN").get()
         projectId = "brJIdf61"
-        minecraftVersions = listOf(mcVersion)
+        minecraftVersions = mcVersions
 
         requires("yacl", "kotlin-for-forge")
     }

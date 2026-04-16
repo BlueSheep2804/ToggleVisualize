@@ -29,5 +29,7 @@
   "togglevisualize.config.positioning_tool.howto.selected.right_click": "Right click: Cancel",
   "togglevisualize.config.positioning_tool.selecting": "Selecting: %s (%s)",
   "togglevisualize.hud.use": "Use",
-  "togglevisualize.hud.attack": "Attack"
+  "togglevisualize.hud.attack": "Attack",
+  "togglevisualize.hud.crawling": "Crawling",
+  "togglevisualize.hud.swimming": "Swimming"
 }

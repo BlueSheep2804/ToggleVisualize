@@ -87,7 +87,7 @@ enum class ToggleType(
         rlMinecraft("textures/item/elytra.png"),
         Component.translatable("item.minecraft.elytra"),
         {
-            Minecraft.getInstance().player?.isFallFlying == true
+            player?.isFallFlying == true
         },
         ToggleVisualizeConfig::flyingShow,
         ToggleVisualizeConfig::flyingPositionX,
@@ -97,6 +97,36 @@ enum class ToggleType(
         ToggleVisualizeConfig::flyingTextPositionX,
         ToggleVisualizeConfig::flyingTextPositionY,
         ToggleVisualizeConfig::flyingTextAnchorPoint
+    ),
+    Swimming(
+        rlMinecraft("textures/item/cod.png"),
+        Component.translatable("togglevisualize.hud.swimming"),
+        {
+            player?.isSwimming == true || (player?.isVisuallySwimming == true && player?.isInWater == true)
+        },
+        ToggleVisualizeConfig::swimmingShow,
+        ToggleVisualizeConfig::swimmingPositionX,
+        ToggleVisualizeConfig::swimmingPositionY,
+        ToggleVisualizeConfig::swimmingAnchorPoint,
+        ToggleVisualizeConfig::swimmingShowText,
+        ToggleVisualizeConfig::swimmingTextPositionX,
+        ToggleVisualizeConfig::swimmingTextPositionY,
+        ToggleVisualizeConfig::swimmingTextAnchorPoint
+    ),
+    Crawling(
+        rlMinecraft("textures/item/shulker_shell.png"),
+        Component.translatable("togglevisualize.hud.crawling"),
+        {
+            player?.isVisuallyCrawling == true
+        },
+        ToggleVisualizeConfig::crawlingShow,
+        ToggleVisualizeConfig::crawlingPositionX,
+        ToggleVisualizeConfig::crawlingPositionY,
+        ToggleVisualizeConfig::crawlingAnchorPoint,
+        ToggleVisualizeConfig::crawlingShowText,
+        ToggleVisualizeConfig::crawlingTextPositionX,
+        ToggleVisualizeConfig::crawlingTextPositionY,
+        ToggleVisualizeConfig::crawlingTextAnchorPoint
     );
 
     companion object {
@@ -109,9 +139,13 @@ enum class ToggleType(
             //?}
         )
         val byPlayer = listOf(
-            Flying
+            Flying,
+            Swimming,
+            Crawling
         )
         private val options: Options
             get() = Minecraft.getInstance().options
+        private val player
+            get() = Minecraft.getInstance().player
     }
 }

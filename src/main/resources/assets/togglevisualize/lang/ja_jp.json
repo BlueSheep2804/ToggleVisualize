@@ -29,5 +29,7 @@
   "togglevisualize.config.positioning_tool.howto.selected.right_click": "右クリック : キャンセル",
   "togglevisualize.config.positioning_tool.selecting": "選択中: %s (%s)",
   "togglevisualize.hud.use": "使用",
-  "togglevisualize.hud.attack": "攻撃"
+  "togglevisualize.hud.attack": "攻撃",
+  "togglevisualize.hud.crawling": "ほふく前進",
+  "togglevisualize.hud.swimming": "泳ぐ"
 }

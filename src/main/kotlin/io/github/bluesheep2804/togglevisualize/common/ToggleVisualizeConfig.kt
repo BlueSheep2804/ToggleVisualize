@@ -141,6 +141,54 @@ class ToggleVisualizeConfig {
     @SerialEntry
     var flyingTextAnchorPoint = AnchorPoint.LEFT_TOP
 
+    @SerialEntry
+    var swimmingShow = true
+
+    @SerialEntry
+    var swimmingPositionX = 16
+
+    @SerialEntry
+    var swimmingPositionY = /*? if >1.21.8 {*/ 96 /*?} else {*/ /*64 *//*?}*/
+
+    @SerialEntry
+    var swimmingAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
+    var swimmingShowText = false
+
+    @SerialEntry
+    var swimmingTextPositionX = 36
+
+    @SerialEntry
+    var swimmingTextPositionY = /*? if >1.21.8 {*/ 100 /*?} else {*/ /*68 *//*?}*/
+
+    @SerialEntry
+    var swimmingTextAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
+    var crawlingShow = true
+
+    @SerialEntry
+    var crawlingPositionX = 16
+
+    @SerialEntry
+    var crawlingPositionY = /*? if >1.21.8 {*/ 96 /*?} else {*/ /*64 *//*?}*/
+
+    @SerialEntry
+    var crawlingAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
+    var crawlingShowText = false
+
+    @SerialEntry
+    var crawlingTextPositionX = 36
+
+    @SerialEntry
+    var crawlingTextPositionY = /*? if >1.21.8 {*/ 100 /*?} else {*/ /*68 *//*?}*/
+
+    @SerialEntry
+    var crawlingTextAnchorPoint = AnchorPoint.LEFT_TOP
+
     companion object {
         private val configId = rl("config")
 

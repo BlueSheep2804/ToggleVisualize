@@ -50,21 +50,6 @@ enum class ToggleType(
         ToggleVisualizeConfig::sneakTextPositionX,
         ToggleVisualizeConfig::sneakTextPositionY,
         ToggleVisualizeConfig::sneakTextAnchorPoint
-    ),
-    Flying(
-        rlMinecraft("textures/item/elytra.png"),
-        Component.translatable("item.minecraft.elytra"),
-        {
-            Minecraft.getInstance().player?.isFallFlying == true
-        },
-        ToggleVisualizeConfig::flyingShow,
-        ToggleVisualizeConfig::flyingPositionX,
-        ToggleVisualizeConfig::flyingPositionY,
-        ToggleVisualizeConfig::flyingAnchorPoint,
-        ToggleVisualizeConfig::flyingShowText,
-        ToggleVisualizeConfig::flyingTextPositionX,
-        ToggleVisualizeConfig::flyingTextPositionY,
-        ToggleVisualizeConfig::flyingTextAnchorPoint
         //? if >= 1.21.9 {
     ),
     Attack(
@@ -97,9 +82,35 @@ enum class ToggleType(
         ToggleVisualizeConfig::useTextPositionY,
         ToggleVisualizeConfig::useTextAnchorPoint
         //?}
+    ),
+    Flying(
+        rlMinecraft("textures/item/elytra.png"),
+        Component.translatable("item.minecraft.elytra"),
+        {
+            Minecraft.getInstance().player?.isFallFlying == true
+        },
+        ToggleVisualizeConfig::flyingShow,
+        ToggleVisualizeConfig::flyingPositionX,
+        ToggleVisualizeConfig::flyingPositionY,
+        ToggleVisualizeConfig::flyingAnchorPoint,
+        ToggleVisualizeConfig::flyingShowText,
+        ToggleVisualizeConfig::flyingTextPositionX,
+        ToggleVisualizeConfig::flyingTextPositionY,
+        ToggleVisualizeConfig::flyingTextAnchorPoint
     );
 
     companion object {
+        val byControl = listOf(
+            Sprint,
+            Sneak,
+            //? if >= 1.21.9 {
+            Attack,
+            Use,
+            //?}
+        )
+        val byPlayer = listOf(
+            Flying
+        )
         private val options: Options
             get() = Minecraft.getInstance().options
     }

@@ -11,6 +11,8 @@
   "togglevisualize.anchor_point.right_center": "Right Center",
   "togglevisualize.config.title": "Toggle Visualize",
   "togglevisualize.config.category.main": "Main",
+  "togglevisualize.config.category.control": "Control",
+  "togglevisualize.config.category.player": "Player",
   "togglevisualize.config.option.indicator": "Indicator",
   "togglevisualize.config.option.indicatorPositionX": "Indicator position X",
   "togglevisualize.config.option.indicatorPositionY": "Indicator position Y",

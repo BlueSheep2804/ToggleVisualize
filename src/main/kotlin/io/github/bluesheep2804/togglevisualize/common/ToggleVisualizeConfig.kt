@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import java.nio.file.Path
+import kotlin.reflect.KMutableProperty1
 
 class ToggleVisualizeConfig {
     @SerialEntry
@@ -173,337 +174,126 @@ class ToggleVisualizeConfig {
         }
 
         fun configScreen(parent: Screen): YetAnotherConfigLib {
-            return YetAnotherConfigLib.create(HANDLER) { defaultConfig, config, builder -> builder
+            return YetAnotherConfigLib.create(HANDLER) { defaultConfig, config, builder ->
+                val mainCategory = ConfigCategory.createBuilder()
+                    .name(Component.translatable("togglevisualize.config.category.main"))
+                    .option(
+                        ButtonOption.createBuilder()
+                            .name(Component.translatable("togglevisualize.config.option.open_positioning_tool"))
+                            .action{_, _ ->
+                                Minecraft.getInstance().setScreen(PositioningScreen(parent))
+                            }
+                            .build()
+                    )
+
+                val controlCategory = ConfigCategory.createBuilder()
+                    .name(Component.translatable("togglevisualize.config.category.control"))
+                ToggleType.byControl.forEach { toggleType ->
+                    controlCategory.group(optionGroup(toggleType, defaultConfig, config))
+                }
+
+                val playerCategory = ConfigCategory.createBuilder()
+                    .name(Component.translatable("togglevisualize.config.category.player"))
+                ToggleType.byPlayer.forEach { toggleType ->
+                    playerCategory.group(optionGroup(toggleType, defaultConfig, config))
+                }
+
+                return@create builder
                     .title(Component.translatable("togglevisualize.config.title"))
                     .save(HANDLER::save)
-                    .category(
-                        ConfigCategory.createBuilder()
-                            .name(Component.translatable("togglevisualize.config.category.main"))
-                            .option(
-                                ButtonOption.createBuilder()
-                                    .name(Component.translatable("togglevisualize.config.option.open_positioning_tool"))
-                                    .action{_, _ ->
-                                        Minecraft.getInstance().setScreen(PositioningScreen(parent))
-                                    }
-                                    .build()
-                            )
-                            .group(
-                                OptionGroup.createBuilder()
-                                    .name(Component.translatable("key.sneak"))
-                                    .option(
-                                        booleanOption(
-                                            "indicator",
-                                            defaultConfig.sneakShow,
-                                            { config.sneakShow },
-                                            { newVal -> config.sneakShow = newVal }
-                                        )
-                                    )
-                                    .option(intOption(
-                                            "indicatorPositionX",
-                                            defaultConfig.sneakPositionX,
-                                            { config.sneakPositionX },
-                                            { newVal -> config.sneakPositionX = newVal }
-                                        ))
-                                    .option(intOption(
-                                            "indicatorPositionY",
-                                            defaultConfig.sneakPositionY,
-                                            { config.sneakPositionY },
-                                            { newVal -> config.sneakPositionY = newVal }
-                                        ))
-                                    .option(anchorPointOption(
-                                        "indicatorAnchorPoint",
-                                        defaultConfig.sneakAnchorPoint,
-                                        { config.sneakAnchorPoint },
-                                        { newVal -> config.sneakAnchorPoint = newVal }
-                                    ))
-                                    .option(
-                                        booleanOption(
-                                            "text",
-                                            defaultConfig.sneakShowText,
-                                            { config.sneakShowText },
-                                            { newVal -> config.sneakShowText = newVal }
-                                        )
-                                    )
-                                    .option(intOption(
-                                            "textPositionX",
-                                            defaultConfig.sneakTextPositionX,
-                                            { config.sneakTextPositionX },
-                                            { newVal -> config.sneakTextPositionX = newVal }
-                                        ))
-                                    .option(intOption(
-                                            "textPositionY",
-                                            defaultConfig.sneakTextPositionY,
-                                            { config.sneakTextPositionY },
-                                            { newVal -> config.sneakTextPositionY = newVal }
-                                        ))
-                                    .option(anchorPointOption(
-                                        "textAnchorPoint",
-                                        defaultConfig.sneakTextAnchorPoint,
-                                        { config.sneakTextAnchorPoint },
-                                        { newVal -> config.sneakTextAnchorPoint = newVal }
-                                    ))
-                                    .build())
-                            .group(
-                                OptionGroup.createBuilder()
-                                    .name(Component.translatable("key.sprint"))
-                                    .option(
-                                        booleanOption(
-                                            "indicator",
-                                            defaultConfig.sprintShow,
-                                            { config.sprintShow },
-                                            { newVal -> config.sprintShow = newVal }
-                                        )
-                                    )
-                                    .option(intOption(
-                                            "indicatorPositionX",
-                                            defaultConfig.sprintPositionX,
-                                            { config.sprintPositionX },
-                                            { newVal -> config.sprintPositionX = newVal }
-                                        ))
-                                    .option(intOption(
-                                            "indicatorPositionY",
-                                            defaultConfig.sprintPositionY,
-                                            { config.sprintPositionY },
-                                            { newVal -> config.sprintPositionY = newVal }
-                                        ))
-                                    .option(anchorPointOption(
-                                        "indicatorAnchorPoint",
-                                        defaultConfig.sprintAnchorPoint,
-                                        { config.sprintAnchorPoint },
-                                        { newVal -> config.sprintAnchorPoint = newVal }
-                                    ))
-                                    .option(
-                                        booleanOption(
-                                            "text",
-                                            defaultConfig.sprintShowText,
-                                            { config.sprintShowText },
-                                            { newVal -> config.sprintShowText = newVal }
-                                        )
-                                    )
-                                    .option(intOption(
-                                            "textPositionX",
-                                            defaultConfig.sprintTextPositionX,
-                                            { config.sprintTextPositionX },
-                                            { newVal -> config.sprintTextPositionX = newVal }
-                                        ))
-                                    .option(intOption(
-                                            "textPositionY",
-                                            defaultConfig.sprintTextPositionY,
-                                            { config.sprintTextPositionY },
-                                            { newVal -> config.sprintTextPositionY = newVal }
-                                        ))
-                                    .option(anchorPointOption(
-                                        "textAnchorPoint",
-                                        defaultConfig.sprintTextAnchorPoint,
-                                        { config.sprintTextAnchorPoint },
-                                        { newVal -> config.sprintTextAnchorPoint = newVal }
-                                    ))
-                                    .build())
-                            //? if >1.21.8 {
-                            .group(
-                                OptionGroup.createBuilder()
-                                    .name(Component.translatable("key.attack"))
-                                    .option(
-                                        booleanOption(
-                                            "indicator",
-                                            defaultConfig.attackShow,
-                                            { config.attackShow },
-                                            { newVal -> config.attackShow = newVal }
-                                        )
-                                    )
-                                    .option(intOption(
-                                            "indicatorPositionX",
-                                            defaultConfig.attackPositionX,
-                                            { config.attackPositionX },
-                                            { newVal -> config.attackPositionX = newVal }
-                                        ))
-                                    .option(intOption(
-                                            "indicatorPositionY",
-                                            defaultConfig.attackPositionY,
-                                            { config.attackPositionY },
-                                            { newVal -> config.attackPositionY = newVal }
-                                        ))
-                                    .option(anchorPointOption(
-                                        "indicatorAnchorPoint",
-                                        defaultConfig.attackAnchorPoint,
-                                        { config.attackAnchorPoint },
-                                        { newVal -> config.attackAnchorPoint = newVal }
-                                    ))
-                                    .option(
-                                        booleanOption(
-                                            "text",
-                                            defaultConfig.attackShowText,
-                                            { config.attackShowText },
-                                            { newVal -> config.attackShowText = newVal }
-                                        )
-                                    )
-                                    .option(intOption(
-                                            "textPositionX",
-                                            defaultConfig.attackTextPositionX,
-                                            { config.attackTextPositionX },
-                                            { newVal -> config.attackTextPositionX = newVal }
-                                        ))
-                                    .option(intOption(
-                                            "textPositionY",
-                                            defaultConfig.attackTextPositionY,
-                                            { config.attackTextPositionY },
-                                            { newVal -> config.attackTextPositionY = newVal }
-                                        ))
-                                    .option(anchorPointOption(
-                                        "textAnchorPoint",
-                                        defaultConfig.attackTextAnchorPoint,
-                                        { config.attackTextAnchorPoint },
-                                        { newVal -> config.attackTextAnchorPoint = newVal }
-                                    ))
-                                    .build())
-                            .group(
-                                OptionGroup.createBuilder()
-                                    .name(Component.translatable("key.use"))
-                                    .option(
-                                        booleanOption(
-                                            "indicator",
-                                            defaultConfig.useShow,
-                                            { config.useShow },
-                                            { newVal -> config.useShow = newVal }
-                                        )
-                                    )
-                                    .option(intOption(
-                                            "indicatorPositionX",
-                                            defaultConfig.usePositionX,
-                                            { config.usePositionX },
-                                            { newVal -> config.usePositionX = newVal }
-                                        ))
-                                    .option(intOption(
-                                            "indicatorPositionY",
-                                            defaultConfig.usePositionY,
-                                            { config.usePositionY },
-                                            { newVal -> config.usePositionY = newVal }
-                                        ))
-                                    .option(anchorPointOption(
-                                        "indicatorAnchorPoint",
-                                        defaultConfig.useAnchorPoint,
-                                        { config.useAnchorPoint },
-                                        { newVal -> config.useAnchorPoint = newVal }
-                                    ))
-                                    .option(
-                                        booleanOption(
-                                            "text",
-                                            defaultConfig.useShowText,
-                                            { config.useShowText },
-                                            { newVal -> config.useShowText = newVal }
-                                        )
-                                    )
-                                    .option(intOption(
-                                            "textPositionX",
-                                            defaultConfig.useTextPositionX,
-                                            { config.useTextPositionX },
-                                            { newVal -> config.useTextPositionX = newVal }
-                                        ))
-                                    .option(intOption(
-                                            "textPositionY",
-                                            defaultConfig.useTextPositionY,
-                                            { config.useTextPositionY },
-                                            { newVal -> config.useTextPositionY = newVal }
-                                        ))
-                                    .option(anchorPointOption(
-                                        "textAnchorPoint",
-                                        defaultConfig.useTextAnchorPoint,
-                                        { config.useTextAnchorPoint },
-                                        { newVal -> config.useTextAnchorPoint = newVal }
-                                    ))
-                                    .build())
-                            //?}
-                            .group(
-                                OptionGroup.createBuilder()
-                                    .name(Component.translatable("item.minecraft.elytra"))
-                                    .option(
-                                        booleanOption(
-                                            "indicator",
-                                            defaultConfig.flyingShow,
-                                            { config.flyingShow },
-                                            { newVal -> config.flyingShow = newVal }
-                                        )
-                                    )
-                                    .option(intOption(
-                                            "indicatorPositionX",
-                                            defaultConfig.flyingPositionX,
-                                            { config.flyingPositionX },
-                                            { newVal -> config.flyingPositionX = newVal }
-                                        ))
-                                    .option(intOption(
-                                            "indicatorPositionY",
-                                            defaultConfig.flyingPositionY,
-                                            { config.flyingPositionY },
-                                            { newVal -> config.flyingPositionY = newVal }
-                                        ))
-                                    .option(anchorPointOption(
-                                        "indicatorAnchorPoint",
-                                        defaultConfig.flyingAnchorPoint,
-                                        { config.flyingAnchorPoint },
-                                        { newVal -> config.flyingAnchorPoint = newVal }
-                                    ))
-                                    .option(
-                                        booleanOption(
-                                            "text",
-                                            defaultConfig.flyingShowText,
-                                            { config.flyingShowText },
-                                            { newVal -> config.flyingShowText = newVal }
-                                        )
-                                    )
-                                    .option(intOption(
-                                            "textPositionX",
-                                            defaultConfig.flyingTextPositionX,
-                                            { config.flyingTextPositionX },
-                                            { newVal -> config.flyingTextPositionX = newVal }
-                                        ))
-                                    .option(intOption(
-                                            "textPositionY",
-                                            defaultConfig.flyingTextPositionY,
-                                            { config.flyingTextPositionY },
-                                            { newVal -> config.flyingTextPositionY = newVal }
-                                        ))
-                                    .option(anchorPointOption(
-                                        "textAnchorPoint",
-                                        defaultConfig.flyingTextAnchorPoint,
-                                        { config.flyingTextAnchorPoint },
-                                        { newVal -> config.flyingTextAnchorPoint = newVal }
-                                    ))
-                                    .build())
-                            .build())
+                    .categories(listOf(
+                        mainCategory.build(),
+                        controlCategory.build(),
+                        playerCategory.build()
+                    ))
             }
         }
 
-        private fun booleanOption(id: String, defaultValue: Boolean, getter: () -> Boolean, setter: (Boolean) -> Unit): Option<Boolean> {
+        private fun optionGroup(type: ToggleType, defaultConfig: ToggleVisualizeConfig, config: ToggleVisualizeConfig): OptionGroup {
+            return OptionGroup.createBuilder()
+                .name(type.textComponent)
+                .option(booleanOption(
+                    "indicator",
+                    type.showIndicator,
+                    defaultConfig,
+                    config
+                ))
+                .option(intOption(
+                    "indicatorPositionX",
+                    type.indicatorPosX,
+                    defaultConfig,
+                    config
+                ))
+                .option(intOption(
+                    "indicatorPositionY",
+                    type.indicatorPosY,
+                    defaultConfig,
+                    config
+                ))
+                .option(anchorPointOption(
+                    "indicatorAnchorPoint",
+                    type.indicatorAnchorPoint,
+                    defaultConfig,
+                    config
+                ))
+                .option(booleanOption(
+                    "text",
+                    type.showText,
+                    defaultConfig,
+                    config
+                ))
+                .option(intOption(
+                    "textPositionX",
+                    type.textPosX,
+                    defaultConfig,
+                    config
+                ))
+                .option(intOption(
+                    "textPositionY",
+                    type.textPosY,
+                    defaultConfig,
+                    config
+                ))
+                .option(anchorPointOption(
+                    "textAnchorPoint",
+                    type.textAnchorPoint,
+                    defaultConfig,
+                    config
+                ))
+                .build()
+        }
+
+        private fun booleanOption(id: String, entry: KMutableProperty1<ToggleVisualizeConfig, Boolean>, defaultConfig: ToggleVisualizeConfig, config: ToggleVisualizeConfig): Option<Boolean> {
             return Option.createBuilder<Boolean>()
                 .name(Component.translatable("togglevisualize.config.option.$id"))
                 .binding(
-                    defaultValue,
-                    getter,
-                    setter
+                    entry.get(defaultConfig),
+                    { entry.get(config) },
+                    { newVal -> entry.set(config, newVal) }
                 )
                 .controller(TickBoxControllerBuilder::create)
                 .build()
         }
 
-        private fun intOption(id: String, defaultValue: Int, getter: () -> Int, setter: (Int) -> Unit): Option<Int> {
+        private fun intOption(id: String, entry: KMutableProperty1<ToggleVisualizeConfig, Int>, defaultConfig: ToggleVisualizeConfig, config: ToggleVisualizeConfig): Option<Int> {
             return Option.createBuilder<Int>()
                 .name(Component.translatable("togglevisualize.config.option.$id"))
                 .binding(
-                    defaultValue,
-                    getter,
-                    setter
+                    entry.get(defaultConfig),
+                    { entry.get(config) },
+                    { newVal -> entry.set(config, newVal) }
                 )
                 .controller(IntegerFieldControllerBuilder::create)
                 .build()
         }
 
-        private fun anchorPointOption(id: String, defaultValue: AnchorPoint, getter: () -> AnchorPoint, setter: (AnchorPoint) -> Unit): Option<AnchorPoint> {
+        private fun anchorPointOption(id: String, entry: KMutableProperty1<ToggleVisualizeConfig, AnchorPoint>, defaultConfig: ToggleVisualizeConfig, config: ToggleVisualizeConfig): Option<AnchorPoint> {
             return Option.createBuilder<AnchorPoint>()
                 .name(Component.translatable("togglevisualize.config.option.$id"))
                 .binding(
-                    defaultValue,
-                    getter,
-                    setter
+                    entry.get(defaultConfig),
+                    { entry.get(config) },
+                    { newVal -> entry.set(config, newVal) }
                 )
                 .controller { opt -> EnumControllerBuilder.create(opt).enumClass(AnchorPoint::class.java) }
                 .build()

@@ -30,6 +30,8 @@
   "togglevisualize.config.positioning_tool.selecting": "Selecting: %s (%s)",
   "togglevisualize.hud.use": "Use",
   "togglevisualize.hud.attack": "Attack",
+  "togglevisualize.hud.flying": "Flying",
+  "togglevisualize.hud.gliding": "Gliding",
   "togglevisualize.hud.crawling": "Crawling",
   "togglevisualize.hud.swimming": "Swimming"
 }

@@ -142,6 +142,30 @@ class ToggleVisualizeConfig {
     var flyingTextAnchorPoint = AnchorPoint.LEFT_TOP
 
     @SerialEntry
+    var glidingShow = true
+
+    @SerialEntry
+    var glidingPositionX = 16
+
+    @SerialEntry
+    var glidingPositionY = /*? if >1.21.8 {*/ 80 /*?} else {*/ /*48 *//*?}*/
+
+    @SerialEntry
+    var glidingAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
+    var glidingShowText = false
+
+    @SerialEntry
+    var glidingTextPositionX = 36
+
+    @SerialEntry
+    var glidingTextPositionY = /*? if >1.21.8 {*/ 84 /*?} else {*/ /*52 *//*?}*/
+
+    @SerialEntry
+    var glidingTextAnchorPoint = AnchorPoint.LEFT_TOP
+
+    @SerialEntry
     var swimmingShow = true
 
     @SerialEntry

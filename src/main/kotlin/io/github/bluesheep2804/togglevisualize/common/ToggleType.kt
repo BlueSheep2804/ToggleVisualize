@@ -6,6 +6,7 @@ import net.minecraft.client.Options
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.resources.Identifier
+import net.minecraft.world.level.GameType
 import kotlin.reflect.KMutableProperty1
 
 enum class ToggleType(
@@ -84,10 +85,10 @@ enum class ToggleType(
         //?}
     ),
     Flying(
-        rlMinecraft("textures/item/elytra.png"),
-        Component.translatable("item.minecraft.elytra"),
+        rlMinecraft("textures/item/feather.png"),
+        Component.translatable("togglevisualize.hud.flying"),
         {
-            player?.isFallFlying == true
+            player?.abilities?.flying == true && player?.isSpectator != true
         },
         ToggleVisualizeConfig::flyingShow,
         ToggleVisualizeConfig::flyingPositionX,
@@ -97,6 +98,21 @@ enum class ToggleType(
         ToggleVisualizeConfig::flyingTextPositionX,
         ToggleVisualizeConfig::flyingTextPositionY,
         ToggleVisualizeConfig::flyingTextAnchorPoint
+    ),
+    Gliding(
+        rlMinecraft("textures/item/elytra.png"),
+        Component.translatable("togglevisualize.hud.gliding"),
+        {
+            player?.isFallFlying == true
+        },
+        ToggleVisualizeConfig::glidingShow,
+        ToggleVisualizeConfig::glidingPositionX,
+        ToggleVisualizeConfig::glidingPositionY,
+        ToggleVisualizeConfig::glidingAnchorPoint,
+        ToggleVisualizeConfig::glidingShowText,
+        ToggleVisualizeConfig::glidingTextPositionX,
+        ToggleVisualizeConfig::glidingTextPositionY,
+        ToggleVisualizeConfig::glidingTextAnchorPoint
     ),
     Swimming(
         rlMinecraft("textures/item/cod.png"),
@@ -140,6 +156,7 @@ enum class ToggleType(
         )
         val byPlayer = listOf(
             Flying,
+            Gliding,
             Swimming,
             Crawling
         )

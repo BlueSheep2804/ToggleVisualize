@@ -121,97 +121,97 @@ class ToggleVisualizeConfig {
     var flyingShow = true
 
     @SerialEntry
-    var flyingPositionX = 16
+    var flyingPositionX = -16
 
     @SerialEntry
-    var flyingPositionY = /*? if >1.21.8 {*/ 80 /*?} else {*/ /*48 *//*?}*/
+    var flyingPositionY = 16
 
     @SerialEntry
-    var flyingAnchorPoint = AnchorPoint.LEFT_TOP
+    var flyingAnchorPoint = AnchorPoint.RIGHT_TOP
 
     @SerialEntry
     var flyingShowText = false
 
     @SerialEntry
-    var flyingTextPositionX = 36
+    var flyingTextPositionX = -36
 
     @SerialEntry
-    var flyingTextPositionY = /*? if >1.21.8 {*/ 84 /*?} else {*/ /*52 *//*?}*/
+    var flyingTextPositionY = 20
 
     @SerialEntry
-    var flyingTextAnchorPoint = AnchorPoint.LEFT_TOP
+    var flyingTextAnchorPoint = AnchorPoint.RIGHT_TOP
 
     @SerialEntry
     var glidingShow = true
 
     @SerialEntry
-    var glidingPositionX = 16
+    var glidingPositionX = -16
 
     @SerialEntry
-    var glidingPositionY = /*? if >1.21.8 {*/ 80 /*?} else {*/ /*48 *//*?}*/
+    var glidingPositionY = 32
 
     @SerialEntry
-    var glidingAnchorPoint = AnchorPoint.LEFT_TOP
+    var glidingAnchorPoint = AnchorPoint.RIGHT_TOP
 
     @SerialEntry
     var glidingShowText = false
 
     @SerialEntry
-    var glidingTextPositionX = 36
+    var glidingTextPositionX = -36
 
     @SerialEntry
-    var glidingTextPositionY = /*? if >1.21.8 {*/ 84 /*?} else {*/ /*52 *//*?}*/
+    var glidingTextPositionY = 36
 
     @SerialEntry
-    var glidingTextAnchorPoint = AnchorPoint.LEFT_TOP
+    var glidingTextAnchorPoint = AnchorPoint.RIGHT_TOP
 
     @SerialEntry
     var swimmingShow = true
 
     @SerialEntry
-    var swimmingPositionX = 16
+    var swimmingPositionX = -16
 
     @SerialEntry
-    var swimmingPositionY = /*? if >1.21.8 {*/ 96 /*?} else {*/ /*64 *//*?}*/
+    var swimmingPositionY = 48
 
     @SerialEntry
-    var swimmingAnchorPoint = AnchorPoint.LEFT_TOP
+    var swimmingAnchorPoint = AnchorPoint.RIGHT_TOP
 
     @SerialEntry
     var swimmingShowText = false
 
     @SerialEntry
-    var swimmingTextPositionX = 36
+    var swimmingTextPositionX = -36
 
     @SerialEntry
-    var swimmingTextPositionY = /*? if >1.21.8 {*/ 100 /*?} else {*/ /*68 *//*?}*/
+    var swimmingTextPositionY = 52
 
     @SerialEntry
-    var swimmingTextAnchorPoint = AnchorPoint.LEFT_TOP
+    var swimmingTextAnchorPoint = AnchorPoint.RIGHT_TOP
 
     @SerialEntry
     var crawlingShow = true
 
     @SerialEntry
-    var crawlingPositionX = 16
+    var crawlingPositionX = -16
 
     @SerialEntry
-    var crawlingPositionY = /*? if >1.21.8 {*/ 96 /*?} else {*/ /*64 *//*?}*/
+    var crawlingPositionY = 64
 
     @SerialEntry
-    var crawlingAnchorPoint = AnchorPoint.LEFT_TOP
+    var crawlingAnchorPoint = AnchorPoint.RIGHT_TOP
 
     @SerialEntry
     var crawlingShowText = false
 
     @SerialEntry
-    var crawlingTextPositionX = 36
+    var crawlingTextPositionX = -36
 
     @SerialEntry
-    var crawlingTextPositionY = /*? if >1.21.8 {*/ 100 /*?} else {*/ /*68 *//*?}*/
+    var crawlingTextPositionY = 68
 
     @SerialEntry
-    var crawlingTextAnchorPoint = AnchorPoint.LEFT_TOP
+    var crawlingTextAnchorPoint = AnchorPoint.RIGHT_TOP
 
     companion object {
         private val configId = rl("config")

@@ -17,7 +17,7 @@ object ToggleVisualizeFabric : ClientModInitializer {
         //? if <1.21.6 {
         /*HudRenderCallback.EVENT.register(HudOverlay::renderOverlay)
         *///?} else {
-        HudElementRegistry.addLast(ToggleVisualize.rl(ToggleVisualize.OVERLAY_ID), HudOverlay::renderOverlay)
+        HudElementRegistry.addFirst(ToggleVisualize.rl(ToggleVisualize.OVERLAY_ID), HudOverlay::renderOverlay)
         //?}
     }
 }

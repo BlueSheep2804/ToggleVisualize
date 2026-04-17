@@ -12,23 +12,28 @@
 
 ## Features
 - Visualizes the following toggles:
-  - Sneak
-  - Sprint
-  - Attack/Destroy block (1.21.9+)
-  - Use item/Place block (1.21.9+)
-  - Elytra flying
+  - Control
+    - Sneak
+    - Sprint
+    - Attack/Destroy block (1.21.9+)
+    - Use item/Place block (1.21.9+)
+  - Player
+    - Creative flight
+    - Elytra gliding
+    - Swimming
+    - Crawling
 - Icon and text position and size can be configured in the GUI.
 - Supports both Fabric and Forge / NeoForge mod loaders.
 
 ## Dependencies
 ### Fabric
 - Fabric API
-- YetAnotherConfigLib
 - Fabric Language Kotlin
+- YetAnotherConfigLib
 
 ### Forge / NeoForge
-- YetAnotherConfigLib
 - Kotlin for Forge
+- YetAnotherConfigLib
 
 ---
 

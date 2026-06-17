@@ -18,7 +18,7 @@ object ToggleVisualizeForge {
         ToggleVisualize.init(FMLPaths.CONFIGDIR.get())
         LOADING_CONTEXT.registerExtensionPoint(ConfigScreenFactory::class.java) {
             ConfigScreenFactory { parentScreen ->
-                ToggleVisualizeConfig.Companion.configScreen(parentScreen).generateScreen(parentScreen)
+                ToggleVisualizeConfig.configScreen(parentScreen).generateScreen(parentScreen)
             }
         }
     }

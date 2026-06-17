@@ -21,7 +21,7 @@ class ToggleVisualizeNeoforge {
         ToggleVisualize.init(FMLPaths.CONFIGDIR.get())
         LOADING_CONTEXT.registerExtensionPoint(IConfigScreenFactory::class.java) {
             IConfigScreenFactory { container, screen ->
-                ToggleVisualizeConfig.Companion.configScreen(screen).generateScreen(screen)
+                ToggleVisualizeConfig.configScreen(screen).generateScreen(screen)
             }
         }
     }

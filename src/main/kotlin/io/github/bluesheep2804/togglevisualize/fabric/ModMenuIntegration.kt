@@ -8,7 +8,7 @@ import io.github.bluesheep2804.togglevisualize.common.ToggleVisualizeConfig
 class ModMenuIntegration: ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> {
         return ConfigScreenFactory { parentScreen ->
-            ToggleVisualizeConfig.Companion.configScreen(parentScreen).generateScreen(parentScreen)
+            ToggleVisualizeConfig.configScreen(parentScreen).generateScreen(parentScreen)
         }
     }
 }

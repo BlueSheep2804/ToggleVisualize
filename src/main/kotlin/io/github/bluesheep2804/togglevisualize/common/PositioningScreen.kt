@@ -18,7 +18,7 @@ import com.mojang.blaze3d.platform.cursor.CursorTypes
 //?}
 
 class PositioningScreen(private val yaclParent: Screen): Screen(Component.translatable("togglevisualize.config.positioning_tool.title")) {
-    private val config = ToggleVisualizeConfig.Companion.instance
+    private val config = ToggleVisualizeConfig.instance
     private var mouseOffsetX = 0
     private var mouseOffsetY = 0
     private var activeToggleType: ToggleType? = null
@@ -375,13 +375,9 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
     }
 
     override fun onClose() {
-        ToggleVisualizeConfig.Companion.save()
-        val screen = ToggleVisualizeConfig.Companion.configScreen(yaclParent).generateScreen(yaclParent)
-        //? if >= 26.2 {
-        minecraft.gui.setScreen(screen)
-        //?} else {
-        /*minecraft?.setScreen(screen)
-        *///?}
+        ToggleVisualizeConfig.save()
+        val screen = ToggleVisualizeConfig.configScreen(yaclParent).generateScreen(yaclParent)
+        CompatLayer.screen = screen
     }
 
     private fun adjustPosition(

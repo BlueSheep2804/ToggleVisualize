@@ -12,7 +12,6 @@ import dev.isxander.yacl3.config.v2.api.ConfigClassHandler
 import dev.isxander.yacl3.config.v2.api.SerialEntry
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder
 import io.github.bluesheep2804.togglevisualize.ToggleVisualize.rl
-import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import java.nio.file.Path
@@ -253,11 +252,7 @@ class ToggleVisualizeConfig {
                         ButtonOption.createBuilder()
                             .name(Component.translatable("togglevisualize.config.option.open_positioning_tool"))
                             .action{_, _ ->
-                                //? if >= 26.2 {
-                                Minecraft.getInstance().gui.setScreen(PositioningScreen(parent))
-                                //?} else {
-                                /*Minecraft.getInstance().setScreen(PositioningScreen(parent))
-                                *///?}
+                                CompatLayer.screen = PositioningScreen(parent)
                             }
                             .build()
                     )

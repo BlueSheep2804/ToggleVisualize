@@ -17,32 +17,8 @@ import net.minecraft.client.renderer.RenderPipelines
 object HudOverlay {
     fun renderOverlay(guiGraphics: GuiGraphicsExtractor, deltaTracker: /*? if <1.21 {*//*Float*//*?} else {*/ DeltaTracker /*?}*/) {
         val minecraftInstance = Minecraft.getInstance()
-        val options = minecraftInstance.options
 
-        val debugScreen =
-            //? if >= 26.1 {
-            minecraftInstance.debugEntries.isOverlayVisible
-            //?} else if >= 1.21.9 {
-            /*minecraftInstance.debugEntries.isF3Visible
-            *///?} else if >= 1.20.2 {
-            /*minecraftInstance.debugOverlay.showDebugScreen()
-            *///?} else {
-            /*options.renderDebug
-            *///?}
-
-        val hideGui =
-            //? if >= 26.2 {
-            minecraftInstance.gui.hud.isHidden
-            //?} else {
-            /*options.hideGui
-            *///?}
-        val currentScreen =
-            //? if >= 26.2 {
-            minecraftInstance.gui.screen()
-            //?} else {
-            /*minecraftInstance.screen
-            *///?}
-        if (debugScreen || hideGui || currentScreen is PositioningScreen) return
+        if (CompatLayer.isDebugOverlayVisible || CompatLayer.isHudHidden || CompatLayer.screen is PositioningScreen) return
 
         ToggleType.entries.forEach {
             if (it.condition.invoke()) {

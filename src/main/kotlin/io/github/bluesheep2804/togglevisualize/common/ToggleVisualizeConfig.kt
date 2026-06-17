@@ -253,7 +253,11 @@ class ToggleVisualizeConfig {
                         ButtonOption.createBuilder()
                             .name(Component.translatable("togglevisualize.config.option.open_positioning_tool"))
                             .action{_, _ ->
-                                Minecraft.getInstance().setScreen(PositioningScreen(parent))
+                                //? if >= 26.2 {
+                                Minecraft.getInstance().gui.setScreen(PositioningScreen(parent))
+                                //?} else {
+                                /*Minecraft.getInstance().setScreen(PositioningScreen(parent))
+                                *///?}
                             }
                             .build()
                     )

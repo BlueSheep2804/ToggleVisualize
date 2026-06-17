@@ -376,7 +376,12 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
 
     override fun onClose() {
         ToggleVisualizeConfig.Companion.save()
-        minecraft?.setScreen(ToggleVisualizeConfig.Companion.configScreen(yaclParent).generateScreen(yaclParent))
+        val screen = ToggleVisualizeConfig.Companion.configScreen(yaclParent).generateScreen(yaclParent)
+        //? if >= 26.2 {
+        minecraft.gui.setScreen(screen)
+        //?} else {
+        /*minecraft?.setScreen(screen)
+        *///?}
     }
 
     private fun adjustPosition(

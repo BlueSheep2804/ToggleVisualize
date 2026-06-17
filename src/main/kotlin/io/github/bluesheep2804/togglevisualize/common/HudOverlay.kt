@@ -30,8 +30,19 @@ object HudOverlay {
             /*options.renderDebug
             *///?}
 
-        val hideGui = options.hideGui
-        if (debugScreen || hideGui || minecraftInstance.screen is PositioningScreen) return
+        val hideGui =
+            //? if >= 26.2 {
+            minecraftInstance.gui.hud.isHidden
+            //?} else {
+            /*options.hideGui
+            *///?}
+        val currentScreen =
+            //? if >= 26.2 {
+            minecraftInstance.gui.screen()
+            //?} else {
+            /*minecraftInstance.screen
+            *///?}
+        if (debugScreen || hideGui || currentScreen is PositioningScreen) return
 
         ToggleType.entries.forEach {
             if (it.condition.invoke()) {

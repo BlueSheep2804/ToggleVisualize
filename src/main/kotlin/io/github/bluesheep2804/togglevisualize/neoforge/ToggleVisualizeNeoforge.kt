@@ -13,10 +13,10 @@ import net.neoforged.fml.loading.FMLPaths
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory
 import thedarkcolour.kotlinforforge.neoforge.forge.LOADING_CONTEXT
+import thedarkcolour.kotlinforforge.neoforge.forge.MOD_BUS
 
-@Mod(ToggleVisualize.MOD_ID)
-@EventBusSubscriber(modid = ToggleVisualize.MOD_ID, value = [Dist.CLIENT])
-class ToggleVisualizeNeoforge {
+@Mod(ToggleVisualize.MOD_ID, dist = [Dist.CLIENT])
+object ToggleVisualizeNeoforge {
     init {
         ToggleVisualize.init(FMLPaths.CONFIGDIR.get())
         LOADING_CONTEXT.registerExtensionPoint(IConfigScreenFactory::class.java) {
@@ -24,14 +24,11 @@ class ToggleVisualizeNeoforge {
                 ToggleVisualizeConfig.configScreen(screen).generateScreen(screen)
             }
         }
+        MOD_BUS.addListener(::registerGuiOverlays)
     }
 
-    companion object {
-        @SubscribeEvent
-        @JvmStatic
-        fun registerGuiOverlays(event: RegisterGuiLayersEvent) {
-            event.registerAboveAll(rl(ToggleVisualize.OVERLAY_ID), HudOverlay::renderOverlay)
-        }
+    fun registerGuiOverlays(event: RegisterGuiLayersEvent) {
+        event.registerAboveAll(rl(ToggleVisualize.OVERLAY_ID), HudOverlay::renderOverlay)
     }
 }
 *///?}

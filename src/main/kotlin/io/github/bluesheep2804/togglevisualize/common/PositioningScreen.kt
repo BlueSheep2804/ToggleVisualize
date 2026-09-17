@@ -289,7 +289,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
 
     override fun mouseClicked(
         //? if >= 1.21.9 {
-        event: MouseButtonEvent,
+        mouseButtonEvent: MouseButtonEvent,
         bl: Boolean
         //?} else {
         /*rawMouseX: Double,
@@ -298,25 +298,25 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
         *///?}
     ): Boolean {
         //? if >= 1.21.9 {
-        val button = event.button()
-        val rawMouseX = event.x()
-        val rawMouseY = event.y()
-        //?}
+        val event = MouseButtonEventWrapper(mouseButtonEvent)
+        //?} else {
+        /*val event = MouseButtonEventWrapper(rawMouseX, rawMouseY, button)
+        *///?}
 
-        if (button > 1) {
+        if (!event.isPrimaryButton && !event.isSecondaryButton) {
             //? if >= 1.21.9 {
-            return super.mouseClicked(event, bl)
+            return super.mouseClicked(mouseButtonEvent, bl)
             //?} else {
             /*return super.mouseClicked(rawMouseX, rawMouseY, button)
             *///?}
         }
 
-        val mouseX = rawMouseX.toInt()
-        val mouseY = rawMouseY.toInt()
+        val mouseX = event.x.toInt()
+        val mouseY = event.y.toInt()
         if (activeToggleType != null) {
             if (isTextElement && textWidgets[activeToggleType] != null) {
                 val anchorPoint = textAnchorPoints[activeToggleType]!!
-                if (button == 0) {
+                if (event.isPrimaryButton) {
                     activeToggleType!!.textPosX.set(config, mouseX - mouseOffsetX)
                     activeToggleType!!.textPosY.set(config, mouseY - mouseOffsetY)
                 }
@@ -331,7 +331,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
                     )
             } else if (!isTextElement && indicatorWidgets[activeToggleType] != null) {
                 val anchorPoint = indicatorAnchorPoints[activeToggleType]!!
-                if (button == 0) {
+                if (event.isPrimaryButton) {
                     activeToggleType!!.indicatorPosX.set(config, mouseX - mouseOffsetX)
                     activeToggleType!!.indicatorPosY.set(config, mouseY - mouseOffsetY)
                 }
@@ -347,7 +347,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             activeToggleType = null
             isTextElement = false
         } else {
-            if (button == 0) {
+            if (event.isPrimaryButton) {
                 val hoveredWidget = getHoveredWidget()
                 if (hoveredWidget != null) {
                     isTextElement = textWidgets.containsValue(hoveredWidget)
@@ -368,7 +368,7 @@ class PositioningScreen(private val yaclParent: Screen): Screen(Component.transl
             selectedHowtoLayout.visitWidgets { it.visible = true }
         }
         //? if >= 1.21.9 {
-        return super.mouseClicked(event, bl)
+        return super.mouseClicked(mouseButtonEvent, bl)
         //?} else {
         /*return super.mouseClicked(rawMouseX, rawMouseY, button)
         *///?}

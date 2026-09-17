@@ -1,5 +1,7 @@
 package io.github.bluesheep2804.togglevisualize.common
 
+import io.github.bluesheep2804.togglevisualize.common.compatibility.CompatLayer
+import io.github.bluesheep2804.togglevisualize.common.compatibility.MouseButtonEventWrapper
 import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.client.gui.components.AbstractWidget

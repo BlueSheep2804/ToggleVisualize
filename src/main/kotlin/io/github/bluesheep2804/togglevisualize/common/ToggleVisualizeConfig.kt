@@ -12,6 +12,7 @@ import dev.isxander.yacl3.config.v2.api.ConfigClassHandler
 import dev.isxander.yacl3.config.v2.api.SerialEntry
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder
 import io.github.bluesheep2804.togglevisualize.ToggleVisualize.rl
+import io.github.bluesheep2804.togglevisualize.common.compatibility.CompatLayer
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.Component
 import java.nio.file.Path

@@ -1,4 +1,4 @@
-package io.github.bluesheep2804.togglevisualize.common
+package io.github.bluesheep2804.togglevisualize.common.compatibility
 
 import net.minecraft.client.Minecraft
 import net.minecraft.client.Options

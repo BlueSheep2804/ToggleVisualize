@@ -1,6 +1,7 @@
 package io.github.bluesheep2804.togglevisualize.common
 
 import io.github.bluesheep2804.togglevisualize.ToggleVisualize.config
+import io.github.bluesheep2804.togglevisualize.common.compatibility.CompatLayer
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphicsExtractor

@@ -1,4 +1,4 @@
-package io.github.bluesheep2804.togglevisualize.common
+package io.github.bluesheep2804.togglevisualize.common.compatibility
 
 //? if >= 1.21.9
 import net.minecraft.client.input.MouseButtonEvent

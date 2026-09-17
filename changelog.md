@@ -1,8 +1,8 @@
-# ToggleVisualize 2.2.1
+# ToggleVisualize 2.2.2
 
 ## New Features
-- Added support for Fabric 26.2
+- Added support for Fabric 26.3
 ---
 
 ## 新機能
-- Fabric 26.2に対応
+- Fabric 26.3に対応
